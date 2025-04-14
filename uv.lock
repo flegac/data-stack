@@ -4,8 +4,8 @@ requires-python = ">=3.12"
 
 [manifest]
 members = [
-    "brocker-api",
-    "brocker-kafka",
+    "broker-api",
+    "broker-kafka",
     "data-stack",
     "measure-open-meteo",
     "measure-repository",
@@ -21,14 +21,14 @@ wheels = [
 ]
 
 [[package]]
-name = "brocker-api"
+name = "broker-api"
 version = "0.1.0"
-source = { editable = "packages/brocker-api" }
+source = { editable = "packages/broker-api" }
 
 [[package]]
-name = "brocker-kafka"
+name = "broker-kafka"
 version = "0.1.0"
-source = { editable = "packages/brocker-kafka" }
+source = { editable = "packages/broker-kafka" }
 dependencies = [
     { name = "confluent-kafka" },
 ]

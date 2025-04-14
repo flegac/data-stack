@@ -4,17 +4,17 @@ from dataclasses import asdict
 
 import pandas as pd
 
-from brocker_api.serializer import Serializer
+from broker_api.serializer import Serializer
 from measure_repository import Measure
 from measure_repository.model.sensor import MeasureType, Sensor
 
 
-class MeasureSerializer(Serializer[Measure]):
-    def serialize(self, obj: Measure) -> str:
-        measure_dict = asdict(obj)
-        measure_dict['value'] = float(obj.value) if pd.notna(obj.value) else None
-        measure_dict['datetime'] = obj.datetime.isoformat()
-        measure_dict['sensor']['type'] = obj.sensor.type.name  # Convert MeasureType to string
+class MeasureSerializer(Serializer[Measure, str]):
+    def serialize(self, message: Measure) -> str:
+        measure_dict = asdict(message)
+        measure_dict['value'] = float(message.value) if pd.notna(message.value) else None
+        measure_dict['datetime'] = message.datetime.isoformat()
+        measure_dict['sensor']['type'] = message.sensor.type.name  # Convert MeasureType to string
         return json.dumps(measure_dict)
 
     def deserialize(self, data: str) -> Measure:

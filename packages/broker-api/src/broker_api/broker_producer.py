@@ -4,7 +4,7 @@ from typing import Generic, TypeVar, Iterable
 T = TypeVar('T')
 
 
-class BrockerProducer(ABC, Generic[T]):
+class BrokerProducer(ABC, Generic[T]):
     @abstractmethod
     def write_batch(self, items: Iterable[T]):
         ...

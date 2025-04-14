@@ -1,15 +1,14 @@
-from typing import Callable, TypeVar, override
+from typing import Callable, override
 
 from confluent_kafka import Consumer, KafkaError
 
-from brocker_api.brocker_consumer import BrockerConsumer
-from brocker_kafka.kafka_config import KafkaConfig
+from broker_api.broker_consumer import BrokerConsumer
+from broker_api.serializer import Message, Data
+from broker_kafka.kafka_config import KafkaConfig
 
-T = TypeVar('T')
 
-
-class KafkaConsumer(BrockerConsumer[T]):
-    def __init__(self, config: KafkaConfig[T]):
+class KafkaConsumer(BrokerConsumer[Message, Data]):
+    def __init__(self, config: KafkaConfig[Message, Data]):
         self.config = config
         self.consumer = Consumer({
             'bootstrap.servers': config.broker_url,
@@ -19,7 +18,7 @@ class KafkaConsumer(BrockerConsumer[T]):
         })
 
     @override
-    def listen(self, on_message: Callable[[T], None]):
+    def listen(self, on_message: Callable[[Message], None]):
         self.consumer.subscribe([self.config.topic])
         try:
             while True:

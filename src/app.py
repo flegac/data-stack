@@ -1,8 +1,8 @@
 import datetime
 
-from brocker_kafka.kafka_config import KafkaConfig
-from brocker_kafka.kafka_consumer import KafkaConsumer
-from brocker_kafka.kafka_producer import KafkaProducer
+from broker_kafka.kafka_config import KafkaConfig
+from broker_kafka.kafka_consumer import KafkaConsumer
+from broker_kafka.kafka_producer import KafkaProducer
 from measure_open_meteo.measure_open_meteo import MeasureOpenMeteo
 from measure_repository import MeasureQuery
 from measure_repository.model.measure_query import Period

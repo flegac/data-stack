@@ -1,15 +1,14 @@
-from typing import TypeVar, Iterable, override
+from typing import Iterable, override
 
 from confluent_kafka import Producer
 
-from brocker_api.brocker_producer import BrockerProducer
-from brocker_kafka.kafka_config import KafkaConfig
+from broker_api.broker_producer import BrokerProducer
+from broker_api.serializer import Message, Data
+from broker_kafka.kafka_config import KafkaConfig
 
-T = TypeVar('T')
 
-
-class KafkaProducer(BrockerProducer[T]):
-    def __init__(self, config: KafkaConfig[T]):
+class KafkaProducer(BrokerProducer[Message, Data]):
+    def __init__(self, config: KafkaConfig[Message, Data]):
         self.config = config
         self.producer = Producer({
             'bootstrap.servers': config.broker_url,
@@ -22,7 +21,7 @@ class KafkaProducer(BrockerProducer[T]):
         })
 
     @override
-    def write_batch(self, items: Iterable[T]):
+    def write_batch(self, items: Iterable[Message]):
         try:
             for _ in items:
                 self.write_single(_)
@@ -30,7 +29,7 @@ class KafkaProducer(BrockerProducer[T]):
             self.producer.flush()
 
     @override
-    def write_single(self, item: T):
+    def write_single(self, item: Message):
         try:
             message = self.config.serializer.serialize(item)
             self.producer.produce(
