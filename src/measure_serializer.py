@@ -17,8 +17,8 @@ class MeasureSerializer(Serializer[Measure, str]):
         measure_dict['sensor']['type'] = message.sensor.type.name  # Convert MeasureType to string
         return json.dumps(measure_dict)
 
-    def deserialize(self, data: str) -> Measure:
-        raw = json.loads(data)
+    def deserialize(self, raw: str) -> Measure:
+        raw = json.loads(raw)
         raw['datetime'] = datetime.datetime.fromisoformat(raw['datetime'])
         try:
             raw['value'] = float(raw['value'])

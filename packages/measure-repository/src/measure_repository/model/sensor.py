@@ -24,4 +24,4 @@ type SensorId = str
 class Sensor:
     id: SensorId
     type: MeasureType
-    location: Location
+    location: Location | None = None

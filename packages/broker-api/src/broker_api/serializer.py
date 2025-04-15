@@ -1,15 +1,15 @@
 from abc import ABC, abstractmethod
 from typing import TypeVar, Generic
 
-Message = TypeVar('Message')
-Data = TypeVar('Data')
+I = TypeVar('I')
+O = TypeVar('O')
 
 
-class Serializer(ABC, Generic[Message, Data]):
+class Serializer(ABC, Generic[I, O]):
     @abstractmethod
-    def serialize(self, message: Message) -> Data:
+    def serialize(self, message: I) -> O:
         ...
 
     @abstractmethod
-    def deserialize(self, data: Data) -> Message:
+    def deserialize(self, raw: O) -> I:
         ...

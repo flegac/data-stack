@@ -1,26 +1,29 @@
 import datetime
 
+from broker_api.broker_topic import BrokerTopic
 from broker_kafka.kafka_config import KafkaConfig
-from broker_kafka.kafka_consumer import KafkaConsumer
-from broker_kafka.kafka_producer import KafkaProducer
+from broker_kafka.kafka_factory import KafkaFactory
 from measure_open_meteo.measure_open_meteo import MeasureOpenMeteo
 from measure_repository import MeasureQuery
 from measure_repository.model.measure_query import Period
 from measure_repository.model.sensor import MeasureType, Location
 from src.measure_serializer import MeasureSerializer
 
-TEMPERATURES_TOPIC = KafkaConfig(
+KAFKA_FACTORY = KafkaFactory(KafkaConfig(
     broker_url='localhost:9092',
+    group_id='temperature_group'
+))
+
+TEMPERATURES_TOPIC = BrokerTopic(
     topic='temperatures',
-    group_id='temperature_group',
     serializer=MeasureSerializer()
 )
 
 if __name__ == '__main__':
     datasource = MeasureOpenMeteo()
 
-    producer = KafkaProducer(TEMPERATURES_TOPIC)
-    consumer = KafkaConsumer(TEMPERATURES_TOPIC)
+    producer = KAFKA_FACTORY.producer(TEMPERATURES_TOPIC)
+    consumer = KAFKA_FACTORY.consumer(TEMPERATURES_TOPIC)
 
     data = datasource.search(
         MeasureQuery(

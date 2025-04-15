@@ -1,14 +1,16 @@
-from typing import Iterable, override
+from typing import override
 
 from confluent_kafka import Producer
 
 from broker_api.broker_producer import BrokerProducer
-from broker_api.serializer import Message, Data
+from broker_api.broker_topic import BrokerTopic
+from broker_api.serializer import I, O
 from broker_kafka.kafka_config import KafkaConfig
 
 
-class KafkaProducer(BrokerProducer[Message, Data]):
-    def __init__(self, config: KafkaConfig[Message, Data]):
+class KafkaProducer(BrokerProducer[I]):
+    def __init__(self, topic: BrokerTopic[I, O], config: KafkaConfig):
+        super().__init__(topic)
         self.config = config
         self.producer = Producer({
             'bootstrap.servers': config.broker_url,
@@ -21,24 +23,20 @@ class KafkaProducer(BrokerProducer[Message, Data]):
         })
 
     @override
-    def write_batch(self, items: Iterable[Message]):
+    def write_single(self, item: I):
         try:
-            for _ in items:
-                self.write_single(_)
-        finally:
-            self.producer.flush()
-
-    @override
-    def write_single(self, item: Message):
-        try:
-            message = self.config.serializer.serialize(item)
+            message = self.topic.serializer.serialize(item)
             self.producer.produce(
-                self.config.topic,
+                self.topic.topic,
                 value=message.encode('utf-8'),
                 callback=self._delivery_report
             )
         except Exception as e:
             print(f'Exception occurred: {e}')
+
+    @override
+    def flush(self):
+        self.producer.flush()
 
     def _delivery_report(self, err, msg):
         if err is not None:

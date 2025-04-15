@@ -9,6 +9,7 @@ dependencies = []
 [tool.uv.sources]
 measure-repository = { workspace = true }
 measure-open-meteo = { workspace = true }
+measure-influxdb = { workspace = true }
 broker-api = { workspace = true }
 broker-kafka = { workspace = true }
 

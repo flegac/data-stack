@@ -3,12 +3,14 @@ from typing import Callable, override
 from confluent_kafka import Consumer, KafkaError
 
 from broker_api.broker_consumer import BrokerConsumer
-from broker_api.serializer import Message, Data
+from broker_api.broker_topic import BrokerTopic
+from broker_api.serializer import I, O
 from broker_kafka.kafka_config import KafkaConfig
 
 
-class KafkaConsumer(BrokerConsumer[Message, Data]):
-    def __init__(self, config: KafkaConfig[Message, Data]):
+class KafkaConsumer(BrokerConsumer[I]):
+    def __init__(self, topic: BrokerTopic[I, O], config: KafkaConfig):
+        super().__init__(topic)
         self.config = config
         self.consumer = Consumer({
             'bootstrap.servers': config.broker_url,
@@ -18,8 +20,8 @@ class KafkaConsumer(BrokerConsumer[Message, Data]):
         })
 
     @override
-    def listen(self, on_message: Callable[[Message], None]):
-        self.consumer.subscribe([self.config.topic])
+    def listen(self, on_message: Callable[[I], None]):
+        self.consumer.subscribe([self.topic.topic])
         try:
             while True:
                 msg = self.consumer.poll(.2)
@@ -31,7 +33,8 @@ class KafkaConsumer(BrokerConsumer[Message, Data]):
                     else:
                         print(msg.error())
                         break
-                item = self.config.serializer.deserialize(msg.value().decode('utf-8'))
+                value = msg.value()
+                item = self.topic.serializer.deserialize(value.decode('utf-8'))
                 on_message(item)
         except KeyboardInterrupt:
             pass

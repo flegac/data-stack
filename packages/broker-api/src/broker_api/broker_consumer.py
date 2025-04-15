@@ -1,11 +1,14 @@
 from abc import abstractmethod
-from typing import Generic, Callable, TypeVar
+from typing import Generic, Callable
 
-T = TypeVar('T')
+from broker_api.broker_topic import BrokerTopic
+from broker_api.serializer import I, O
 
 
-class BrokerConsumer(Generic[T]):
+class BrokerConsumer(Generic[I]):
+    def __init__(self, topic: BrokerTopic[I, O]):
+        self.topic = topic
 
     @abstractmethod
-    def listen(self, on_message: Callable[[T], None]):
+    def listen(self, on_message: Callable[[I], None]):
         ...
