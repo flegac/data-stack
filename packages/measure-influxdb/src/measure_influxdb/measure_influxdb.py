@@ -1,5 +1,4 @@
 import time
-from datetime import datetime
 from functools import cached_property
 
 import influxdb_client
@@ -9,10 +8,10 @@ from influxdb_client.client.write_api import SYNCHRONOUS
 from measure_influxdb.influxdb_config import InfluxDBConfig
 from measure_repository import MeasureSeries, Measure, MeasureQuery
 from measure_repository.measure_repository import MeasureRepository
-from measure_repository.model.sensor import Sensor, Location, MeasureType
+from measure_repository.model.sensor import Sensor, MeasureType
 
 
-class InfluxDbConnection(MeasureRepository):
+class MeasureInfluxDb(MeasureRepository):
     def __init__(self, config: InfluxDBConfig):
         self.config = config
 
@@ -35,7 +34,6 @@ class InfluxDbConnection(MeasureRepository):
             org=self.config.org,
             record=record
         )
-        time.sleep(.1)
 
     def write_batch(self, measures: MeasureSeries):
         for _ in measures:
