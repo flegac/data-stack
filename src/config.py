@@ -1,7 +1,6 @@
-from broker_api.broker_topic import BrokerTopic
-from broker_kafka.kafka_config import KafkaConfig
-from broker_kafka.kafka_factory import KafkaFactory
-from measure_influxdb.influxdb_config import InfluxDBConfig
+from kafka_connector.broker_topic import BrokerTopic
+from kafka_connector.kafka_config import KafkaConfig
+from influxdb_connector.influxdb_config import InfluxDBConfig
 from src.measure_serializer import MeasureSerializer
 
 INFLUX_DB_CONFIG = InfluxDBConfig(

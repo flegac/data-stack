@@ -1,16 +1,16 @@
 import datetime
 
-from broker_kafka.kafka_factory import KafkaFactory
-from measure_open_meteo.measure_open_meteo import MeasureOpenMeteo
-from measure_repository import MeasureQuery
-from measure_repository.model.measure_query import Period
-from measure_repository.model.sensor import MeasureType, Location
+from kafka_connector.kafka_factory import KafkaFactory
+from measure_open_meteo.open_meteo_measure_reader import OpenMeteoMeasureReader
+from measure_feature import MeasureQuery
+from measure_feature.model.measure_query import Period
+from measure_feature.model.sensor import MeasureType, Location
 from src.config import TEMPERATURES_TOPIC, KAFKA_CONFIG
 
 
 def main():
     producer = KafkaFactory(KAFKA_CONFIG).producer(TEMPERATURES_TOPIC)
-    data = MeasureOpenMeteo().search(
+    data = OpenMeteoMeasureReader().search(
         MeasureQuery(
             measure_type=MeasureType.TEMPERATURE,
             period=Period(

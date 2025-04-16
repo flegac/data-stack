@@ -4,9 +4,9 @@ from dataclasses import asdict
 
 import pandas as pd
 
-from broker_api.serializer import Serializer
-from measure_repository import Measure
-from measure_repository.model.sensor import MeasureType, Sensor
+from kafka_connector.serializer import Serializer
+from measure_feature import Measure
+from measure_feature.model.sensor import MeasureType, Sensor
 
 
 class MeasureSerializer(Serializer[Measure, str]):

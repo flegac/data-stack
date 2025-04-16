@@ -1,28 +1,45 @@
 # Data-stack
 
-Small project to experiment with different data oriented libraries.
+Putting together a data stack with Python to handle meteorological data.
 
 ## Setup
 
 ```bash
+rm .venv
 uv venv
 uv sync --all-packages 
 ```
 
-## Architecture
+## Technologies
 
-The project is composed of several packages:
+Long term storage / archiving:
 
-- `temperature-datasource`: a simple package that provides a function to get the temperature in a given city
-- `temperature-repository`: a simple package that provides a function to get the temperature in a given city
-- `meteo-app`: a simple package that provides a function to get the temperature in a given city
-- `meteo-backend`: a simple package that provides a function to get the temperature in a given city
+- S3 (minio)
+- NetCDF / HDF5
 
-## Stack
+Short term storage / querying:
+
+- InfluxDB
 
 Message brokers:
 
 - Kafka
-- RabbitMQ
+
+Data processing:
+
+- xarray : data structures
+- dask : distributed computing
+- xarray-simlab : simulations
+
+Data sources:
+
+- OpenMeteo API
+
+Hexagonal architecture:
 
 - https://injector.readthedocs.io/en/latest/
+
+Tools:
+
+- uv: package manager
+- unittest: unit testing

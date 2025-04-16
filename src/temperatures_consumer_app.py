@@ -1,12 +1,12 @@
 import asyncio
 
-from broker_kafka.kafka_factory import KafkaFactory
-from measure_influxdb.measure_influxdb import MeasureInfluxDb
+from kafka_connector.kafka_factory import KafkaFactory
+from influxdb_connector.measure_influxdb import InfluxDbMeasureRepository
 from src.config import TEMPERATURES_TOPIC, KAFKA_CONFIG, INFLUX_DB_CONFIG
 
 
 async def main():
-    measure_influxdb = MeasureInfluxDb(INFLUX_DB_CONFIG)
+    measure_influxdb = InfluxDbMeasureRepository(INFLUX_DB_CONFIG)
 
     async def measure_influxdb_write(measure):
         print(measure)

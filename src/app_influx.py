@@ -1,15 +1,15 @@
 import datetime
 import random
 
-from measure_influxdb.measure_influxdb import MeasureInfluxDb
-from measure_repository import Measure, MeasureQuery
-from measure_repository.model.measure_query import Period
-from measure_repository.model.sensor import MeasureType, Location, Sensor
-from src.config import INFLUX_DB_CONFIG
+from influxdb_connector.measure_influxdb import InfluxDbMeasureRepository
+from measure_feature import Measure, MeasureQuery
+from measure_feature.model.measure_query import Period
+from measure_feature.model.sensor import MeasureType, Location, Sensor
+from config import INFLUX_DB_CONFIG
 
 
 def main():
-    measure_influxdb = MeasureInfluxDb(INFLUX_DB_CONFIG)
+    measure_influxdb = InfluxDbMeasureRepository(INFLUX_DB_CONFIG)
     measure_influxdb.write(Measure(
         datetime=datetime.datetime.now(),
         value=random.random(),
