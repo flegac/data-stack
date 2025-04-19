@@ -1,5 +1,5 @@
 [project]
-name = "cds-connector"
+name = "grib-connector"
 version = "0.1.0"
 description = "Add your description here"
 readme = "README.md"
@@ -7,13 +7,7 @@ authors = [
     { name = "flegac", email = "florent.legac@gmail.com" }
 ]
 requires-python = ">=3.12"
-dependencies = [
-    "cdsapi>=0.7.5",
-    "cfgrib>=0.9.15.0",
-    "dask>=2025.3.0",
-    "h5netcdf>=1.6.1",
-    "xarray>=2025.3.1",
-]
+dependencies = []
 
 [build-system]
 requires = ["hatchling"]
