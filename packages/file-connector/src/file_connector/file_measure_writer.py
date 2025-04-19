@@ -4,7 +4,7 @@ from measure_feature import Measure, MeasureSeries
 from measure_feature.api.measure_writer import MeasureWriter
 
 
-class GribMeasureWriter(MeasureWriter):
+class FileMeasureWriter(MeasureWriter):
     @override
     def write(self, measure: Measure):
         raise NotImplementedError

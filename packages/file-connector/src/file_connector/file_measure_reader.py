@@ -3,40 +3,41 @@ from typing import override, Generator, Any
 import pandas as pd
 import xarray as xr
 
-from grib_connector.grib_config import GribConfig
+from file_connector.file_config import FileConfig
 from measure_feature import MeasureSeries, MeasureQuery
 from measure_feature.api.measure_reader import MeasureReader
 from measure_feature.model.sensor import Sensor, MeasureType, Location
 
 
-class GribMeasureReader(MeasureReader):
+class FileMeasureReader(MeasureReader):
 
-    def __init__(self, config: GribConfig):
+    def __init__(self, config: FileConfig):
         super().__init__()
         self.config = config
-        self.raw = xr.open_dataset(self.config.path)
-        print(self.raw)
+        self.show_config()
+
+    def show_config(self):
+        print(self.config.raw)
 
     @override
     def read_all(self) -> Generator[MeasureSeries, Any, None]:
-        ds_xarray = self.raw
-        latitudes = ds_xarray['latitude']
-        longitudes = ds_xarray['longitude']
-        print(ds_xarray)
+        dataset = self.config.raw
+        latitudes = dataset['latitude']
+        longitudes = dataset['longitude']
         print(len(latitudes), len(longitudes))
 
-        for lat_idx in range(len(ds_xarray['latitude'])):
-            for lon_idx in range(len(ds_xarray['longitude'])):
+        for lat_idx in range(len(latitudes)):
+            for lon_idx in range(len(longitudes)):
                 temperatures = MeasureSeries(
                     sensor=Sensor(
                         id="cds",
                         type=MeasureType.TEMPERATURE,
                         location=Location(
-                            latitude=float(ds_xarray['latitude'].values[lat_idx]),
-                            longitude=float(ds_xarray['longitude'].values[lon_idx])
+                            latitude=float(latitudes.values[lat_idx]),
+                            longitude=float(longitudes.values[lon_idx])
                         ),
                     ),
-                    measures=self._extract_time_series(ds_xarray, 'precip', lat_idx, lon_idx)
+                    measures=self._extract_time_series(dataset, self.config.variable_name, lat_idx, lon_idx)
                 )
                 yield temperatures
 

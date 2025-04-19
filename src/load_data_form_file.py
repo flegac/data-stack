@@ -1,7 +1,7 @@
 from pathlib import Path
 
-from grib_connector.grib_config import GribConfig
-from grib_connector.grib_measure_reader import GribMeasureReader
+from file_connector.file_config import FileConfig
+from file_connector.file_measure_reader import FileMeasureReader
 
 
 def main():
@@ -10,12 +10,12 @@ def main():
     filepath = path / 'CDS-1983-10-22.nc'
     filepath = path / 'CDS-1983-10.nc'
 
-    grib = GribConfig(
+    grib = FileConfig(
         path=path / 'CDS-hydro-2020-10-22.nc',
         variable_name='precip'
     )
 
-    reader = GribMeasureReader(grib)
+    reader = FileMeasureReader(grib)
     for measures in reader.read_all():
         max_value = measures.measures['value'].max()
         print(measures.sensor, measures.measures.head())
