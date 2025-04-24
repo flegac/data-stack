@@ -7,7 +7,10 @@ authors = [
     { name = "flegac", email = "florent.legac@gmail.com" }
 ]
 requires-python = ">=3.12"
-dependencies = []
+dependencies = [
+    "h5netcdf>=1.6.1",
+    "xarray>=2025.3.1",
+]
 
 [build-system]
 requires = ["hatchling"]

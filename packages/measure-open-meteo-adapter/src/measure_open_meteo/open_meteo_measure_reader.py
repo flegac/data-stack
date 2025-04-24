@@ -1,4 +1,4 @@
-from typing import override
+from typing import override, Generator, Any
 
 import openmeteo_requests
 import pandas as pd
@@ -13,8 +13,12 @@ OPEN_METEO_URL = 'https://archive-api.open-meteo.com/v1/archive'
 
 
 class OpenMeteoMeasureReader(MeasureReader):
+    def __init__(self, query: MeasureQuery):
+        self.query = query
+
     @override
-    def search(self, query: MeasureQuery):
+    def read_all(self) -> Generator[MeasureSeries, Any, None]:
+        query = self.query
         if not (measure_type := query.measure_type):
             raise ValueError('measure_type is required')
         if not (location := query.location):
@@ -42,7 +46,7 @@ class OpenMeteoMeasureReader(MeasureReader):
         location_0 = responses[0]
         hourly = location_0.Hourly()
 
-        return MeasureSeries(
+        yield MeasureSeries(
             sensor=Sensor(
                 id='OpenMeteo',
                 type=query.measure_type,

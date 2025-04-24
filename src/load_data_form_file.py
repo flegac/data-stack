@@ -12,7 +12,7 @@ def main():
 
     grib = FileConfig(
         path=path / 'CDS-hydro-2020-10-22.nc',
-        variable_name='precip'
+        variables=['precip']
     )
 
     reader = FileMeasureReader(grib)
