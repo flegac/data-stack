@@ -1,0 +1,17 @@
+[project]
+name = "measure-io-file"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+authors = [
+    { name = "flegac", email = "florent.legac@gmail.com" }
+]
+requires-python = ">=3.12"
+dependencies = [
+    "h5netcdf>=1.6.1",
+    "xarray>=2025.3.1",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"

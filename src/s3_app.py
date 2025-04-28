@@ -1,7 +1,7 @@
 import asyncio
 
-from s3_connector.s3_client import S3Client
-from s3_connector.s3_config import S3Config
+from file_repository_s3.s3_file_repository import S3FileRepository
+from file_repository_s3.s3_config import S3Config
 
 
 async def main():
@@ -10,15 +10,15 @@ async def main():
         access_key="admin",
         secret_key="adminpassword"
     )
-    client = S3Client(config)
+    repository = S3FileRepository(config)
 
-    await client.create_bucket("my-bucket")
+    await repository.create_bucket("my-bucket")
     file_content = "Hello, MinIO!"
-    await client.upload_file("my-bucket", "example.txt", file_content)
-    await client.list_buckets()
-    await client.list_objects("my-bucket")
-    await client.get_object_metadata("my-bucket", "example.txt")
-    content = await client.download_object("my-bucket", "example.txt")
+    await repository.upload_file("my-bucket", "example.txt", file_content)
+    await repository.list_buckets()
+    await repository.list_files("my-bucket")
+    await repository.get_object_metadata("my-bucket", "example.txt")
+    content = await repository.download_file("my-bucket", "example.txt")
     if content:
         print("Downloaded content:")
         print(content.decode("utf-8"))

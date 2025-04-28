@@ -52,6 +52,19 @@ services:
     volumes:
       - minio-data:/data
 
+  postgres:
+    image: postgres:latest
+    container_name: postgres
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: adminpassword
+      POSTGRES_DB: mydatabase
+    volumes:
+      - postgres-data:/data/measures/postgresql
+
 volumes:
   influxdb-data:
   minio-data:
+  postgres-data:

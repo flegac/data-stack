@@ -1,7 +1,7 @@
 from kafka_connector.broker_topic import BrokerTopic
 from kafka_connector.kafka_config import KafkaConfig
-from influxdb_connector.influxdb_config import InfluxDBConfig
-from src.measure_serializer import MeasureSerializer
+from measure_io_influxdb.influxdb_config import InfluxDBConfig
+from measure_io_kafka.measure_serializer import MeasureSerializer
 
 INFLUX_DB_CONFIG = InfluxDBConfig(
     url="http://localhost:8086",
