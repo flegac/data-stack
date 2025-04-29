@@ -4,20 +4,20 @@ from dataclasses import asdict
 
 import pandas as pd
 
-from kafka_connector.serializer import Serializer
+from message_queue.serializer import Serializer
 from measure_io.measure import Measure
 from measure_io.sensor import MeasureType, Sensor
 
 
-class MeasureSerializer(Serializer[Measure, str]):
-    def serialize(self, message: Measure) -> str:
+class MeasureSerializer(Serializer[Measure, bytes]):
+    def serialize(self, message: Measure) -> bytes:
         measure_dict = asdict(message)
         measure_dict['value'] = float(message.value) if pd.notna(message.value) else None
         measure_dict['datetime'] = message.datetime.isoformat()
         measure_dict['sensor']['type'] = message.sensor.type.name  # Convert MeasureType to string
-        return json.dumps(measure_dict)
+        return json.dumps(measure_dict).encode('utf-8')
 
-    def deserialize(self, raw: str) -> Measure:
+    def deserialize(self, raw: bytes) -> Measure:
         raw = json.loads(raw)
         raw['datetime'] = datetime.datetime.fromisoformat(raw['datetime'])
         try:

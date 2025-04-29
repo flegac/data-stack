@@ -12,6 +12,9 @@ class Measure:
     value: float
     sensor: Sensor | None = None
 
+    def __repr__(self):
+        return f'{self.sensor.type.name}[value={self.value}, time={self.datetime}]'
+
 
 @dataclass
 class MeasureSeries:

@@ -14,26 +14,23 @@ class TestPgDataFileRepository(IsolatedAsyncioTestCase):
         self.repo = PgDataFileRepository(
             database_url="postgresql+asyncpg://admin:adminpassword@localhost:5432/mydatabase"
         )
-        await self.repo.init()
-
-    async def asyncTearDown(self):
-        await self.repo.close()
 
     async def test_transaction(self):
         repo = self.repo
 
         datafile = DataFile.from_file(
+            key='xxx',
             path=Path(__file__).absolute()
         )
         await repo.create_or_update(datafile)
         await self.log_all()
 
         async with repo.transaction():
-            datafile.file_uid = 'toto'
+            datafile.key = 'toto'
             await repo.create_or_update(datafile)
             await self.log_all()
 
-            datafile.file_uid = 'titi'
+            datafile.key = 'titi'
             await repo.create_or_update(datafile)
             await self.log_all()
             repo.cancel_transaction()
@@ -44,6 +41,7 @@ class TestPgDataFileRepository(IsolatedAsyncioTestCase):
         repo = self.repo
 
         datafile = DataFile.from_file(
+            key='yyy',
             path=Path(__file__).absolute()
         )
 
@@ -53,10 +51,10 @@ class TestPgDataFileRepository(IsolatedAsyncioTestCase):
         await repo.update_status(datafile, TaskStatus.ingestion_success)
         await self.log_all()
 
-        await repo.delete(datafile.file_uid)
+        await repo.delete_by_key(datafile.key)
         await self.log_all()
 
     async def log_all(self):
         async for datafile in self.repo.read_all():
-            print(datafile.file_uid, datafile.status)
+            print(datafile.key, datafile.status)
         print('-------------------')

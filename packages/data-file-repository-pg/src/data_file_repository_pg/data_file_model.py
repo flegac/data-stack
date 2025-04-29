@@ -10,8 +10,9 @@ Base = declarative_base()
 
 class DataFileModel(Base):
     __tablename__ = 'datafile'
-    name = Column(String, nullable=False)
-    file_uid = Column(String, primary_key=True)
+    key = Column(String, primary_key=True)
+    source_hash = Column(String, nullable=False)
+    source_uri = Column(String, nullable=False)
+    status = Column(SqlEnum(TaskStatus), nullable=False)
     creation_date = Column(DateTime, nullable=False, default=datetime.now)
     last_update_date = Column(DateTime, nullable=False, default=datetime.now, onupdate=datetime.now)
-    status = Column(SqlEnum(TaskStatus), nullable=False)

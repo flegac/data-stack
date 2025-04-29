@@ -1,10 +1,10 @@
 import datetime
 
-from kafka_connector.kafka_factory import KafkaFactory
+from message_queue_kafka.kafka_factory import KafkaFactory
 from measure_io.measure_query import Period, MeasureQuery
 from measure_io.sensor import MeasureType, Location
 from measure_io_open_meteo.open_meteo_measure_reader import OpenMeteoMeasureReader
-from src.config import TEMPERATURES_TOPIC, KAFKA_CONFIG
+from src.config import TEMPERATURE_TOPIC, KAFKA_CONFIG
 
 
 def main():
@@ -20,7 +20,7 @@ def main():
         ),
     )
 
-    producer = KafkaFactory(KAFKA_CONFIG).producer(TEMPERATURES_TOPIC)
+    producer = KafkaFactory(KAFKA_CONFIG).producer(TEMPERATURE_TOPIC)
     for data in OpenMeteoMeasureReader(query).read_all():
         producer.write_batch(data)
 

@@ -15,11 +15,11 @@ class DataFileRepository(ABC):
         ...
 
     @abstractmethod
-    def find_by_uid(self, uid: str) -> DataFile | None:
+    def find_by_key(self, key: str) -> DataFile | None:
         ...
 
     @abstractmethod
-    async def delete(self, item: DataFile):
+    async def delete_by_key(self, item: DataFile):
         ...
 
     @abstractmethod

@@ -7,12 +7,7 @@ requires-python = ">=3.12"
 dependencies = []
 
 [tool.uv.sources]
-
-measure-io = { workspace = true }
-measure-io-file = { workspace = true }
-measure-io-open-meteo = { workspace = true }
-measure-io-influxdb = { workspace = true }
-measure-io-kafka = { workspace = true }
+aa-common = { workspace = true }
 
 data-file-ingestion = { workspace = true }
 data-file-repository = { workspace = true }
@@ -22,7 +17,14 @@ file-repository = { workspace = true }
 file-repository-posix = { workspace = true }
 file-repository-s3 = { workspace = true }
 
-kafka-connector = { workspace = true }
+measure-io = { workspace = true }
+measure-io-file = { workspace = true }
+measure-io-influxdb = { workspace = true }
+measure-io-kafka = { workspace = true }
+measure-io-open-meteo = { workspace = true }
+
+message-queue = { workspace = true }
+message-queue-kafka = { workspace = true }
 
 [tool.uv.workspace]
 members = ["packages/*"]

@@ -1,6 +1,6 @@
 from abc import abstractmethod
 
-from kafka_connector.kafka_producer import KafkaProducer
+from message_queue_kafka.kafka_producer import KafkaProducer
 from measure_io.measure import MeasureSeries, Measure
 from measure_io.measure_writer import MeasureWriter
 

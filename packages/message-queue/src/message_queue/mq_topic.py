@@ -1,9 +1,9 @@
 from typing import Generic
 
-from kafka_connector.serializer import I, O, Serializer
+from message_queue.serializer import I, O, Serializer
 
 
-class BrokerTopic(Generic[I, O]):
+class MQTopic(Generic[I, O]):
     def __init__(self, topic: str, serializer: Serializer[I, O]):
         self.topic = topic
         self.serializer = serializer

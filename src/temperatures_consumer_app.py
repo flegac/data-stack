@@ -1,8 +1,8 @@
 import asyncio
 
-from kafka_connector.kafka_factory import KafkaFactory
+from message_queue_kafka.kafka_factory import KafkaFactory
 from measure_io_influxdb.measure_writer_influxdb import InfluxDbMeasureWriter
-from src.config import TEMPERATURES_TOPIC, KAFKA_CONFIG, INFLUX_DB_CONFIG
+from src.config import TEMPERATURE_TOPIC, KAFKA_CONFIG, INFLUX_DB_CONFIG
 
 
 async def main():
@@ -13,7 +13,7 @@ async def main():
         influx_db_writer.write(measure)
 
     factory = KafkaFactory(KAFKA_CONFIG)
-    consumer = factory.consumer(TEMPERATURES_TOPIC)
+    consumer = factory.consumer(TEMPERATURE_TOPIC)
     await consumer.listen(measure_influxdb_write)
 
 

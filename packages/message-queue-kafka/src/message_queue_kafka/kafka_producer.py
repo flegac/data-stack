@@ -1,15 +1,17 @@
-from typing import Generic, Iterable
+from typing import override
 
 from confluent_kafka import Producer
+from loguru import logger
 
-from kafka_connector.broker_topic import BrokerTopic
-from kafka_connector.kafka_config import KafkaConfig
-from kafka_connector.serializer import I, O
+from message_queue.mq_producer import MQProducer
+from message_queue.mq_topic import MQTopic
+from message_queue.serializer import I, O
+from message_queue_kafka.kafka_config import KafkaConfig
 
 
-class KafkaProducer(Generic[I]):
-    def __init__(self, topic: BrokerTopic[I, O], config: KafkaConfig):
-        self.topic = topic
+class KafkaProducer(MQProducer[I]):
+    def __init__(self, topic: MQTopic[I, O], config: KafkaConfig):
+        super().__init__(topic)
         self.config = config
         self.producer = Producer({
             'bootstrap.servers': config.broker_url,
@@ -21,25 +23,20 @@ class KafkaProducer(Generic[I]):
             'linger.ms': 25,
         })
 
-    def write_single(self, item: I):
+    @override
+    async def write_single(self, item: I):
         try:
             message = self.topic.serializer.serialize(item)
             self.producer.produce(
                 self.topic.topic,
-                value=message.encode('utf-8'),
+                value=message,
                 callback=self._delivery_report
             )
         except Exception as e:
-            print(f'Exception occurred: {e}')
+            logger.warning(f'{self.topic.topic}: {item}: Error! {e}')
 
-    def write_batch(self, items: Iterable[I]):
-        try:
-            for _ in items:
-                self.write_single(_)
-        finally:
-            self.flush()
-
-    def flush(self):
+    @override
+    async def flush(self):
         self.producer.flush()
 
     def _delivery_report(self, err, msg):
