@@ -25,6 +25,7 @@ async def main():
     item = await service.upload_file('toto', Path(__file__))
     logger.debug(f'{item}')
 
+    # TODO: use as a callback in KafkaConsumer.listen()
     await service.ingest_file(item)
 
 
