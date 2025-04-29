@@ -13,6 +13,6 @@ DATAFILE_INGESTION_TOPIC = MQTopic(
 )
 
 DATAFILE_ERROR_TOPIC = MQTopic(
-    topic='DataFile.ingestion.topic',
+    topic='DataFile.error.topic',
     serializer=DataFileSerializer()
 )
