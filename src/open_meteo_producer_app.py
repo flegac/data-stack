@@ -1,13 +1,15 @@
+import asyncio
 import datetime
 
-from message_queue_kafka.kafka_factory import KafkaFactory
+from data_file_ingestion.config import TEMPERATURE_TOPIC
 from measure_io.measure_query import Period, MeasureQuery
 from measure_io.sensor import MeasureType, Location
 from measure_io_open_meteo.open_meteo_measure_reader import OpenMeteoMeasureReader
-from src.config import TEMPERATURE_TOPIC, KAFKA_CONFIG
+from message_queue_kafka.kafka_factory import KafkaFactory
+from src.config import KAFKA_CONFIG
 
 
-def main():
+async def main():
     query = MeasureQuery(
         measure_type=MeasureType.TEMPERATURE,
         period=Period(
@@ -22,8 +24,8 @@ def main():
 
     producer = KafkaFactory(KAFKA_CONFIG).producer(TEMPERATURE_TOPIC)
     for data in OpenMeteoMeasureReader(query).read_all():
-        producer.write_batch(data)
+        await producer.write_batch(data)
 
 
 if __name__ == '__main__':
-    main()
+    asyncio.run(main())

@@ -1,20 +1,21 @@
 import asyncio
 
-from message_queue_kafka.kafka_factory import KafkaFactory
+from data_file_ingestion.config import TEMPERATURE_TOPIC
 from measure_io_influxdb.measure_writer_influxdb import InfluxDbMeasureWriter
-from src.config import TEMPERATURE_TOPIC, KAFKA_CONFIG, INFLUX_DB_CONFIG
+from message_queue_kafka.kafka_factory import KafkaFactory
+from src.config import KAFKA_CONFIG, INFLUX_DB_CONFIG
 
 
 async def main():
     influx_db_writer = InfluxDbMeasureWriter(INFLUX_DB_CONFIG)
 
-    async def measure_influxdb_write(measure):
+    async def handler(measure):
         print(measure)
         influx_db_writer.write(measure)
 
     factory = KafkaFactory(KAFKA_CONFIG)
     consumer = factory.consumer(TEMPERATURE_TOPIC)
-    await consumer.listen(measure_influxdb_write)
+    await consumer.listen(handler)
 
 
 if __name__ == '__main__':

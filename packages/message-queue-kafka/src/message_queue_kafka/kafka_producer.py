@@ -11,7 +11,7 @@ from message_queue_kafka.kafka_config import KafkaConfig
 
 class KafkaProducer(MQProducer[I]):
     def __init__(self, topic: MQTopic[I, O], config: KafkaConfig):
-        super().__init__(topic)
+        self.topic = topic
         self.config = config
         self.producer = Producer({
             'bootstrap.servers': config.broker_url,
