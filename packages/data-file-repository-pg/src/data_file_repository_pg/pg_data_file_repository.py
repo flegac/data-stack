@@ -1,79 +1,120 @@
+from contextlib import asynccontextmanager
 from datetime import datetime
 from typing import override
 
 import databases
-from sqlalchemy import delete, Column, String, DateTime, Enum as SqlEnum
+from sqlalchemy import delete, update
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
 from sqlalchemy.future import select
-from sqlalchemy.orm import sessionmaker, declarative_base
+from sqlalchemy.orm import sessionmaker
 
-from data_file_ingestion.data_file import DataFile
-from data_file_ingestion.task_status import TaskStatus
-from data_file_ingestion.data_file_repository import DataFileRepository
+from data_file_repository.data_file import DataFile
+from data_file_repository.data_file_repository import DataFileRepository
+from data_file_repository.task_status import TaskStatus
+from data_file_repository_pg.data_file_model import DataFileModel
 
-Base = declarative_base()
+
+class CancelTransactionException(Exception):
+    pass
 
 
 class PgDataFileRepository(DataFileRepository):
+
     def __init__(self, database_url: str):
         self.database_url = database_url
         self.database = databases.Database(database_url)
         self.engine = create_async_engine(database_url, echo=False)
         self.async_session = sessionmaker(self.engine, expire_on_commit=False, class_=AsyncSession)
-        self.model = self._create_model()
+        self.model = DataFileModel
 
-    def _create_model(self):
-        class DataFileModel(Base):
-            __tablename__ = 'datafile'
-            name = Column(String, nullable=False)
-            uri = Column(String, primary_key=True)
-            file_uid = Column(String, nullable=False)
-            creation_date = Column(DateTime, nullable=False, default=datetime.now)
-            last_update_date = Column(DateTime, nullable=False, default=datetime.now, onupdate=datetime.now)
-            status = Column(SqlEnum(TaskStatus), nullable=False)
+        self._current_session = None
 
-        return DataFileModel
+    @asynccontextmanager
+    async def transaction(self):
+        if self._current_session is not None:
+            yield self._current_session
+            return
+        async with self.async_session() as session:
+            self._current_session = session
+            try:
+                yield session
+                await session.commit()
+            except CancelTransactionException:
+                await session.rollback()
+            except Exception:
+                await session.rollback()
+                raise
+            finally:
+                self._current_session = None
+
+    def cancel_transaction(self):
+        raise CancelTransactionException
+
+    @override
+    async def find_by_uid(self, uid: str):
+        async with self.async_session() as session:
+            stmt = select(self.model).where(self.model.file_uid == uid)
+            result = await session.execute(stmt)
+            row = result.scalar_one_or_none()
+            if row:
+                return DataFile(
+                    name=row.name,
+                    file_uid=row.file_uid,
+                    creation_date=row.creation_date,
+                    last_update_date=row.last_update_date,
+                    status=row.status
+                )
+            return None
+
+    @override
+    async def update_status(self, item: DataFile, status: TaskStatus) -> DataFile:
+        async with self.transaction() as session:
+            stmt = (
+                update(self.model)
+                .where(self.model.file_uid == item.file_uid)
+                .values(status=status, last_update_date=datetime.now())
+            )
+            result = await session.execute(stmt)
+
+        if result.rowcount == 0:
+            raise ValueError(f"No DataFile found with uid: {item.file_uid}")
+        return await self.find_by_uid(item.file_uid)
+
+    @override
+    async def create_or_update(self, item: DataFile):
+        async with self.transaction() as session:
+            item.last_update_date = datetime.now()
+            await session.merge(self.model(
+                name=item.name,
+                file_uid=item.file_uid,
+                creation_date=item.creation_date,
+                last_update_date=item.last_update_date,
+                status=item.status
+            ))
+
+    @override
+    async def delete(self, uid: str):
+        async with self.transaction() as session:
+            await session.execute(delete(self.model).where(self.model.file_uid == uid))
+
+    @override
+    async def read_all(self):
+        async with self.transaction() as session:
+            result = await session.execute(select(self.model))
+        for row in result.scalars().all():
+            yield DataFile(
+                name=row.name,
+                file_uid=row.file_uid,
+                creation_date=row.creation_date,
+                last_update_date=row.last_update_date,
+                status=row.status
+            )
 
     @override
     async def init(self):
         await self.database.connect()
         async with self.engine.begin() as conn:
             await conn.run_sync(self.model.metadata.create_all)
-
-    @override
-    async def create_or_update(self, item: DataFile):
-        async with self.async_session() as session:
-            # Mettre à jour la date de dernière mise à jour
-            item.last_update_date = datetime.now()
-            await session.merge(self.model(
-                name=item.name,
-                uri=item.uri,
-                file_uid=item.file_uid,
-                creation_date=item.creation_date,
-                last_update_date=item.last_update_date,
-                status=item.status
-            ))
-            await session.commit()
-
-    @override
-    async def delete(self, item_uri: str):
-        async with self.async_session() as session:
-            await session.execute(delete(self.model).where(self.model.uri == item_uri))
-            await session.commit()
-
-    @override
-    async def read_all(self):
-        async with self.async_session() as session:
-            result = await session.execute(select(self.model))
-            for row in result.scalars().all():
-                yield DataFile(
-                    name=row.name,
-                    uri=row.uri,
-                    file_uid=row.file_uid,
-                    creation_date=row.creation_date,
-                    last_update_date=row.last_update_date,
-                    status=row.status
-                )
 
     @override
     async def close(self):

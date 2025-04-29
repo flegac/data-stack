@@ -15,6 +15,7 @@ measure-io-influxdb = { workspace = true }
 measure-io-kafka = { workspace = true }
 
 data-file-ingestion = { workspace = true }
+data-file-repository = { workspace = true }
 data-file-repository-pg = { workspace = true }
 
 file-repository = { workspace = true }
@@ -22,7 +23,6 @@ file-repository-posix = { workspace = true }
 file-repository-s3 = { workspace = true }
 
 kafka-connector = { workspace = true }
-
 
 [tool.uv.workspace]
 members = ["packages/*"]

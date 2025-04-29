@@ -17,9 +17,14 @@ Long term storage / archiving:
 - S3 (minio)
 - NetCDF / HDF5
 
+
 Short term storage / querying:
 
 - InfluxDB
+
+Metadata DB:
+
+- PostgreSQL
 
 Message brokers:
 

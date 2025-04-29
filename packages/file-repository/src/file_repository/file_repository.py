@@ -31,6 +31,7 @@ class FileRepository(ABC):
         content = await self.read_content(key)
         with target.open('wb') as _:
             _.write(content)
+        return target
 
     @abstractmethod
     async def read_content(self, key: str) -> Optional[bytes]:
