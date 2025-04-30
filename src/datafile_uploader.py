@@ -1,13 +1,13 @@
 import asyncio
 
 from wires.application import ApplicationContainer
-from worker.datafile_ingestion_listener import DataFileIngestionListener
+from worker.datafile_upload_worker import DataFileUploadWorker
 
 if __name__ == '__main__':
     container = ApplicationContainer()
     container.check_dependencies()
     container.wire(modules=[__name__])
 
-    worker = DataFileIngestionListener()
+    worker = DataFileUploadWorker()
 
     asyncio.run(worker.run())

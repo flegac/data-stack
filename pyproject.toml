@@ -18,7 +18,7 @@ file-repository-posix = { workspace = true }
 file-repository-s3 = { workspace = true }
 
 measure-io = { workspace = true }
-measure-io-file = { workspace = true }
+measure-io-datafile = { workspace = true }
 measure-io-influxdb = { workspace = true }
 measure-io-kafka = { workspace = true }
 measure-io-open-meteo = { workspace = true }

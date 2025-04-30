@@ -9,7 +9,7 @@ class TestSerializer(TestCase):
     def test_serializer(self):
         serializer = DataFileSerializer()
 
-        item = DataFile.from_file('toto', Path(__file__))
+        item = DataFile.from_file(Path(__file__))
 
         expected = serializer.serialize(item)
 

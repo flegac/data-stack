@@ -3,11 +3,12 @@ from pathlib import Path
 
 from loguru import logger
 
-from data_file_ingestion.config import DATAFILE_INGESTION_TOPIC, DATAFILE_ERROR_TOPIC
+from data_file_ingestion.config import DATAFILE_INGESTION_TOPIC, DATAFILE_ERROR_TOPIC, MEASURE_TOPIC
 from data_file_repository.data_file import DataFile
 from data_file_repository.data_file_repository import DataFileRepository
 from data_file_repository.task_status import TaskStatus
 from file_repository.file_repository import FileRepository
+from measure_io_datafile.datafile_measure_reader import DataFileMeasureReader
 from message_queue.mq_factory import MQFactory
 
 
@@ -16,31 +17,35 @@ class DataFileIngestionService:
             self,
             data_file_repository: DataFileRepository,
             file_repository: FileRepository,
-            message_queue: MQFactory
+            mq_factory: MQFactory,
     ):
         self.data_file_repository = data_file_repository
         self.file_repository = file_repository
-        self.message_queue = message_queue
+        self.mq_factory = mq_factory
 
     @cached_property
     def ingestion_producer(self):
-        return self.message_queue.producer(DATAFILE_INGESTION_TOPIC)
+        return self.mq_factory.producer(DATAFILE_INGESTION_TOPIC)
 
     @cached_property
     def ingestion_consumer(self):
-        return self.message_queue.consumer(DATAFILE_INGESTION_TOPIC)
+        return self.mq_factory.consumer(DATAFILE_INGESTION_TOPIC)
 
     @cached_property
     def error_producer(self):
-        return self.message_queue.producer(DATAFILE_ERROR_TOPIC)
+        return self.mq_factory.producer(DATAFILE_ERROR_TOPIC)
 
     @cached_property
     def error_consumer(self):
-        return self.message_queue.consumer(DATAFILE_ERROR_TOPIC)
+        return self.mq_factory.consumer(DATAFILE_ERROR_TOPIC)
 
-    async def upload_file(self, key: str, path: Path) -> DataFile | None:
+    @cached_property
+    def measure_producer(self):
+        return self.mq_factory.producer(MEASURE_TOPIC)
+
+    async def upload_file(self, path: Path, key: str | None = None) -> DataFile | None:
         logger.info(f'upload_file: {key}[{path}')
-        item = DataFile.from_file(key, path)
+        item = DataFile.from_file(path=path, key=key)
         await self.data_file_repository.create_or_update(item)
 
         try:
@@ -66,11 +71,18 @@ class DataFileIngestionService:
 
             item = await self.data_file_repository.update_status(item, TaskStatus.ingestion_in_progress)
 
-            local_path = await self.file_repository.download_file(item.key)
+            item.local_path = await self.file_repository.download_file(item.key)
 
-            raise NotImplementedError
+            reader = DataFileMeasureReader(item)
+            provider = reader.read_all()
 
-            item = await self.data_file_repository.update_status(item, TaskStatus.ingestion_success)
+            try:
+                for measures in provider:
+                    await self.measure_producer.write_batch(measures)
+                item = await self.data_file_repository.update_status(item, TaskStatus.ingestion_success)
+            except:
+                item = await self.data_file_repository.update_status(item, TaskStatus.ingestion_error)
+                raise
 
             return item
         except:

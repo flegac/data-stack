@@ -1,5 +1,5 @@
 [project]
-name = "measure-io-file"
+name = "measure-io-datafile"
 version = "0.1.0"
 description = "Add your description here"
 readme = "README.md"

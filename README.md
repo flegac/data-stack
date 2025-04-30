@@ -42,7 +42,9 @@ Data sources:
 
 Hexagonal architecture:
 
+- https://github.com/ets-labs/python-dependency-injector
 - https://injector.readthedocs.io/en/latest/
+
 
 Tools:
 

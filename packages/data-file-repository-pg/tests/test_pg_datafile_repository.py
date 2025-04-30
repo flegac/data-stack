@@ -19,7 +19,6 @@ class TestPgDataFileRepository(IsolatedAsyncioTestCase):
         repo = self.repo
 
         datafile = DataFile.from_file(
-            key='xxx',
             path=Path(__file__).absolute()
         )
         await repo.create_or_update(datafile)
@@ -41,7 +40,6 @@ class TestPgDataFileRepository(IsolatedAsyncioTestCase):
         repo = self.repo
 
         datafile = DataFile.from_file(
-            key='yyy',
             path=Path(__file__).absolute()
         )
 

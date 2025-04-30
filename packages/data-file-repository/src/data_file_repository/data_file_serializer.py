@@ -17,6 +17,7 @@ class DataFileSerializer(Serializer[DataFile, bytes]):
         data_file_dict['status'] = data_file.status.name
         data_file_dict['creation_date'] = data_file.creation_date.isoformat()
         data_file_dict['last_update_date'] = data_file.last_update_date.isoformat()
+        del data_file_dict['local_path']
         return json.dumps(data_file_dict).encode('utf-8')
 
     def deserialize(self, raw: bytes) -> DataFile:
