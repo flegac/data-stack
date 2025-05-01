@@ -1,11 +1,11 @@
 from loguru import logger
 
-from measure_repository_datafile.datafile_measure_reader import DataFileMeasureReader
-from meteo_measures.entities.data_file import DataFile
-from meteo_measures.entities.task_status import TaskStatus
-from meteo_measures.ports.data_file_repository import DataFileRepository
-from meteo_measures.ports.file_repository import FileRepository
-from meteo_measures.services.datafile_messaging_service import DataFileMessagingService
+from measure_repository_datafile.data_file_measure_reader import DataFileMeasureReader
+from meteo_measures.domain.entities.data_file import DataFile
+from meteo_measures.domain.entities.task_status import DataFileLifecycle
+from meteo_measures.domain.ports.data_file_repository import DataFileRepository
+from meteo_measures.domain.ports.file_repository import FileRepository
+from meteo_measures.domain.services.data_file_messaging_service import DataFileMessagingService
 
 
 class DataFileIngestionService:
@@ -25,9 +25,9 @@ class DataFileIngestionService:
     async def ingest_file(self, item: DataFile):
         logger.debug(f'ingest_file: {item}')
         try:
-            assert item.status in [TaskStatus.upload_success, TaskStatus.ingestion_pending]
+            assert item.status in [DataFileLifecycle.upload_completed]
 
-            item = await self.data_file_repository.update_status(item, TaskStatus.ingestion_in_progress)
+            item = await self.data_file_repository.update_status(item, DataFileLifecycle.ingestion_in_progress)
 
             item.local_path = await self.file_repository.download_file(item.key)
 
@@ -37,9 +37,9 @@ class DataFileIngestionService:
             try:
                 for measures in provider:
                     await self.messaging.measure_producer.write_batch(measures)
-                item = await self.data_file_repository.update_status(item, TaskStatus.ingestion_success)
+                item = await self.data_file_repository.update_status(item, DataFileLifecycle.ingestion_completed)
             except:
-                item = await self.data_file_repository.update_status(item, TaskStatus.ingestion_error)
+                item = await self.data_file_repository.update_status(item, DataFileLifecycle.ingestion_failed)
                 raise
 
             return item

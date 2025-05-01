@@ -6,7 +6,7 @@ from pathlib import Path
 
 import xarray as xr
 
-from meteo_measures.entities.task_status import TaskStatus
+from meteo_measures.domain.entities.task_status import DataFileLifecycle
 
 
 @dataclass
@@ -15,7 +15,7 @@ class DataFile:
     source_hash: str
     source_uri: str
     local_path: Path | None = None
-    status: TaskStatus = field(default=TaskStatus.created)
+    status: DataFileLifecycle = field(default=DataFileLifecycle.created)
     creation_date: datetime = field(default_factory=datetime.now)
     last_update_date: datetime = field(default_factory=datetime.now)
 

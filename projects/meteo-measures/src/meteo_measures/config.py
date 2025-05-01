@@ -1,11 +1,16 @@
 from message_queue.mq_topic import MQTopic
-from meteo_measures.entities.data_file_serializer import DataFileSerializer
-from meteo_measures.entities.measures.measure_serializer import MeasureSerializer
+from meteo_measures.domain.entities.data_file_serializer import DataFileSerializer
+from meteo_measures.domain.entities.measures.measure_serializer import MeasureSerializer
 
-MEASURE_TOPIC = MQTopic(
-    topic='measure.topic',
-    serializer=MeasureSerializer()
-)
+
+def specific_measure_topic(name: str):
+    return MQTopic(
+        topic=f'{name}.topic',
+        serializer=MeasureSerializer()
+    )
+
+
+MEASURE_TOPIC = specific_measure_topic('measure')
 
 TEMPERATURE_TOPIC = MQTopic(
     topic='temperature.topic',

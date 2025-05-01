@@ -2,11 +2,11 @@ from pathlib import Path
 
 from loguru import logger
 
-from meteo_measures.entities.data_file import DataFile
-from meteo_measures.entities.task_status import TaskStatus
-from meteo_measures.ports.data_file_repository import DataFileRepository
-from meteo_measures.ports.file_repository import FileRepository
-from meteo_measures.services.datafile_messaging_service import DataFileMessagingService
+from meteo_measures.domain.entities.data_file import DataFile
+from meteo_measures.domain.entities.task_status import DataFileLifecycle
+from meteo_measures.domain.ports.data_file_repository import DataFileRepository
+from meteo_measures.domain.ports.file_repository import FileRepository
+from meteo_measures.domain.services.data_file_messaging_service import DataFileMessagingService
 
 
 class DataFileUploadService:
@@ -26,13 +26,10 @@ class DataFileUploadService:
         await self.data_file_repository.create_or_update(item)
 
         try:
-            item = await self.data_file_repository.update_status(item, TaskStatus.upload_in_progress)
+            item = await self.data_file_repository.update_status(item, DataFileLifecycle.upload_in_progress)
             await self.file_repository.upload_file(item.key, path.read_bytes())
-            item = await self.data_file_repository.update_status(item, TaskStatus.upload_success)
-
+            item = await self.data_file_repository.update_status(item, DataFileLifecycle.upload_completed)
             await self.messaging.ingestion_producer.write_single(item)
-            item = await self.data_file_repository.update_status(item, TaskStatus.ingestion_pending)
-
             return item
         except:
             await self.messaging.error_handler(item)

@@ -1,28 +1,28 @@
 import datetime
+from unittest import IsolatedAsyncioTestCase
 
-from measure_repository_openmeteo.open_meteo_measure_reader import OpenMeteoMeasureReader
-from meteo_measures.entities import Location
-from meteo_measures.entities import MeasureQuery
-from meteo_measures.entities import MeasureType
-from meteo_measures.entities.measures.period import Period
-
-
-def main():
-    query = MeasureQuery(
-        measure_type=MeasureType.TEMPERATURE,
-        period=Period(
-            start=datetime.datetime(2025, 4, 6, tzinfo=datetime.timezone.utc),
-            end=datetime.datetime(2025, 4, 13, tzinfo=datetime.timezone.utc)
-        ),
-        location=Location(
-            latitude=43.6043,
-            longitude=1.4437
-        ),
-    )
-
-    for data in OpenMeteoMeasureReader(query).read_all():
-        print(data)
+from measure_repository_openmeteo.open_meteo_measure_repository import OpenMeteoMeasureRepository
+from meteo_measures.domain.entities.measure_query import MeasureQuery
+from meteo_measures.domain.entities.measures.location import Location
+from meteo_measures.domain.entities.measures.period import Period
 
 
-if __name__ == '__main__':
-    main()
+class TestInfluDbMeasureRepository(IsolatedAsyncioTestCase):
+
+    async def asyncSetUp(self):
+        self.repo = OpenMeteoMeasureRepository()
+
+    async def test_search(self):
+        query = MeasureQuery(
+            measure_type='temperature',
+            period=Period(
+                start=datetime.datetime(2025, 4, 6, tzinfo=datetime.timezone.utc),
+                end=datetime.datetime(2025, 4, 13, tzinfo=datetime.timezone.utc)
+            ),
+            location=Location(
+                latitude=43.6043,
+                longitude=1.4437
+            ),
+        )
+        for measures in self.repo.search(query):
+            print(measures)

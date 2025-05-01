@@ -1,13 +1,13 @@
 from abc import abstractmethod, ABC
 
-from meteo_measures.entities.data_file import DataFile
-from meteo_measures.entities.task_status import TaskStatus
+from meteo_measures.domain.entities.data_file import DataFile
+from meteo_measures.domain.entities.task_status import DataFileLifecycle
 
 
 class DataFileRepository(ABC):
 
     @abstractmethod
-    async def update_status(self, item: DataFile, status: TaskStatus) -> DataFile:
+    async def update_status(self, item: DataFile, status: DataFileLifecycle) -> DataFile:
         ...
 
     @abstractmethod

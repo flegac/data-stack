@@ -21,13 +21,13 @@ class Config(containers.DeclarativeContainer):
     kafka = providers.Factory(
         KafkaConfig,
         broker_url='localhost:9092',
-        group_id='temperature_group'
+        group_id='meteo_group'
     )
 
-    influxdb = providers.Factory(
+    influx_db = providers.Factory(
         InfluxDBConfig,
         url='http://localhost:8086',
         org='myorg',
-        token='k5OmUjRQ0R-unlkmdwoGIV4aYNSqUyfG3uY2I7y1VqIQy5jcE_ErXYQ4b-Epq8BzrmrUwIw1a0zIZV6FCqgd8g==',
+        token='SDha-behzzOhZyZ1v1xfnjKtDhWbk_uZDuLyUJvHXYQSGSJkwXBVFj9F8dhnPMZoXLkRRuih_E5gJfJ3d3sdBw==',
         bucket='meteo-data'
     )

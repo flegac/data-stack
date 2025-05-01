@@ -4,7 +4,7 @@ from pathlib import Path
 from dependency_injector.wiring import Provide
 from loguru import logger
 
-from meteo_measures.services.datafile_upload_servicee import DataFileUploadService
+from meteo_measures.domain.services.data_file_upload_service import DataFileUploadService
 
 
 @dataclass

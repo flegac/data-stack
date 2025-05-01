@@ -1,7 +1,7 @@
 import asyncio
 
 from wires.application import ApplicationContainer
-from worker.datafile_upload_worker import DataFileUploadWorker
+from worker.data_file_upload_worker import DataFileUploadWorker
 
 if __name__ == '__main__':
     container = ApplicationContainer()

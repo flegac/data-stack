@@ -10,9 +10,9 @@ from sqlalchemy.future import select
 from sqlalchemy.orm import sessionmaker
 
 from data_file_repository_pg.data_file_model import DataFileModel
-from meteo_measures.entities.data_file import DataFile
-from meteo_measures.entities.task_status import TaskStatus
-from meteo_measures.ports.data_file_repository import DataFileRepository
+from meteo_measures.domain.entities.data_file import DataFile
+from meteo_measures.domain.entities.task_status import DataFileLifecycle
+from meteo_measures.domain.ports.data_file_repository import DataFileRepository
 
 
 class CancelTransactionException(Exception):
@@ -79,7 +79,7 @@ class PgDataFileRepository(DataFileRepository):
             return None
 
     @override
-    async def update_status(self, item: DataFile, status: TaskStatus) -> DataFile:
+    async def update_status(self, item: DataFile, status: DataFileLifecycle) -> DataFile:
         logger.debug(f'update_status: {item.key}: {item.status.name} -> {status.name}')
         async with self.transaction() as session:
             stmt = (

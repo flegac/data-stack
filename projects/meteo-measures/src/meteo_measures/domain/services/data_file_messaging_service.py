@@ -4,9 +4,9 @@ from loguru import logger
 
 from message_queue.mq_factory import MQFactory
 from meteo_measures.config import DATAFILE_INGESTION_TOPIC, DATAFILE_ERROR_TOPIC, MEASURE_TOPIC
-from meteo_measures.entities.data_file import DataFile
-from meteo_measures.entities.task_status import TaskStatus
-from meteo_measures.ports.data_file_repository import DataFileRepository
+from meteo_measures.domain.entities.data_file import DataFile
+from meteo_measures.domain.entities.task_status import DataFileLifecycle
+from meteo_measures.domain.ports.data_file_repository import DataFileRepository
 
 
 class DataFileMessagingService:
@@ -36,5 +36,5 @@ class DataFileMessagingService:
 
     async def error_handler(self, item: DataFile):
         logger.warning(f'_handle_error: {item}')
-        await self.data_file_repository.update_status(item, TaskStatus.ingestion_error)
+        await self.data_file_repository.update_status(item, DataFileLifecycle.ingestion_failed)
         await self.error_producer.write_single(item)

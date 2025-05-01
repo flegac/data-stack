@@ -2,9 +2,10 @@ import logging
 from pathlib import Path
 from unittest import IsolatedAsyncioTestCase
 
-from data_file_repository_pg.pg_data_file_repository import PgDataFileRepository
 from meteo_measures.entities import DataFile
 from meteo_measures.entities import TaskStatus
+
+from data_file_repository_pg.pg_data_file_repository import PgDataFileRepository
 
 
 class TestPgDataFileRepository(IsolatedAsyncioTestCase):
@@ -18,19 +19,19 @@ class TestPgDataFileRepository(IsolatedAsyncioTestCase):
     async def test_transaction(self):
         repo = self.repo
 
-        datafile = DataFile.from_file(
+        data_file = DataFile.from_file(
             path=Path(__file__).absolute()
         )
-        await repo.create_or_update(datafile)
+        await repo.create_or_update(data_file)
         await self.log_all()
 
         async with repo.transaction():
-            datafile.key = 'toto'
-            await repo.create_or_update(datafile)
+            data_file.key = 'toto'
+            await repo.create_or_update(data_file)
             await self.log_all()
 
-            datafile.key = 'titi'
-            await repo.create_or_update(datafile)
+            data_file.key = 'titi'
+            await repo.create_or_update(data_file)
             await self.log_all()
             repo.cancel_transaction()
 
@@ -39,17 +40,17 @@ class TestPgDataFileRepository(IsolatedAsyncioTestCase):
     async def test_posix_file_repository(self):
         repo = self.repo
 
-        datafile = DataFile.from_file(
+        data_file = DataFile.from_file(
             path=Path(__file__).absolute()
         )
 
-        await repo.create_or_update(datafile)
+        await repo.create_or_update(data_file)
         await self.log_all()
 
-        await repo.update_status(datafile, TaskStatus.ingestion_success)
+        await repo.update_status(data_file, TaskStatus.ingestion_success)
         await self.log_all()
 
-        await repo.delete_by_key(datafile.key)
+        await repo.delete_by_key(data_file.key)
         await self.log_all()
 
     async def log_all(self):

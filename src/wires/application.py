@@ -1,8 +1,8 @@
 from dependency_injector import containers, providers
 
-from meteo_measures.services.data_file_ingestion_service import DataFileIngestionService
-from meteo_measures.services.datafile_messaging_service import DataFileMessagingService
-from meteo_measures.services.datafile_upload_servicee import DataFileUploadService
+from meteo_measures.domain.services.data_file_ingestion_service import DataFileIngestionService
+from meteo_measures.domain.services.data_file_messaging_service import DataFileMessagingService
+from meteo_measures.domain.services.data_file_upload_service import DataFileUploadService
 from wires.config import Config
 from wires.repositories import RepositoryContainer
 

@@ -5,35 +5,34 @@ import pandas as pd
 import xarray as xr
 from loguru import logger
 
-from meteo_measures.entities.data_file import DataFile
-from meteo_measures.entities.measures.location import Location
-from meteo_measures.entities.measures.measure_series import MeasureSeries
-from meteo_measures.entities.measures.measure_type import MeasureType
-from meteo_measures.entities.measures.sensor import Sensor
-from meteo_measures.ports.measure_reader import MeasureReader
+from meteo_measures.domain.entities.data_file import DataFile
+from meteo_measures.domain.entities.measures.location import Location
+from meteo_measures.domain.entities.measures.measure_series import MeasureSeries
+from meteo_measures.domain.entities.measures.sensor import Sensor
+from meteo_measures.domain.ports.measure_reader import MeasureReader
 
 
 class DataFileMeasureReader(MeasureReader):
 
-    def __init__(self, datafile: DataFile):
+    def __init__(self, data_file: DataFile):
         super().__init__()
-        self.datafile = datafile
+        self.data_file = data_file
         self.show_config()
 
     def show_config(self):
-        logger.debug(self.datafile.raw)
+        logger.debug(self.data_file.raw)
         time.sleep(.1)
 
     @override
     def read_all(self) -> Generator[MeasureSeries, Any, None]:
-        dataset = self.datafile.raw
+        dataset = self.data_file.raw
         latitudes = dataset['latitude']
         longitudes = dataset['longitude']
         print(len(latitudes), len(longitudes))
 
         variables = [
             _
-            for _ in self.datafile.variables
+            for _ in self.data_file.variables
             if _ not in ['latitude', 'longitude']
         ]
 
@@ -44,7 +43,7 @@ class DataFileMeasureReader(MeasureReader):
                         temperatures = MeasureSeries(
                             sensor=Sensor(
                                 id="cds",
-                                type=MeasureType.TEMPERATURE,
+                                type=variable,
                                 location=Location(
                                     latitude=float(latitudes.values[lat_idx]),
                                     longitude=float(longitudes.values[lon_idx])

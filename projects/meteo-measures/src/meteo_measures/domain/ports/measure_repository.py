@@ -1,9 +1,9 @@
 from abc import ABC, abstractmethod
 from typing import Generator, Any
 
-from meteo_measures.entities.measures.measure import Measure
-from meteo_measures.entities.measures.measure_query import MeasureQuery
-from meteo_measures.entities.measures.measure_series import MeasureSeries
+from meteo_measures.domain.entities.measure_query import MeasureQuery
+from meteo_measures.domain.entities.measures.measure import Measure
+from meteo_measures.domain.entities.measures.measure_series import MeasureSeries
 
 
 class MeasureRepository(ABC):

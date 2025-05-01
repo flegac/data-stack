@@ -1,8 +1,8 @@
 from pathlib import Path
 from unittest import TestCase
 
-from meteo_measures.entities.data_file import DataFile
-from meteo_measures.entities.data_file_serializer import DataFileSerializer
+from meteo_measures.domain.entities.data_file import DataFile
+from meteo_measures.domain.entities.data_file_serializer import DataFileSerializer
 
 
 class TestDataFileSerializer(TestCase):

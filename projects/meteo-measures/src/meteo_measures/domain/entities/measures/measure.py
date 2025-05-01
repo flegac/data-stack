@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 from datetime import datetime
 
-from meteo_measures.entities.measures.sensor import Sensor
+from meteo_measures.domain.entities.measures.sensor import Sensor
 
 
 @dataclass
@@ -11,4 +11,4 @@ class Measure:
     sensor: Sensor | None = None
 
     def __repr__(self):
-        return f'{self.sensor.type.name}[value={self.value}, time={self.datetime}]'
+        return f'{self.sensor.type}[value={self.value}, time={self.datetime}]'

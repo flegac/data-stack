@@ -1,13 +1,15 @@
 import asyncio
 
 from wires.application import ApplicationContainer
-from worker.data_file_ingestion_listener import DataFileIngestionListener
+from worker.measure_ingestion_listener import MeasureIngestionListener
 
 if __name__ == '__main__':
     container = ApplicationContainer()
     container.check_dependencies()
     container.wire(modules=[__name__])
 
-    worker = DataFileIngestionListener()
+    worker = MeasureIngestionListener(
+        topic='temperature'
+    )
 
     asyncio.run(worker.run())

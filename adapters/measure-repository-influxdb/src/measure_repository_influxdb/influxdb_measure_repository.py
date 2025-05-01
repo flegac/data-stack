@@ -6,12 +6,11 @@ from influxdb_client import InfluxDBClient, Point
 from influxdb_client.client.write_api import SYNCHRONOUS
 
 from measure_repository_influxdb.influxdb_config import InfluxDBConfig
-from meteo_measures.entities import Measure
-from meteo_measures.entities import MeasureQuery
-from meteo_measures.entities import MeasureType
-from meteo_measures.entities import Sensor, SensorId
-from meteo_measures.entities.measures.measure_series import MeasureSeries
-from meteo_measures.ports import MeasureRepository
+from meteo_measures.domain.entities.measure_query import MeasureQuery
+from meteo_measures.domain.entities.measures.measure import Measure
+from meteo_measures.domain.entities.measures.measure_series import MeasureSeries
+from meteo_measures.domain.entities.measures.sensor import SensorId, Sensor
+from meteo_measures.domain.ports.measure_repository import MeasureRepository
 
 
 class InfluxDbMeasureRepository(MeasureRepository):
@@ -22,7 +21,7 @@ class InfluxDbMeasureRepository(MeasureRepository):
     @override
     def save(self, measure: Measure):
         record = (
-            Point(measure.sensor.type.name.lower())
+            Point(measure.sensor.type.lower())
             .tag('sensor_id', measure.sensor.id)
             .field('value', measure.value)
         )
@@ -49,7 +48,7 @@ class InfluxDbMeasureRepository(MeasureRepository):
             for record in table.records:
                 sensor = Sensor(
                     id=record.values['sensor_id'],
-                    type=MeasureType[record.values['_measurement'].upper()],
+                    type=record.values['_measurement'],
                     # location=Location(
                     #     latitude=record['latitude'],
                     #     longitude=record['longitude'],
@@ -93,4 +92,4 @@ def query_to_flux(query: MeasureQuery, bucket: str):
 
     return f"""from(bucket: "{bucket}")
  |> range(start: -10m)
- |> filter(fn: (r) => r._measurement == "{query.measure_type.name.lower()}")"""
+ |> filter(fn: (r) => r._measurement == "{query.measure_type}")"""

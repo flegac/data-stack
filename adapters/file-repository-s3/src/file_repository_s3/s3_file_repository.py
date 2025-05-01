@@ -6,7 +6,7 @@ import aioboto3
 from botocore.config import Config
 
 from file_repository_s3.s3_config import S3Config
-from meteo_measures.ports.file_repository import FileRepository
+from meteo_measures.domain.ports.file_repository import FileRepository
 
 
 class S3FileRepository(FileRepository):

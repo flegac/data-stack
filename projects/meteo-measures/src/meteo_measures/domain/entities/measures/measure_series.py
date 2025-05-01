@@ -2,8 +2,8 @@ from dataclasses import dataclass
 
 import pandas as pd
 
-from meteo_measures.entities.measures.measure import Measure
-from meteo_measures.entities.measures.sensor import Sensor
+from meteo_measures.domain.entities.measures.measure import Measure
+from meteo_measures.domain.entities.measures.sensor import Sensor
 
 
 @dataclass

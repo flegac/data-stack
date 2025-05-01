@@ -4,8 +4,8 @@ from datetime import datetime
 from typing import TypeVar
 
 from message_queue.serializer import Serializer
-from meteo_measures.entities.data_file import DataFile
-from meteo_measures.entities.task_status import TaskStatus
+from meteo_measures.domain.entities.data_file import DataFile
+from meteo_measures.domain.entities.task_status import DataFileLifecycle
 
 T = TypeVar('T')
 S = TypeVar('S')
@@ -24,5 +24,5 @@ class DataFileSerializer(Serializer[DataFile, bytes]):
         raw_dict = json.loads(raw)
         raw_dict['creation_date'] = datetime.fromisoformat(raw_dict['creation_date'])
         raw_dict['last_update_date'] = datetime.fromisoformat(raw_dict['last_update_date'])
-        raw_dict['status'] = TaskStatus[raw_dict['status']]
+        raw_dict['status'] = DataFileLifecycle[raw_dict['status']]
         return DataFile(**raw_dict)

@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 
-from meteo_measures.entities.measures.measure import Measure
-from meteo_measures.entities.measures.measure_series import MeasureSeries
+from meteo_measures.domain.entities.measures.measure import Measure
+from meteo_measures.domain.entities.measures.measure_series import MeasureSeries
 
 
 class MeasureWriter(ABC):

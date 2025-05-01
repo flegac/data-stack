@@ -16,7 +16,8 @@ INFLUX_DB_CONFIG = InfluxDBConfig(
     token='SDha-behzzOhZyZ1v1xfnjKtDhWbk_uZDuLyUJvHXYQSGSJkwXBVFj9F8dhnPMZoXLkRRuih_E5gJfJ3d3sdBw==',
     bucket='meteo-data'
 )
+
 KAFKA_CONFIG = KafkaConfig(
     broker_url='localhost:9092',
-    group_id='temperature_group'
+    group_id='meteo-group'
 )

@@ -3,7 +3,7 @@ from typing import Optional, override, IO
 
 from loguru import logger
 
-from meteo_measures.ports.file_repository import FileRepository
+from meteo_measures.domain.ports.file_repository import FileRepository
 
 
 class PosixFileRepository(FileRepository):
