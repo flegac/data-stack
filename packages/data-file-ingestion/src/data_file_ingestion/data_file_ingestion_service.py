@@ -8,7 +8,7 @@ from data_file_repository.data_file import DataFile
 from data_file_repository.data_file_repository import DataFileRepository
 from data_file_repository.task_status import TaskStatus
 from file_repository.file_repository import FileRepository
-from measure_io_datafile.datafile_measure_reader import DataFileMeasureReader
+from measure_repository_datafile.datafile_measure_reader import DataFileMeasureReader
 from message_queue.mq_factory import MQFactory
 
 

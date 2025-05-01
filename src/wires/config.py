@@ -3,7 +3,7 @@ from pathlib import Path
 from dependency_injector import containers, providers
 
 from file_repository_s3.s3_config import S3Config
-from measure_io_influxdb.influxdb_config import InfluxDBConfig
+from measure_repository_influxdb.influxdb_config import InfluxDBConfig
 from message_queue_kafka.kafka_config import KafkaConfig
 
 

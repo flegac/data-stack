@@ -12,11 +12,12 @@ members = [
     "file-repository",
     "file-repository-posix",
     "file-repository-s3",
-    "measure-io",
-    "measure-io-datafile",
-    "measure-io-influxdb",
-    "measure-io-kafka",
     "measure-io-open-meteo",
+    "measure-repository",
+    "measure-repository-datafile",
+    "measure-repository-influxdb",
+    "measure-repository-kafka",
+    "measure-repository-openmeteo",
     "message-queue",
     "message-queue-kafka",
 ]
@@ -360,6 +361,16 @@ source = { editable = "packages/data-file-ingestion" }
 name = "data-file-repository"
 version = "0.1.0"
 source = { editable = "packages/data-file-repository" }
+dependencies = [
+    { name = "h5netcdf" },
+    { name = "xarray" },
+]
+
+[package.metadata]
+requires-dist = [
+    { name = "h5netcdf", specifier = ">=1.6.1" },
+    { name = "xarray", specifier = ">=2025.3.1" },
+]
 
 [[package]]
 name = "data-file-repository-pg"
@@ -619,42 +630,6 @@ wheels = [
 ]
 
 [[package]]
-name = "measure-io"
-version = "0.1.0"
-source = { editable = "packages/measure-io" }
-
-[[package]]
-name = "measure-io-datafile"
-version = "0.1.0"
-source = { editable = "packages/measure-io-datafile" }
-dependencies = [
-    { name = "h5netcdf" },
-    { name = "xarray" },
-]
-
-[package.metadata]
-requires-dist = [
-    { name = "h5netcdf", specifier = ">=1.6.1" },
-    { name = "xarray", specifier = ">=2025.3.1" },
-]
-
-[[package]]
-name = "measure-io-influxdb"
-version = "0.1.0"
-source = { editable = "packages/measure-io-influxdb" }
-dependencies = [
-    { name = "influxdb-client" },
-]
-
-[package.metadata]
-requires-dist = [{ name = "influxdb-client", specifier = ">=1.48.0" }]
-
-[[package]]
-name = "measure-io-kafka"
-version = "0.1.0"
-source = { editable = "packages/measure-io-kafka" }
-
-[[package]]
 name = "measure-io-open-meteo"
 version = "0.1.0"
 source = { editable = "packages/measure-io-open-meteo" }
@@ -674,6 +649,43 @@ requires-dist = [
     { name = "requests-cache", specifier = ">=1.2.1" },
     { name = "retry-requests", specifier = ">=2.0.0" },
 ]
+
+[[package]]
+name = "measure-repository"
+version = "0.1.0"
+source = { editable = "packages/measure-repository" }
+
+[[package]]
+name = "measure-repository-datafile"
+version = "0.1.0"
+source = { editable = "packages/measure-repository-datafile" }
+
+[[package]]
+name = "measure-repository-influxdb"
+version = "0.1.0"
+source = { editable = "packages/measure-repository-influxdb" }
+dependencies = [
+    { name = "influxdb-client" },
+]
+
+[package.metadata]
+requires-dist = [{ name = "influxdb-client", specifier = ">=1.48.0" }]
+
+[[package]]
+name = "measure-repository-kafka"
+version = "0.1.0"
+source = { editable = "packages/measure-repository-kafka" }
+dependencies = [
+    { name = "aiokafka" },
+]
+
+[package.metadata]
+requires-dist = [{ name = "aiokafka", specifier = ">=0.12.0" }]
+
+[[package]]
+name = "measure-repository-openmeteo"
+version = "0.1.0"
+source = { editable = "packages/measure-repository-openmeteo" }
 
 [[package]]
 name = "message-queue"

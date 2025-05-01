@@ -1,5 +1,5 @@
 [project]
-name = "data-file-repository"
+name = "measure-repository-influxdb"
 version = "0.1.0"
 description = "Add your description here"
 readme = "README.md"
@@ -8,8 +8,7 @@ authors = [
 ]
 requires-python = ">=3.12"
 dependencies = [
-    "h5netcdf>=1.6.1",
-    "xarray>=2025.3.1",
+    "influxdb-client>=1.48.0",
 ]
 
 [build-system]

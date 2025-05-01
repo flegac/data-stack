@@ -1,5 +1,5 @@
 [project]
-name = "data-file-repository"
+name = "measure-repository-openmeteo"
 version = "0.1.0"
 description = "Add your description here"
 readme = "README.md"
@@ -8,8 +8,11 @@ authors = [
 ]
 requires-python = ">=3.12"
 dependencies = [
-    "h5netcdf>=1.6.1",
-    "xarray>=2025.3.1",
+    "numpy>=2.2.4",
+    "openmeteo-requests>=1.4.0",
+    "pandas>=2.2.3",
+    "requests-cache>=1.2.1",
+    "retry-requests>=2.0.0",
 ]
 
 [build-system]

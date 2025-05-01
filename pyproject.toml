@@ -10,6 +10,7 @@ dependencies = []
 aa-common = { workspace = true }
 
 data-file-ingestion = { workspace = true }
+
 data-file-repository = { workspace = true }
 data-file-repository-pg = { workspace = true }
 
@@ -17,11 +18,10 @@ file-repository = { workspace = true }
 file-repository-posix = { workspace = true }
 file-repository-s3 = { workspace = true }
 
-measure-io = { workspace = true }
-measure-io-datafile = { workspace = true }
-measure-io-influxdb = { workspace = true }
-measure-io-kafka = { workspace = true }
-measure-io-open-meteo = { workspace = true }
+measure-repository = { workspace = true }
+measure-repository-datafile = { workspace = true }
+measure-repository-influxdb = { workspace = true }
+measure-repository-openmeteo = { workspace = true }
 
 message-queue = { workspace = true }
 message-queue-kafka = { workspace = true }

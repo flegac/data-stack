@@ -1,5 +1,5 @@
 from data_file_repository.data_file_serializer import DataFileSerializer
-from measure_io.measure_serializer import MeasureSerializer
+from measure_repository.measure_serializer import MeasureSerializer
 from message_queue.mq_topic import MQTopic
 
 MEASURE_TOPIC = MQTopic(

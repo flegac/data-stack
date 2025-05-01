@@ -1,8 +1,8 @@
 from typing import Callable
 
-from measure_io.measure import Measure
-from measure_io.measure_reader import MeasureReader
-from measure_io.measure_writer import MeasureWriter
+from measure_repository.model.measure import Measure
+from measure_repository.stream.measure_reader import MeasureReader
+from measure_repository.stream.measure_writer import MeasureWriter
 
 
 class MeasureService:
