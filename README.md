@@ -20,7 +20,7 @@ Given a grib/hdf5 file
 - write a DataFile message on `DataFile.ingestion.topic`
 
 ```bash
-uv run .\src\datafile_uploader.py
+uv run ./src/datafile_uploader.py
 ```
 
 ### Datafile ingestion handler
@@ -29,7 +29,7 @@ uv run .\src\datafile_uploader.py
 - For each variable in the GRIB/HDF5 file, writes all measures on `measure.topic`
 
 ```bash
-uv run .\src\datafile_ingestion_listener.py
+uv run ./src/datafile_ingestion_listener.py
 ```
 
 ### Measure Dispatcher (TODO)
