@@ -28,5 +28,6 @@ class ApplicationContainer(containers.DeclarativeContainer):
         DataFileIngestionService,
         data_file_repository=repositories.data_file_repository,
         file_repository=repositories.file_repository,
-        messaging=messaging_service
+        messaging=messaging_service,
+        measure_repository=repositories.measure_repository
     )

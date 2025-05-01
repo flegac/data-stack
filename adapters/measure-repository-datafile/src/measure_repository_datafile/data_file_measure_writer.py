@@ -1,7 +1,6 @@
 from typing import override
 
-from measure_repository import Measure
-
+from meteo_measures.domain.entities.measures.measure import Measure
 from meteo_measures.domain.entities.measures.measure_series import MeasureSeries
 from meteo_measures.domain.ports.measure_writer import MeasureWriter
 

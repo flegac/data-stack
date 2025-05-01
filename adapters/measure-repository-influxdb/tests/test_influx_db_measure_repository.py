@@ -3,6 +3,8 @@ import logging
 import random
 from unittest import IsolatedAsyncioTestCase
 
+from loguru import logger
+
 from config import INFLUX_DB_CONFIG
 from measure_repository_influxdb.influxdb_measure_repository import InfluxDbMeasureRepository, query_to_flux
 from meteo_measures.domain.entities.measure_query import MeasureQuery
@@ -61,17 +63,10 @@ class TestInfluDbMeasureRepository(IsolatedAsyncioTestCase):
             ),
             measures=[
                 Measure(
-                    datetime=datetime.datetime.now(),
-                    value=10.,
-                ),
-                Measure(
-                    datetime=datetime.datetime.now() + datetime.timedelta(seconds=10),
+                    datetime=datetime.datetime.now() + datetime.timedelta(seconds=10 * i),
                     value=20.,
-                ),
-                Measure(
-                    datetime=datetime.datetime.now() + + datetime.timedelta(seconds=20),
-                    value=30.,
-                ),
+                )
+                for i in range(1000)
             ]
 
         )
@@ -87,4 +82,4 @@ class TestInfluDbMeasureRepository(IsolatedAsyncioTestCase):
             ),
         )
         for measures in self.repo.search(query):
-            print(measures)
+            logger.info(measures)

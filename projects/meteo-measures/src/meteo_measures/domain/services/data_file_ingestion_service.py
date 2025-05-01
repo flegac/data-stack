@@ -5,6 +5,7 @@ from meteo_measures.domain.entities.data_file import DataFile
 from meteo_measures.domain.entities.task_status import DataFileLifecycle
 from meteo_measures.domain.ports.data_file_repository import DataFileRepository
 from meteo_measures.domain.ports.file_repository import FileRepository
+from meteo_measures.domain.ports.measure_repository import MeasureRepository
 from meteo_measures.domain.services.data_file_messaging_service import DataFileMessagingService
 
 
@@ -14,10 +15,12 @@ class DataFileIngestionService:
             messaging: DataFileMessagingService,
             data_file_repository: DataFileRepository,
             file_repository: FileRepository,
+            measure_repository: MeasureRepository
     ):
         self.data_file_repository = data_file_repository
         self.file_repository = file_repository
         self.messaging = messaging
+        self.measure_repository = measure_repository
 
     async def ingestion_listener(self):
         await self.messaging.ingestion_consumer.listen(self.ingest_file)
@@ -36,7 +39,8 @@ class DataFileIngestionService:
 
             try:
                 for measures in provider:
-                    await self.messaging.measure_producer.write_batch(measures)
+                    await self.measure_repository.save_batch(measures)
+                    # await self.messaging.measure_producer.write_batch(measures)
                 item = await self.data_file_repository.update_status(item, DataFileLifecycle.ingestion_completed)
             except:
                 item = await self.data_file_repository.update_status(item, DataFileLifecycle.ingestion_failed)

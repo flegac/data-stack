@@ -4,6 +4,7 @@ from typing import Generator, Any, override
 
 from influxdb_client import InfluxDBClient, Point
 from influxdb_client.client.write_api import SYNCHRONOUS
+from loguru import logger
 
 from measure_repository_influxdb.influxdb_config import InfluxDBConfig
 from meteo_measures.domain.entities.measure_query import MeasureQuery
@@ -27,6 +28,8 @@ class InfluxDbMeasureRepository(MeasureRepository):
 
     @override
     async def save(self, measure: Measure):
+        logger.info(f'save: {measure.sensor}')
+
         self._write_api.write(
             bucket=self.config.bucket,
             org=self.config.org,
@@ -35,6 +38,8 @@ class InfluxDbMeasureRepository(MeasureRepository):
 
     @override
     async def save_batch(self, measures: MeasureSeries):
+        logger.info(f'save_batch: {measures.sensor} {len(measures.measures)}')
+
         records = list(map(measure_to_point, measures))
         self._write_api.write(
             bucket=self.config.bucket,
@@ -44,8 +49,9 @@ class InfluxDbMeasureRepository(MeasureRepository):
 
     @override
     def search(self, query: MeasureQuery) -> Generator[MeasureSeries, Any, None]:
+        logger.info(f'search: {query}')
         flux_query = query_to_flux(query=query, bucket=self.config.bucket)
-        print(flux_query)
+        logger.debug(f'query:\n{flux_query}')
         tables = self._query_api.query(flux_query, org=self.config.org)
 
         sensors: dict[tuple[SensorId, str], Sensor] = {}

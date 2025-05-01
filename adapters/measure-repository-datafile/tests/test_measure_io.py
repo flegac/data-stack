@@ -3,9 +3,9 @@ from pathlib import Path
 from unittest import IsolatedAsyncioTestCase
 
 from loguru import logger
-from meteo_measures.entities import DataFile
 
 from measure_repository_datafile.data_file_measure_reader import DataFileMeasureReader
+from meteo_measures.domain.entities.data_file import DataFile
 
 
 class TestInfluDbMeasureIO(IsolatedAsyncioTestCase):
