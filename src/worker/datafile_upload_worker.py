@@ -4,12 +4,12 @@ from pathlib import Path
 from dependency_injector.wiring import Provide
 from loguru import logger
 
-from data_file_ingestion.data_file_ingestion_service import DataFileIngestionService
+from meteo_measures.services.datafile_upload_servicee import DataFileUploadService
 
 
 @dataclass
 class DataFileUploadWorker:
-    service: DataFileIngestionService = Provide['ingestion_service']
+    service: DataFileUploadService = Provide['upload_service']
 
     async def run(self):
         path = Path.home() / 'Documents' / 'Data' / 'Datasets'

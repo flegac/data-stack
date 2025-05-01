@@ -1,8 +1,8 @@
 import asyncio
 
-from data_file_ingestion.config import TEMPERATURE_TOPIC
 from measure_repository_influxdb.measure_writer_influxdb import InfluxDbMeasureWriter
 from message_queue_kafka.kafka_factory import KafkaFactory
+from meteo_measures.config import TEMPERATURE_TOPIC
 from src.config import KAFKA_CONFIG, INFLUX_DB_CONFIG
 
 

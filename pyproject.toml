@@ -8,8 +8,9 @@ dependencies = []
 
 [tool.uv.sources]
 aa-common = { workspace = true }
+message-queue = { workspace = true }
 
-data-file-ingestion = { workspace = true }
+meteo-measures = { workspace = true }
 
 data-file-repository = { workspace = true }
 data-file-repository-pg = { workspace = true }
@@ -23,8 +24,11 @@ measure-repository-datafile = { workspace = true }
 measure-repository-influxdb = { workspace = true }
 measure-repository-openmeteo = { workspace = true }
 
-message-queue = { workspace = true }
 message-queue-kafka = { workspace = true }
 
 [tool.uv.workspace]
-members = ["packages/*"]
+members = [
+    "common/*",
+    "projects/*",
+    "adapters/*"
+]

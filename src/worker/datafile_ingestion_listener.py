@@ -3,7 +3,7 @@ from dataclasses import dataclass
 from dependency_injector.wiring import Provide
 from loguru import logger
 
-from data_file_ingestion.data_file_ingestion_service import DataFileIngestionService
+from meteo_measures.services.data_file_ingestion_service import DataFileIngestionService
 
 
 @dataclass

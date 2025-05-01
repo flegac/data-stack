@@ -1,0 +1,40 @@
+from functools import cached_property
+
+from loguru import logger
+
+from message_queue.mq_factory import MQFactory
+from meteo_measures.config import DATAFILE_INGESTION_TOPIC, DATAFILE_ERROR_TOPIC, MEASURE_TOPIC
+from meteo_measures.entities.data_file import DataFile
+from meteo_measures.entities.task_status import TaskStatus
+from meteo_measures.ports.data_file_repository import DataFileRepository
+
+
+class DataFileMessagingService:
+    def __init__(
+            self,
+            data_file_repository: DataFileRepository,
+            mq_factory: MQFactory,
+    ):
+        self.data_file_repository = data_file_repository
+        self.mq_factory = mq_factory
+
+    @cached_property
+    def ingestion_producer(self):
+        return self.mq_factory.producer(DATAFILE_INGESTION_TOPIC)
+
+    @cached_property
+    def ingestion_consumer(self):
+        return self.mq_factory.consumer(DATAFILE_INGESTION_TOPIC)
+
+    @cached_property
+    def error_producer(self):
+        return self.mq_factory.producer(DATAFILE_ERROR_TOPIC)
+
+    @cached_property
+    def measure_producer(self):
+        return self.mq_factory.producer(MEASURE_TOPIC)
+
+    async def error_handler(self, item: DataFile):
+        logger.warning(f'_handle_error: {item}')
+        await self.data_file_repository.update_status(item, TaskStatus.ingestion_error)
+        await self.error_producer.write_single(item)
