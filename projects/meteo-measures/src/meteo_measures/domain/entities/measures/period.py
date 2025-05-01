@@ -4,5 +4,5 @@ from datetime import datetime
 
 @dataclass
 class Period:
-    start: datetime
-    end: datetime
+    start: datetime | None = None
+    end: datetime | None = None

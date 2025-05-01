@@ -10,3 +10,4 @@ class MeasureQuery:
     period: Period | None = None
     location: Location | None = None
     measure_type: str | None = None
+    tags: dict[str, list[str]] | None = None
