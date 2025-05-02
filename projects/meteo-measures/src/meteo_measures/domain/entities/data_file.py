@@ -5,8 +5,7 @@ from functools import cached_property
 from pathlib import Path
 
 import xarray as xr
-
-from meteo_measures.domain.entities.task_status import DataFileLifecycle
+from meteo_measures.domain.entities.datafile_lifecycle import DataFileLifecycle
 
 
 @dataclass
@@ -27,7 +26,7 @@ class DataFile:
             key=key,
             source_hash=compute_hash(path),
             source_uri=str(path),
-            local_path=path
+            local_path=path,
         )
 
     @cached_property
@@ -39,7 +38,7 @@ class DataFile:
         return list(self.raw.data_vars)
 
     def __repr__(self):
-        return f'Data({self.key}, {self.status}, {self.source_hash})'
+        return f"Data({self.key}, {self.status}, {self.source_hash})"
 
 
 def compute_hash(file_path: Path):

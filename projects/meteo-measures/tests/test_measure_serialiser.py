@@ -12,19 +12,15 @@ class TestMeasureSerializer(TestCase):
         serializer = MeasureSerializer()
 
         sensor = Sensor(
-            id='MySensor',
-            type='temperature',
+            id="MySensor",
+            type="temperature",
             location=Location(
                 latitude=12.3,
                 longitude=25.3,
-            )
+            ),
         )
 
-        item = Measure(
-            value=33,
-            datetime=datetime.datetime.now(),
-            sensor=sensor
-        )
+        item = Measure(value=33, datetime=datetime.datetime.now(), sensor=sensor)
 
         expected = serializer.serialize(item)
 

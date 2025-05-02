@@ -1,15 +1,14 @@
 from abc import abstractmethod
 from typing import Generic, Iterable
 
-from message_queue.serializer import I
+from message_queue.serializer import Input
 
 
-class MQProducer(Generic[I]):
+class MQProducer(Generic[Input]):
     @abstractmethod
-    async def write_single(self, item: I):
-        ...
+    async def write_single(self, item: Input): ...
 
-    async def write_batch(self, items: Iterable[I]):
+    async def write_batch(self, items: Iterable[Input]):
         try:
             for _ in items:
                 await self.write_single(_)
@@ -17,5 +16,4 @@ class MQProducer(Generic[I]):
             await self.flush()
 
     @abstractmethod
-    async def flush(self):
-        ...
+    async def flush(self): ...

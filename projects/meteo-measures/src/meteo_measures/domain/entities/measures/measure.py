@@ -11,4 +11,4 @@ class Measure:
     sensor: Sensor | None = None
 
     def __repr__(self):
-        return f'{self.sensor.type}[value={self.value}, time={self.datetime}]'
+        return f"{self.sensor.type}[value={self.value}, time={self.datetime}]"

@@ -1,10 +1,10 @@
 import asyncio
 
-from wires.application import ApplicationContainer
+from wires.services import Services
 from worker.data_file_upload_worker import DataFileUploadWorker
 
-if __name__ == '__main__':
-    container = ApplicationContainer()
+if __name__ == "__main__":
+    container = Services()
     container.check_dependencies()
     container.wire(modules=[__name__])
 

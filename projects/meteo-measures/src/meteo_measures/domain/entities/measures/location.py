@@ -5,4 +5,4 @@ from dataclasses import dataclass
 class Location:
     latitude: float
     longitude: float
-    altitude: float = .0
+    altitude: float = 0.0

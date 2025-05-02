@@ -6,12 +6,16 @@ readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
     "cfgrib>=0.9.15.0",
-    "eccodes>=2.41.0",
     "fastapi>=0.115.12",
     "python-multipart>=0.0.20",
     "scipy>=1.15.2",
     "uvicorn>=0.34.2",
-    "zarr>=3.0.7",
+]
+
+[tool.uv.workspace]
+members = [
+    "projects/*",
+    "adapters/*"
 ]
 
 [tool.uv.sources]
@@ -34,10 +38,15 @@ measure-repository-datafile = { workspace = true }
 measure-repository-influxdb = { workspace = true }
 measure-repository-openmeteo = { workspace = true }
 
+[tool.isort]
+profile = "black"
 
-[tool.uv.workspace]
-members = [
-    "common/*",
-    "projects/*",
-    "adapters/*"
+[dependency-groups]
+dev = [
+    "black>=25.1.0",
+    "coverage>=7.8.0",
+    "flake8>=7.2.0",
+    "isort>=6.0.1",
+    "pre-commit>=4.2.0",
+    "radon>=6.0.1",
 ]

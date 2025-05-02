@@ -1,7 +1,7 @@
 import shutil
 from pathlib import Path
 
-from fastapi import FastAPI, File, UploadFile, HTTPException
+from fastapi import FastAPI, File, HTTPException, UploadFile
 from fastapi.responses import JSONResponse
 
 app = FastAPI()
@@ -27,13 +27,12 @@ async def upload_file(file: UploadFile = File(...)):
     with file_location.open("wb") as buffer:
         shutil.copyfileobj(file.file, buffer)
 
-    return JSONResponse(content={"message": f"File {file.filename} uploaded successfully"})
+    return JSONResponse(
+        content={"message": f"File {file.filename} uploaded successfully"}
+    )
 
 
 if __name__ == "__main__":
     import uvicorn
 
-    uvicorn.run(
-        app,
-        port=8000
-    )
+    uvicorn.run(app, port=8000)

@@ -16,7 +16,7 @@ class MyService:
 
 
 class MyContainer(containers.DeclarativeContainer):
-    config = providers.Singleton(MyConfig, param='toto')
+    config = providers.Singleton(MyConfig, param="toto")
     service_factory = providers.Factory(MyService, config=config)
 
 
@@ -25,7 +25,7 @@ class TestDependencyInjector(TestCase):
         self.container = MyContainer()
 
     def test_it(self):
-        service = self.container.service_factory(custom='coucou')
+        service = self.container.service_factory(custom="coucou")
         print(service)
         print(service.config)
         print(service.custom)

@@ -1,10 +1,9 @@
 import time
-from typing import Generator, Any, override, Iterable
+from typing import Any, Generator, Iterable, override
 
 import pandas as pd
 import xarray as xr
 from loguru import logger
-
 from meteo_measures.domain.entities.data_file import DataFile
 from meteo_measures.domain.entities.measure_query import MeasureQuery
 from meteo_measures.domain.entities.measures.location import Location
@@ -21,7 +20,7 @@ class DataFileMeasureRepository(MeasureRepository):
 
     def show_config(self):
         logger.debug(self.data_file.raw)
-        time.sleep(.1)
+        time.sleep(0.1)
 
     @override
     async def save_batch(self, measures: Iterable[Measure]):
@@ -37,14 +36,12 @@ class DataFileMeasureRepository(MeasureRepository):
         raise NotImplementedError
 
         dataset = self.data_file.raw
-        latitudes = dataset['latitude']
-        longitudes = dataset['longitude']
+        latitudes = dataset["latitude"]
+        longitudes = dataset["longitude"]
         print(len(latitudes), len(longitudes))
 
         variables = [
-            _
-            for _ in self.data_file.variables
-            if _ not in ['latitude', 'longitude']
+            _ for _ in self.data_file.variables if _ not in ["latitude", "longitude"]
         ]
 
         for variable in variables:
@@ -57,30 +54,23 @@ class DataFileMeasureRepository(MeasureRepository):
                                 type=variable,
                                 location=Location(
                                     latitude=float(latitudes.values[lat_idx]),
-                                    longitude=float(longitudes.values[lon_idx])
+                                    longitude=float(longitudes.values[lon_idx]),
                                 ),
                             ),
-                            measures=self._extract_time_series(dataset, variable, lat_idx, lon_idx)
+                            measures=self._extract_time_series(
+                                dataset, variable, lat_idx, lon_idx
+                            ),
                         )
                         yield temperatures
             except Exception as e:
-                logger.warning(f'Could not handle variable=[{variable}] : {e}')
+                logger.warning(f"Could not handle variable=[{variable}] : {e}")
 
     @staticmethod
-    def _extract_time_series(dataset: xr.Dataset, variable_name: str, lat_idx: int, lon_idx: int) -> pd.DataFrame:
-        # Sélectionner les données pour les indices de latitude et de longitude spécifiés
+    def _extract_time_series(
+        dataset: xr.Dataset, variable_name: str, lat_idx: int, lon_idx: int
+    ) -> pd.DataFrame:
         data_array = dataset[variable_name].isel(latitude=lat_idx, longitude=lon_idx)
-
-        # Créer les valeurs de datetime
-        datetime_values = dataset['time'].values
-
-        # Aplatir les valeurs de données
+        datetime_values = dataset["time"].values
         data_values = data_array.values.flatten()
-
-        # Créer un DataFrame pandas
-        df = pd.DataFrame({
-            'datetime': datetime_values,
-            'value': data_values
-        })
-
+        df = pd.DataFrame({"datetime": datetime_values, "value": data_values})
         return df

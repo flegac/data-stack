@@ -7,7 +7,7 @@ from message_queue_kafka.kafka_consumer import KafkaConsumer
 from message_queue_kafka.kafka_producer import KafkaProducer
 
 
-class KafkaFactory(MQFactory):
+class KafkaMQFactory(MQFactory):
     def __init__(self, config: KafkaConfig):
         self.config = config
 

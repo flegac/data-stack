@@ -2,7 +2,7 @@
 
 ## File
 
-- File: binary (or text) file identified by a "key" and a "bucket" (S3 terminology) 
+- File: binary (or text) file identified by a "key" and a "bucket" (S3 terminology)
 - FileRepository: abstract class to synchronize local/remote files
 
 ## Measurement

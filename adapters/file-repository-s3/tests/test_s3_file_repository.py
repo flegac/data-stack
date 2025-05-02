@@ -7,25 +7,24 @@ from file_repository_s3.s3_file_repository import S3FileRepository
 
 
 class TestS3FileRepository(IsolatedAsyncioTestCase):
-
     async def asyncSetUp(self):
-        logging.getLogger('asyncio').setLevel(logging.ERROR)
+        logging.getLogger("asyncio").setLevel(logging.ERROR)
         self.repo = S3FileRepository(
             config=S3Config(
                 endpoint="http://localhost:9000",
                 access_key="admin",
-                secret_key="adminpassword"
+                secret_key="adminpassword",
             ),
-            local_path=Path('/tmp/test/local'),
+            local_path=Path("/tmp/test/local"),
         )
 
     async def test_s3_file_repository(self):
         repo = self.repo
-        key = 'toto.txt'
-        expected = 'content of file'.encode('utf-8')
+        key = "toto.txt"
+        expected = "content of file".encode("utf-8")
 
         await repo.create_bucket()
-        repo.change_bucket('new-bucket')
+        repo.change_bucket("new-bucket")
         await repo.create_bucket()
 
         await repo.upload_file(key, expected)
@@ -37,7 +36,7 @@ class TestS3FileRepository(IsolatedAsyncioTestCase):
         async for bucket in repo.list_buckets():
             repo.change_bucket(bucket)
             files = [_ async for _ in repo.list_files()]
-            print(f'{bucket}: {files}')
+            print(f"{bucket}: {files}")
             for file in files:
                 content = await repo.read_content(file)
-                print(f'\t{file}: {content}')
+                print(f"\t{file}: {content}")
