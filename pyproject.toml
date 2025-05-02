@@ -4,7 +4,15 @@ version = "0.1.0"
 description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.12"
-dependencies = []
+dependencies = [
+    "cfgrib>=0.9.15.0",
+    "eccodes>=2.41.0",
+    "fastapi>=0.115.12",
+    "python-multipart>=0.0.20",
+    "scipy>=1.15.2",
+    "uvicorn>=0.34.2",
+    "zarr>=3.0.7",
+]
 
 [tool.uv.sources]
 aa-common = { workspace = true }
