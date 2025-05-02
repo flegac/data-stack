@@ -1,5 +1,5 @@
 import time
-from typing import Generator, Any, override
+from typing import Generator, Any, override, Iterable
 
 import pandas as pd
 import xarray as xr
@@ -24,7 +24,7 @@ class DataFileMeasureRepository(MeasureRepository):
         time.sleep(.1)
 
     @override
-    async def save_batch(self, measures: MeasureSeries):
+    async def save_batch(self, measures: Iterable[Measure]):
         raise NotImplementedError
 
     @override

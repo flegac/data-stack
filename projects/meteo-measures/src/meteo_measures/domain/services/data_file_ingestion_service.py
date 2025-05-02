@@ -2,11 +2,14 @@ from loguru import logger
 
 from measure_repository_datafile.data_file_measure_reader import DataFileMeasureReader
 from meteo_measures.domain.entities.data_file import DataFile
+from meteo_measures.domain.entities.measures.measure import Measure
 from meteo_measures.domain.entities.task_status import DataFileLifecycle
 from meteo_measures.domain.ports.data_file_repository import DataFileRepository
 from meteo_measures.domain.ports.file_repository import FileRepository
 from meteo_measures.domain.ports.measure_repository import MeasureRepository
 from meteo_measures.domain.services.data_file_messaging_service import DataFileMessagingService
+
+BATCH_SIZE = 10_000
 
 
 class DataFileIngestionService:
@@ -26,7 +29,7 @@ class DataFileIngestionService:
         await self.messaging.ingestion_consumer.listen(self.ingest_file)
 
     async def ingest_file(self, item: DataFile):
-        logger.debug(f'ingest_file: {item}')
+        logger.info(f'ingest_file: {item}')
         try:
             assert item.status in [DataFileLifecycle.upload_completed]
 
@@ -38,9 +41,14 @@ class DataFileIngestionService:
             provider = reader.read_all()
 
             try:
+                batch: list[Measure] = []
                 for measures in provider:
-                    await self.measure_repository.save_batch(measures)
+                    batch.extend(measures)
+                    if len(batch) >= BATCH_SIZE:
+                        await self.measure_repository.save_batch(batch)
+                        batch.clear()
                     # await self.messaging.measure_producer.write_batch(measures)
+                await self.measure_repository.save_batch(batch)
                 item = await self.data_file_repository.update_status(item, DataFileLifecycle.ingestion_completed)
             except:
                 item = await self.data_file_repository.update_status(item, DataFileLifecycle.ingestion_failed)

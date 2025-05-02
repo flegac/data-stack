@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import Generator, Any
+from typing import Generator, Any, Iterable
 
 from meteo_measures.domain.entities.measure_query import MeasureQuery
 from meteo_measures.domain.entities.measures.measure import Measure
@@ -9,7 +9,7 @@ from meteo_measures.domain.entities.measures.measure_series import MeasureSeries
 class MeasureRepository(ABC):
 
     @abstractmethod
-    async def save_batch(self, measures: MeasureSeries):
+    async def save_batch(self, measures: Iterable[Measure]):
         ...
 
     @abstractmethod

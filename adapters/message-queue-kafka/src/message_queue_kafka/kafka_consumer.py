@@ -18,7 +18,6 @@ class KafkaConsumer(MQConsumer[I]):
             bootstrap_servers=config.broker_url,
             group_id=config.group_id,
             auto_offset_reset='earliest',
-            # value_deserializer=lambda x: x.decode('utf-8')
         )
 
     @override

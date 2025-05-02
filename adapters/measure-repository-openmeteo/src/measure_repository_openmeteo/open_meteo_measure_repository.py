@@ -1,4 +1,4 @@
-from typing import Generator, Any, override
+from typing import Generator, Any, override, Iterable
 
 import openmeteo_requests
 import pandas as pd
@@ -17,7 +17,7 @@ OPEN_METEO_URL = 'https://archive-api.open-meteo.com/v1/archive'
 
 class OpenMeteoMeasureRepository(MeasureRepository):
     @override
-    async def save_batch(self, measures: MeasureSeries):
+    async def save_batch(self, measures: Iterable[Measure]):
         raise NotImplementedError
 
     @override

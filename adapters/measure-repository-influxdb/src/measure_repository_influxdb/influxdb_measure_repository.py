@@ -1,6 +1,6 @@
 from collections import defaultdict
 from functools import cached_property
-from typing import Generator, Any, override
+from typing import Generator, Any, override, Iterable
 
 from influxdb_client import InfluxDBClient, Point
 from influxdb_client.client.write_api import SYNCHRONOUS
@@ -37,10 +37,9 @@ class InfluxDbMeasureRepository(MeasureRepository):
         )
 
     @override
-    async def save_batch(self, measures: MeasureSeries):
-        logger.info(f'save_batch: {measures.sensor} {len(measures.measures)}')
-
-        records = list(map(measure_to_point, measures))
+    async def save_batch(self, measures: Iterable[Measure]):
+        records = [measure_to_point(_) for _ in measures]
+        logger.info(f'save_batch: {len(records)}')
         self._write_api.write(
             bucket=self.config.bucket,
             org=self.config.org,
