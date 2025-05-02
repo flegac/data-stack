@@ -10,8 +10,8 @@ from measure_repository_influxdb.influxdb_measure_repository import (
 )
 from meteo_measures.domain.entities.measure_query import MeasureQuery
 from meteo_measures.domain.entities.measures.location import Location
-from meteo_measures.domain.entities.measures.measure import Measure
 from meteo_measures.domain.entities.measures.measure_series import MeasureSeries
+from meteo_measures.domain.entities.measures.measurement import Measurement
 from meteo_measures.domain.entities.measures.period import Period
 from meteo_measures.domain.entities.measures.sensor import Sensor
 
@@ -38,7 +38,7 @@ class TestInfluDbMeasureRepository(IsolatedAsyncioTestCase):
 
     async def test_save(self):
         await self.repo.save(
-            Measure(
+            Measurement(
                 datetime=datetime.datetime.now(),
                 value=random.random(),
                 sensor=Sensor(
@@ -57,7 +57,7 @@ class TestInfluDbMeasureRepository(IsolatedAsyncioTestCase):
                 location=Location(latitude=43.6043, longitude=1.4437),
             ),
             measures=[
-                Measure(
+                Measurement(
                     datetime=datetime.datetime.now()
                     + datetime.timedelta(seconds=10 * i),
                     value=20.0,

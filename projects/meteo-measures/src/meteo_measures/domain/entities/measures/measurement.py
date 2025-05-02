@@ -5,7 +5,7 @@ from meteo_measures.domain.entities.measures.sensor import Sensor
 
 
 @dataclass
-class Measure:
+class Measurement:
     datetime: datetime
     value: float
     sensor: Sensor | None = None

@@ -4,12 +4,12 @@ from dataclasses import asdict
 
 import pandas as pd
 from message_queue.serializer import Serializer
-from meteo_measures.domain.entities.measures.measure import Measure
+from meteo_measures.domain.entities.measures.measurement import Measurement
 from meteo_measures.domain.entities.measures.sensor import Sensor
 
 
-class MeasureSerializer(Serializer[Measure, bytes]):
-    def serialize(self, message: Measure) -> bytes:
+class MeasureSerializer(Serializer[Measurement, bytes]):
+    def serialize(self, message: Measurement) -> bytes:
         measure_dict = asdict(message)
         measure_dict["value"] = (
             float(message.value) if pd.notna(message.value) else None
@@ -17,7 +17,7 @@ class MeasureSerializer(Serializer[Measure, bytes]):
         measure_dict["datetime"] = message.datetime.isoformat()
         return json.dumps(measure_dict).encode("utf-8")
 
-    def deserialize(self, raw: bytes) -> Measure:
+    def deserialize(self, raw: bytes) -> Measurement:
         raw = json.loads(raw)
         raw["datetime"] = datetime.datetime.fromisoformat(raw["datetime"])
         try:
@@ -25,4 +25,4 @@ class MeasureSerializer(Serializer[Measure, bytes]):
         except TypeError:
             raw["value"] = float("nan")
         raw["sensor"] = Sensor(**raw["sensor"])
-        return Measure(**raw)
+        return Measurement(**raw)

@@ -2,8 +2,8 @@ import datetime
 from unittest import TestCase
 
 from meteo_measures.domain.entities.measures.location import Location
-from meteo_measures.domain.entities.measures.measure import Measure
 from meteo_measures.domain.entities.measures.measure_serializer import MeasureSerializer
+from meteo_measures.domain.entities.measures.measurement import Measurement
 from meteo_measures.domain.entities.measures.sensor import Sensor
 
 
@@ -20,7 +20,7 @@ class TestMeasureSerializer(TestCase):
             ),
         )
 
-        item = Measure(value=33, datetime=datetime.datetime.now(), sensor=sensor)
+        item = Measurement(value=33, datetime=datetime.datetime.now(), sensor=sensor)
 
         expected = serializer.serialize(item)
 

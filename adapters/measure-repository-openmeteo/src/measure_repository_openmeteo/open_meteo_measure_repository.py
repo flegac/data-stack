@@ -5,8 +5,8 @@ import pandas as pd
 import requests_cache
 from meteo_measures.domain.entities.measure_query import MeasureQuery
 from meteo_measures.domain.entities.measures.location import Location
-from meteo_measures.domain.entities.measures.measure import Measure
 from meteo_measures.domain.entities.measures.measure_series import MeasureSeries
+from meteo_measures.domain.entities.measures.measurement import Measurement
 from meteo_measures.domain.entities.measures.sensor import Sensor
 from meteo_measures.domain.ports.measure_repository import MeasureRepository
 from retry_requests import retry
@@ -16,11 +16,11 @@ OPEN_METEO_URL = "https://archive-api.open-meteo.com/v1/archive"
 
 class OpenMeteoMeasureRepository(MeasureRepository):
     @override
-    async def save_batch(self, measures: Iterable[Measure]):
+    async def save_batch(self, measures: Iterable[Measurement]):
         raise NotImplementedError
 
     @override
-    async def save(self, measure: Measure):
+    async def save(self, measure: Measurement):
         raise NotImplementedError
 
     @override

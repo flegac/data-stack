@@ -2,7 +2,7 @@ from loguru import logger
 from measure_repository_datafile.data_file_measure_reader import DataFileMeasureReader
 from meteo_measures.domain.entities.data_file import DataFile
 from meteo_measures.domain.entities.datafile_lifecycle import DataFileLifecycle
-from meteo_measures.domain.entities.measures.measure import Measure
+from meteo_measures.domain.entities.measures.measurement import Measurement
 from meteo_measures.domain.ports.data_file_repository import DataFileRepository
 from meteo_measures.domain.ports.file_repository import FileRepository
 from meteo_measures.domain.ports.measure_repository import MeasureRepository
@@ -44,7 +44,7 @@ class DataFileIngestionService:
             provider = reader.read_all()
 
             try:
-                batch: list[Measure] = []
+                batch: list[Measurement] = []
                 for measures in provider:
                     batch.extend(measures)
                     if len(batch) >= BATCH_SIZE:

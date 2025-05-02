@@ -7,13 +7,13 @@ from influxdb_client.client.write_api import SYNCHRONOUS
 from loguru import logger
 from measure_repository_influxdb.influxdb_config import InfluxDBConfig
 from meteo_measures.domain.entities.measure_query import MeasureQuery
-from meteo_measures.domain.entities.measures.measure import Measure
 from meteo_measures.domain.entities.measures.measure_series import MeasureSeries
+from meteo_measures.domain.entities.measures.measurement import Measurement
 from meteo_measures.domain.entities.measures.sensor import Sensor, SensorId
 from meteo_measures.domain.ports.measure_repository import MeasureRepository
 
 
-def measure_to_point(measure: Measure):
+def measure_to_point(measure: Measurement):
     return (
         Point(measure.sensor.type.lower())
         .tag("sensor_id", measure.sensor.id)
@@ -26,7 +26,7 @@ class InfluxDbMeasureRepository(MeasureRepository):
         self.config = config
 
     @override
-    async def save(self, measure: Measure):
+    async def save(self, measure: Measurement):
         logger.info(f"save: {measure.sensor}")
 
         self._write_api.write(
@@ -36,7 +36,7 @@ class InfluxDbMeasureRepository(MeasureRepository):
         )
 
     @override
-    async def save_batch(self, measures: Iterable[Measure]):
+    async def save_batch(self, measures: Iterable[Measurement]):
         records = [measure_to_point(_) for _ in measures]
         logger.info(f"save_batch: {len(records)}")
         self._write_api.write(
@@ -51,7 +51,9 @@ class InfluxDbMeasureRepository(MeasureRepository):
         tables = self._query_api.query(flux_query, org=self.config.org)
 
         sensors: dict[tuple[SensorId, str], Sensor] = {}
-        measure_series: dict[tuple[SensorId, str], list[Measure]] = defaultdict(list)
+        measure_series: dict[tuple[SensorId, str], list[Measurement]] = defaultdict(
+            list
+        )
 
         for table in tables:
             for record in table.records:
@@ -67,7 +69,7 @@ class InfluxDbMeasureRepository(MeasureRepository):
                 key = (sensor.id, sensor.type)
                 sensors[key] = sensor
                 measure_series[key].append(
-                    Measure(
+                    Measurement(
                         datetime=record.values["_time"],
                         value=record.values["_value"],
                     )
