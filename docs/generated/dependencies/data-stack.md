@@ -51,6 +51,15 @@ data-stack v0.1.0
 │       ├── distlib v0.3.9
 │       ├── filelock v3.18.0
 │       └── platformdirs v4.3.7
+├── pydeps v3.0.1 (group: dev)
+│   └── stdlib-list v0.11.1
+├── pylint v3.3.6 (group: dev)
+│   ├── astroid v3.3.9
+│   ├── dill v0.4.0
+│   ├── isort v6.0.1
+│   ├── mccabe v0.7.0
+│   ├── platformdirs v4.3.7
+│   └── tomlkit v0.13.2
 └── radon v6.0.1 (group: dev)
     ├── colorama v0.4.6
     └── mando v0.7.1

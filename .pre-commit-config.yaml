@@ -2,6 +2,13 @@ repos:
   - repo: local
     hooks:
 
+      - id: generate-docs-md
+        name: Generate Docs
+        entry: uv run scripts/analyze.py
+        language: system
+        pass_filenames: false
+        always_run: true
+
       - id: isort
         name: isort
         entry: isort
@@ -20,13 +27,13 @@ repos:
         language: system
         types: [ python ]
 
-#      - id: coverage
-#        name: Coverage
-#        entry: coverage run --source=. -m unittest
-#        language: system
-#        pass_filenames: false
-#        always_run: true
-#        verbose: true
+      #      - id: coverage
+      #        name: Coverage
+      #        entry: coverage run --source=. -m unittest
+      #        language: system
+      #        pass_filenames: false
+      #        always_run: true
+      #        verbose: true
 
       - id: radon-cc
         name: Radon CC
@@ -56,10 +63,3 @@ repos:
         language: system
         pass_filenames: false
         always_run: false
-
-      - id: generate-docs-md
-        name: Generate Docs
-        entry: uv run scripts/analyze.py
-        language: system
-        pass_filenames: false
-        always_run: true

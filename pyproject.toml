@@ -4,6 +4,7 @@ version = "0.1.0"
 description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.12"
+
 dependencies = [
     "cfgrib>=0.9.15.0",
     "fastapi>=0.115.12",
@@ -48,5 +49,7 @@ dev = [
     "flake8>=7.2.0",
     "isort>=6.0.1",
     "pre-commit>=4.2.0",
+    "pydeps>=3.0.1",
+    "pylint>=3.3.6",
     "radon>=6.0.1",
 ]
