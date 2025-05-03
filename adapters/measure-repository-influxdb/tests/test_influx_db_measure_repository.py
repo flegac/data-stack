@@ -8,14 +8,13 @@ from measure_repository_influxdb.influxdb_measure_repository import (
     InfluxDbMeasureRepository,
     query_to_flux,
 )
+from meteo_app.config import INFLUX_DB_CONFIG
 from meteo_measures.domain.entities.measure_query import MeasureQuery
 from meteo_measures.domain.entities.measures.location import Location
 from meteo_measures.domain.entities.measures.measure_series import MeasureSeries
 from meteo_measures.domain.entities.measures.measurement import Measurement
 from meteo_measures.domain.entities.measures.period import Period
 from meteo_measures.domain.entities.measures.sensor import Sensor
-
-from config import INFLUX_DB_CONFIG
 
 
 class TestInfluDbMeasureRepository(IsolatedAsyncioTestCase):
@@ -29,7 +28,7 @@ class TestInfluDbMeasureRepository(IsolatedAsyncioTestCase):
             measure_type="something",
             period=Period(
                 # start=datetime.datetime(2025, 1, 1, tzinfo=datetime.timezone.utc),
-                end=datetime.datetime.now(datetime.timezone.utc)
+                end=datetime.datetime.now(datetime.UTC)
             ),
             tags={"toto": ["one", "two", "three"], "tata": ["some", "thing"]},
         )
@@ -72,7 +71,7 @@ class TestInfluDbMeasureRepository(IsolatedAsyncioTestCase):
             sensor_id="testing",
             # measure_type='something',
             period=Period(
-                start=datetime.datetime(2025, 1, 1, tzinfo=datetime.timezone.utc),
+                start=datetime.datetime(2025, 1, 1, tzinfo=datetime.UTC),
                 # end=datetime.datetime.now(datetime.timezone.utc)
             ),
         )

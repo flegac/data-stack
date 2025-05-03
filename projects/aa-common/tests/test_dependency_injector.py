@@ -14,7 +14,11 @@ class MyService:
         self.custom = custom
         self.config = config
 
+    def do_something(self):
+        print("do_something")
 
+
+# pylint: disable=too-few-public-methods
 class MyContainer(containers.DeclarativeContainer):
     config = providers.Singleton(MyConfig, param="toto")
     service_factory = providers.Factory(MyService, config=config)

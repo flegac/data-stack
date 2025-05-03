@@ -5,12 +5,13 @@ from functools import cached_property
 from pathlib import Path
 
 import xarray as xr
+
 from meteo_measures.domain.entities.datafile_lifecycle import DataFileLifecycle
 
 
 @dataclass
 class DataFile:
-    key: str
+    data_id: str
     source_hash: str
     source_uri: str
     local_path: Path | None = None
@@ -19,11 +20,11 @@ class DataFile:
     last_update_date: datetime = field(default_factory=datetime.now)
 
     @staticmethod
-    def from_file(path: Path, key: str | None = None):
-        if key is None:
-            key = path.name
+    def from_file(path: Path, data_id: str | None = None):
+        if data_id is None:
+            data_id = path.name
         return DataFile(
-            key=key,
+            data_id=data_id,
             source_hash=compute_hash(path),
             source_uri=str(path),
             local_path=path,
@@ -38,7 +39,7 @@ class DataFile:
         return list(self.raw.data_vars)
 
     def __repr__(self):
-        return f"Data({self.key}, {self.status}, {self.source_hash})"
+        return f"Data({self.data_id}, {self.status}, {self.source_hash})"
 
 
 def compute_hash(file_path: Path):

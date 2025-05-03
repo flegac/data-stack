@@ -1,14 +1,13 @@
-from pathlib import Path
 from unittest import TestCase
 
-from aa_common.constants import DATASET_ROOT_PATH
+from aa_common.constants import DATASET_ROOT_PATH, EXPORT_PATH
 from meteo_measures.domain.entities.data_file import DataFile
-
-EXPORT_PATH = Path.cwd() / "exports"
-EXPORT_PATH.mkdir(parents=True, exist_ok=True)
 
 
 class TestDataFile(TestCase):
+    def setUp(self):
+        EXPORT_PATH.mkdir(parents=True, exist_ok=True)
+
     def test_it(self):
         grib = DataFile.from_file(
             path=DATASET_ROOT_PATH / "CDS-hydro-2020-10-22.nc",

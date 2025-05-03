@@ -12,5 +12,5 @@ class DataFileIngestionListener:
     service: DataFileIngestionService = Provide["ingestion_service"]
 
     async def run(self):
-        logger.debug("DataFileIngestionListener.run")
+        logger.info("DataFileIngestionListener.run")
         await self.service.ingestion_listener()

@@ -1,10 +1,12 @@
-from typing import Any, Awaitable, Callable, override
+from collections.abc import Awaitable, Callable
+from typing import Any, override
 
 from aiokafka import AIOKafkaConsumer
 from loguru import logger
 from message_queue.mq_consumer import MQConsumer
 from message_queue.mq_topic import MQTopic
 from message_queue.serializer import Input, Output
+
 from message_queue_kafka.kafka_config import KafkaConfig
 
 
@@ -26,9 +28,16 @@ class KafkaConsumer(MQConsumer[Input]):
         try:
             async for msg in self.consumer:
                 try:
-                    item = self.topic.serializer.deserialize(msg.value)
+                    if serializer := self.topic.serializer:
+                        item = serializer.deserialize(msg.value)
+                    else:
+                        item = msg.value.decode("utf-8")
                     await on_message(item)
-                except Exception as e:
+                except Exception as e:  # pylint: disable=broad-exception-caught
                     logger.error(f"{msg}: {e}")
         finally:
             await self.consumer.stop()
+
+    @override
+    async def stop(self):
+        await self.consumer.stop()

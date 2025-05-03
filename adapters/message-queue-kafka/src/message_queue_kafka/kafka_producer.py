@@ -5,6 +5,7 @@ from loguru import logger
 from message_queue.mq_producer import MQProducer
 from message_queue.mq_topic import MQTopic
 from message_queue.serializer import Input, Output
+
 from message_queue_kafka.kafka_config import KafkaConfig
 
 
@@ -27,11 +28,14 @@ class KafkaProducer(MQProducer[Input]):
     @override
     async def write_single(self, item: Input):
         try:
-            message = self.topic.serializer.serialize(item)
+            if serializer := self.topic.serializer:
+                message = serializer.serialize(item)
+            else:
+                message = item
             self.producer.produce(
                 self.topic.topic, value=message, callback=self._delivery_report
             )
-        except Exception as e:
+        except Exception as e:  # pylint: disable=broad-exception-caught
             logger.warning(f"{self.topic.topic}: {item}: Error! {e}")
 
     @override

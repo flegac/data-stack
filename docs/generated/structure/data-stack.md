@@ -39,60 +39,67 @@ data-stack
 │               ├── kafka_consumer.py
 │               ├── kafka_factory.py
 │               └── kafka_producer.py
-├── projects
-│   ├── aa-common
-│   │   └── src
-│   │       └── aa_common
-│   │           └── constants.py
-│   ├── message-queue
-│   │   └── src
-│   │       └── message_queue
-│   │           ├── mq_consumer.py
-│   │           ├── mq_factory.py
-│   │           ├── mq_producer.py
-│   │           ├── mq_topic.py
-│   │           └── serializer.py
-│   └── meteo-measures
-│       └── src
-│           └── meteo_measures
-│               ├── config.py
-│               └── domain
-│                   ├── entities
-│                   │   ├── datafile_lifecycle.py
-│                   │   ├── data_file.py
-│                   │   ├── data_file_serializer.py
-│                   │   ├── measure_query.py
-│                   │   └── measures
-│                   │       ├── location.py
-│                   │       ├── measurement.py
-│                   │       ├── measure_serializer.py
-│                   │       ├── measure_series.py
-│                   │       ├── period.py
-│                   │       └── sensor.py
-│                   ├── ports
-│                   │   ├── data_file_repository.py
-│                   │   ├── file_repository.py
-│                   │   ├── measure_reader.py
-│                   │   ├── measure_repository.py
-│                   │   └── measure_writer.py
-│                   └── services
-│                       ├── data_file_ingestion_service.py
-│                       ├── data_file_messaging_service.py
-│                       └── data_file_upload_service.py
-└── src
-    ├── config.py
-    ├── datafile_ingestion_listener.py
-    ├── datafile_uploader.py
-    ├── datafile_writer.py
-    ├── measure_ingestion_listener.py
-    ├── open_meteo_producer_app.py
-    ├── server_app.py
-    ├── wires
-    │   ├── config.py
-    │   ├── repositories.py
-    │   └── services.py
-    └── worker
-        ├── data_file_ingestion_listener.py
-        ├── data_file_upload_worker.py
-        └── measure_ingestion_listener.py
+└── projects
+    ├── aa-common
+    │   └── src
+    │       └── aa_common
+    │           └── constants.py
+    ├── message-queue
+    │   └── src
+    │       └── message_queue
+    │           ├── memory_mq_factory.py
+    │           ├── mq_consumer.py
+    │           ├── mq_factory.py
+    │           ├── mq_producer.py
+    │           ├── mq_topic.py
+    │           └── serializer.py
+    ├── meteo-app
+    │   └── src
+    │       └── meteo_app
+    │           ├── config.py
+    │           ├── datafile_ingestion_listener.py
+    │           ├── datafile_uploader.py
+    │           ├── exports
+    │           ├── measure_ingestion_listener.py
+    │           ├── open_meteo_producer_app.py
+    │           ├── server_app.py
+    │           ├── wires
+    │           │   ├── config.py
+    │           │   ├── repositories.py
+    │           │   └── services.py
+    │           └── workers
+    │               ├── data_file_ingestion_listener.py
+    │               ├── data_file_upload_worker.py
+    │               └── measure_ingestion_listener.py
+    └── meteo-measures
+        └── src
+            └── meteo_measures
+                ├── config.py
+                └── domain
+                    ├── entities
+                    │   ├── coordinate.py
+                    │   ├── datafile_lifecycle.py
+                    │   ├── data_file.py
+                    │   ├── data_file_serializer.py
+                    │   ├── measure_query.py
+                    │   ├── measures
+                    │   │   ├── location.py
+                    │   │   ├── measurement.py
+                    │   │   ├── measure_serializer.py
+                    │   │   ├── measure_series.py
+                    │   │   ├── period.py
+                    │   │   └── sensor.py
+                    │   ├── meta_data_file.py
+                    │   └── variable.py
+                    ├── ports
+                    │   ├── data_file_repository.py
+                    │   ├── file_repository.py
+                    │   ├── measure_reader.py
+                    │   ├── measure_repository.py
+                    │   └── measure_writer.py
+                    └── services
+                        ├── data_file_creation_service.py
+                        ├── data_file_ingestion_service.py
+                        ├── data_file_messaging_service.py
+                        └── data_file_upload_service.py
 ```

@@ -2,6 +2,7 @@ from typing import override
 
 from message_queue.mq_factory import MQFactory
 from message_queue.mq_topic import MQTopic
+
 from message_queue_kafka.kafka_config import KafkaConfig
 from message_queue_kafka.kafka_consumer import KafkaConsumer
 from message_queue_kafka.kafka_producer import KafkaProducer

@@ -23,11 +23,11 @@ class TestPgDataFileRepository(IsolatedAsyncioTestCase):
         await self.log_all()
 
         async with repo.transaction():
-            data_file.key = "toto"
+            data_file.data_id = "toto"
             await repo.create_or_update(data_file)
             await self.log_all()
 
-            data_file.key = "titi"
+            data_file.data_id = "titi"
             await repo.create_or_update(data_file)
             await self.log_all()
             repo.cancel_transaction()
@@ -45,10 +45,10 @@ class TestPgDataFileRepository(IsolatedAsyncioTestCase):
         await repo.update_status(data_file, DataFileLifecycle.ingestion_completed)
         await self.log_all()
 
-        await repo.delete_by_key(data_file.key)
+        await repo.delete_by_id(data_file.data_id)
         await self.log_all()
 
     async def log_all(self):
         async for datafile in self.repo.read_all():
-            print(datafile.key, datafile.status)
+            print(datafile.data_id, datafile.status)
         print("-------------------")

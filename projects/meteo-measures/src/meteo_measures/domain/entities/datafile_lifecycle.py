@@ -1,6 +1,7 @@
 from enum import Enum, auto
 
 
+# pylint: disable=invalid-name
 class DataFileLifecycle(Enum):
     created = auto()
 
@@ -13,3 +14,6 @@ class DataFileLifecycle(Enum):
     ingestion_failed = auto()
 
     completed = auto()
+
+
+# pylint: enable=invalid-name

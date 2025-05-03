@@ -17,8 +17,8 @@ class TestInfluDbMeasureRepository(IsolatedAsyncioTestCase):
         query = MeasureQuery(
             measure_type="temperature",
             period=Period(
-                start=datetime.datetime(2025, 4, 6, tzinfo=datetime.timezone.utc),
-                end=datetime.datetime(2025, 4, 13, tzinfo=datetime.timezone.utc),
+                start=datetime.datetime(2025, 4, 6, tzinfo=datetime.UTC),
+                end=datetime.datetime(2025, 4, 13, tzinfo=datetime.UTC),
             ),
             location=Location(latitude=43.6043, longitude=1.4437),
         )

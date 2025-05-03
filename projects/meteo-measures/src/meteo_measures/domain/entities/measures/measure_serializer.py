@@ -4,6 +4,7 @@ from dataclasses import asdict
 
 import pandas as pd
 from message_queue.serializer import Serializer
+
 from meteo_measures.domain.entities.measures.measurement import Measurement
 from meteo_measures.domain.entities.measures.sensor import Sensor
 

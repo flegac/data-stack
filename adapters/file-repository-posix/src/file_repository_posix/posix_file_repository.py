@@ -1,5 +1,5 @@
 from pathlib import Path
-from typing import IO, Optional, override
+from typing import IO, override
 
 from loguru import logger
 from meteo_measures.domain.ports.file_repository import FileRepository
@@ -12,23 +12,23 @@ class PosixFileRepository(FileRepository):
 
     @override
     async def create_bucket(self):
-        logger.debug(f"create_bucket: {self.current_bucket()}")
+        logger.info(f"create_bucket: {self.current_bucket()}")
         path = self.root / self.current_bucket()
         path.mkdir(parents=True, exist_ok=True)
 
     @override
-    async def upload_file(self, key: str, file_content: bytes | IO):
-        logger.debug(f"upload_file: {key}: size={len(file_content) / 1024}Ko")
+    async def upload_file(self, file_id: str, file_content: bytes | IO):
+        logger.info(f"upload_file: {file_id}: size={len(file_content) / 1024}Ko")
 
-        path = self.root / self.current_bucket() / key
+        path = self.root / self.current_bucket() / file_id
         with path.open("wb") as _:
             _.write(file_content)
 
     @override
-    async def read_content(self, key: str) -> Optional[bytes]:
-        logger.debug(f"read_content: {key}")
+    async def read_content(self, file_id: str) -> bytes | None:
+        logger.info(f"read_content: {file_id}")
 
-        path = self.root / self.current_bucket() / key
+        path = self.root / self.current_bucket() / file_id
         with path.open("rb") as _:
             return _.read()
 

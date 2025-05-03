@@ -8,6 +8,7 @@ from message_queue_kafka.kafka_config import KafkaConfig
 INI_FILE = Path(__file__).parent / "config.ini"
 
 
+# pylint: disable=too-few-public-methods
 class Config(containers.DeclarativeContainer):
     config: providers.Configuration = providers.Configuration()
     kafka = providers.Singleton(

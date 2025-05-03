@@ -1,7 +1,7 @@
 import asyncio
 
-from wires.services import Services
-from worker.measure_ingestion_listener import MeasureIngestionListener
+from meteo_app.wires.services import Services
+from meteo_app.workers.measure_ingestion_listener import MeasureIngestionListener
 
 if __name__ == "__main__":
     container = Services()

@@ -2,6 +2,7 @@ from functools import cached_property
 
 from loguru import logger
 from message_queue.mq_factory import MQFactory
+
 from meteo_measures.config import (
     DATAFILE_ERROR_TOPIC,
     DATAFILE_INGESTION_TOPIC,
@@ -37,8 +38,8 @@ class DataFileMessagingService:
     def measure_producer(self):
         return self.mq_factory.producer(MEASURE_TOPIC)
 
-    async def error_handler(self, item: DataFile):
-        logger.warning(f"_handle_error: {item}")
+    async def error_handler(self, item: DataFile, error: Exception = None):
+        logger.warning(f"_handle_error: {error}: {item}")
         await self.data_file_repository.update_status(
             item, DataFileLifecycle.ingestion_failed
         )

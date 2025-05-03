@@ -3,7 +3,6 @@ from datetime import datetime
 from typing import override
 
 import databases
-from data_file_repository_pg.data_file_model import DataFileModel
 from loguru import logger
 from meteo_measures.domain.entities.data_file import DataFile
 from meteo_measures.domain.entities.datafile_lifecycle import DataFileLifecycle
@@ -13,8 +12,10 @@ from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
 from sqlalchemy.future import select
 from sqlalchemy.orm import sessionmaker
 
+from data_file_repository_pg.data_file_model import DataFileModel
 
-class CancelTransactionException(Exception):
+
+class CancelTransactionError(Exception):
     pass
 
 
@@ -24,7 +25,9 @@ class PgDataFileRepository(DataFileRepository):
         self.database = databases.Database(database_url)
         self.engine = create_async_engine(database_url, echo=False)
         self.async_session = sessionmaker(
-            self.engine, expire_on_commit=False, class_=AsyncSession
+            self.engine,
+            expire_on_commit=False,
+            class_=AsyncSession,
         )
         self.model = DataFileModel
 
@@ -45,7 +48,7 @@ class PgDataFileRepository(DataFileRepository):
                 yield session
                 logger.trace("transaction: commit")
                 await session.commit()
-            except CancelTransactionException:
+            except CancelTransactionError:
                 logger.trace("transaction: rollback (canceled)")
                 await session.rollback()
             except Exception:
@@ -58,18 +61,18 @@ class PgDataFileRepository(DataFileRepository):
                 logger.trace("transaction: STOP")
 
     def cancel_transaction(self):
-        raise CancelTransactionException
+        raise CancelTransactionError
 
     @override
-    async def find_by_key(self, key: str):
-        logger.debug("find_by_key: {key}")
+    async def find_by_id(self, data_id: str):
+        logger.info(f"find_by_id: {data_id}")
         async with self.transaction() as session:
-            stmt = select(self.model).where(self.model.key == key)
+            stmt = select(self.model).where(self.model.data_id == data_id)
             result = await session.execute(stmt)
             row = result.scalar_one_or_none()
             if row:
                 return DataFile(
-                    key=row.key,
+                    data_id=row.data_id,
                     source_uri=row.source_uri,
                     source_hash=row.source_hash,
                     status=row.status,
@@ -79,30 +82,30 @@ class PgDataFileRepository(DataFileRepository):
             return None
 
     @override
-    async def update_status(
-        self, item: DataFile, status: DataFileLifecycle
-    ) -> DataFile:
-        logger.debug(f"update_status: {item.key}: {item.status.name} -> {status.name}")
+    async def update_status(self, item: DataFile, status: DataFileLifecycle):
+        logger.info(
+            f"update_status: {item.data_id}: {item.status.name} -> {status.name}"
+        )
         async with self.transaction() as session:
             stmt = (
                 update(self.model)
-                .where(self.model.key == item.key)
+                .where(self.model.data_id == item.data_id)
                 .values(status=status, last_update_date=datetime.now())
             )
             result = await session.execute(stmt)
 
         if result.rowcount == 0:
-            raise ValueError(f"No DataFile found with uid: {item.key}")
-        return await self.find_by_key(item.key)
+            raise ValueError(f"No DataFile found with uid: {item.data_id}")
+        item.status = status
 
     @override
     async def create_or_update(self, item: DataFile):
-        logger.debug(f"create_or_update: {item}")
+        logger.info(f"create_or_update: {item}")
         async with self.transaction() as session:
             item.last_update_date = datetime.now()
             await session.merge(
                 self.model(
-                    key=item.key,
+                    data_id=item.data_id,
                     source_uri=item.source_uri,
                     source_hash=item.source_hash,
                     status=item.status,
@@ -112,19 +115,21 @@ class PgDataFileRepository(DataFileRepository):
             )
 
     @override
-    async def delete_by_key(self, key: str):
-        logger.debug(f"delete_by_key: {key}")
+    async def delete_by_id(self, data_id: str):
+        logger.info(f"delete_by_id: {data_id}")
         async with self.transaction() as session:
-            await session.execute(delete(self.model).where(self.model.key == key))
+            await session.execute(
+                delete(self.model).where(self.model.data_id == data_id)
+            )
 
     @override
     async def read_all(self):
-        logger.debug("read_all")
+        logger.info("read_all")
         async with self.transaction() as session:
             result = await session.execute(select(self.model))
         for row in result.scalars().all():
             yield DataFile(
-                key=row.key,
+                data_id=row.data_id,
                 source_uri=row.source_uri,
                 source_hash=row.source_hash,
                 status=row.status,

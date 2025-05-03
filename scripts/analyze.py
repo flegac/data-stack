@@ -29,7 +29,7 @@ def generate_structure(project_toml: Path):
     output_dir.mkdir(parents=True, exist_ok=True)
     output_file = output_dir / project_dir.with_suffix(".md").name
     dump_command_result(
-        command=f'tree -I "{'|'.join(IGNORED)}" --noreport -P "*.py" {project_name}',
+        command=f'tree -I "{"|".join(IGNORED)}" --noreport -P "*.py" {project_name}',
         execution_dir=project_dir.parent,
         output_file=output_file,
     )
@@ -61,6 +61,7 @@ def dump_command_result(command: str, execution_dir: Path, output_file: Path):
             shell=True,
             text=True,
             stdout=subprocess.PIPE,
+            check=False,
         )
         result = str(process.stdout)
         result = result.replace(" ", " ")

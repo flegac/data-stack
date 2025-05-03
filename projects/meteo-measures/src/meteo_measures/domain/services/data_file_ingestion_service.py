@@ -1,5 +1,6 @@
 from loguru import logger
 from measure_repository_datafile.data_file_measure_reader import DataFileMeasureReader
+
 from meteo_measures.domain.entities.data_file import DataFile
 from meteo_measures.domain.entities.datafile_lifecycle import DataFileLifecycle
 from meteo_measures.domain.entities.measures.measurement import Measurement
@@ -34,11 +35,11 @@ class DataFileIngestionService:
         try:
             assert item.status in [DataFileLifecycle.upload_completed]
 
-            item = await self.data_file_repository.update_status(
+            await self.data_file_repository.update_status(
                 item, DataFileLifecycle.ingestion_in_progress
             )
 
-            item.local_path = await self.file_repository.download_file(item.key)
+            item.local_path = await self.file_repository.download_file(item.data_id)
 
             reader = DataFileMeasureReader(item)
             provider = reader.read_all()
@@ -52,16 +53,16 @@ class DataFileIngestionService:
                         batch.clear()
                     # await self.messaging.measure_producer.write_batch(measures)
                 await self.measure_repository.save_batch(batch)
-                item = await self.data_file_repository.update_status(
+                await self.data_file_repository.update_status(
                     item, DataFileLifecycle.ingestion_completed
                 )
             except Exception:
-                item = await self.data_file_repository.update_status(
+                await self.data_file_repository.update_status(
                     item, DataFileLifecycle.ingestion_failed
                 )
                 raise
 
             return item
-        except Exception:
-            await self.messaging.error_handler(item)
+        except Exception as e:
+            await self.messaging.error_handler(item, e)
             raise

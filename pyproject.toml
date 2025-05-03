@@ -5,14 +5,6 @@ description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.12"
 
-dependencies = [
-    "cfgrib>=0.9.15.0",
-    "fastapi>=0.115.12",
-    "python-multipart>=0.0.20",
-    "scipy>=1.15.2",
-    "uvicorn>=0.34.2",
-]
-
 [tool.uv.workspace]
 members = [
     "projects/*",
@@ -39,8 +31,30 @@ measure-repository-datafile = { workspace = true }
 measure-repository-influxdb = { workspace = true }
 measure-repository-openmeteo = { workspace = true }
 
-[tool.isort]
-profile = "black"
+[tool.ruff]
+# Règles à activer
+lint.select = ["E", "F", "B", "I", "N", "UP", "PL"]  # PL active les règles équivalentes à Pylint
+
+# Ignore les erreurs d'importation pour les packages spécifiques
+lint.extend-ignore = []
+
+# Chemins à ignorer
+exclude = [
+    ".git",
+    ".ruff_cache",
+    "__pycache__",
+]
+
+[tool.pylint.'MESSAGES CONTROL']
+disable = [
+    "C0114", # missing-module-docstring
+    "C0115", # missing-class-docstring
+    "C0116", # missing-function-docstring
+    "c-extension-no-member",
+]
+
+[tool.pylint."DESIGN"]
+min-public-methods = 1
 
 [dependency-groups]
 dev = [
@@ -52,4 +66,5 @@ dev = [
     "pydeps>=3.0.1",
     "pylint>=3.3.6",
     "radon>=6.0.1",
+    "ruff>=0.11.8",
 ]

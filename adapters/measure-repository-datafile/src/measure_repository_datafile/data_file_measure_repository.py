@@ -1,5 +1,6 @@
 import time
-from typing import Any, Generator, Iterable, override
+from collections.abc import Generator, Iterable
+from typing import Any, override
 
 import pandas as pd
 import xarray as xr
@@ -19,7 +20,7 @@ class DataFileMeasureRepository(MeasureRepository):
         self.show_config()
 
     def show_config(self):
-        logger.debug(self.data_file.raw)
+        logger.info(self.data_file.raw)
         time.sleep(0.1)
 
     @override
@@ -32,9 +33,7 @@ class DataFileMeasureRepository(MeasureRepository):
 
     @override
     def search(self, query: MeasureQuery) -> Generator[MeasureSeries, Any, None]:
-        # TODO: filter according to query
-        raise NotImplementedError
-
+        # TODO: filter according to query # pylint: disable=fixme
         dataset = self.data_file.raw
         latitudes = dataset["latitude"]
         longitudes = dataset["longitude"]
@@ -62,7 +61,7 @@ class DataFileMeasureRepository(MeasureRepository):
                             ),
                         )
                         yield temperatures
-            except Exception as e:
+            except Exception as e:  # pylint: disable=broad-exception-caught
                 logger.warning(f"Could not handle variable=[{variable}] : {e}")
 
     @staticmethod

@@ -1,4 +1,5 @@
-from typing import Any, Generator, Iterable, override
+from collections.abc import Generator, Iterable
+from typing import Any, override
 
 import openmeteo_requests
 import pandas as pd

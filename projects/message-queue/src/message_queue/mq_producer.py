@@ -1,5 +1,6 @@
 from abc import abstractmethod
-from typing import Generic, Iterable
+from collections.abc import Iterable
+from typing import Generic
 
 from message_queue.serializer import Input
 

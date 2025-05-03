@@ -1,7 +1,8 @@
 import re
 from abc import ABC, abstractmethod
+from collections.abc import AsyncGenerator
 from pathlib import Path
-from typing import IO, Any, AsyncGenerator, Optional
+from typing import IO, Any
 
 
 class FileRepository(ABC):
@@ -22,18 +23,18 @@ class FileRepository(ABC):
     async def create_bucket(self): ...
 
     @abstractmethod
-    async def upload_file(self, key: str, file_content: bytes | IO): ...
+    async def upload_file(self, file_id: str, file_content: bytes | IO): ...
 
-    async def download_file(self, key: str, target: Path | None = None):
+    async def download_file(self, file_id: str, target: Path | None = None):
         if target is None:
-            target = self.local_path / key
-        content = await self.read_content(key)
+            target = self.local_path / file_id
+        content = await self.read_content(file_id)
         with target.open("wb") as _:
             _.write(content)
         return target
 
     @abstractmethod
-    async def read_content(self, key: str) -> Optional[bytes]: ...
+    async def read_content(self, file_id: str) -> bytes | None: ...
 
     @abstractmethod
     async def list_buckets(self) -> AsyncGenerator[str, Any]: ...

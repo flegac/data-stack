@@ -21,7 +21,7 @@ class TestS3FileRepository(IsolatedAsyncioTestCase):
     async def test_s3_file_repository(self):
         repo = self.repo
         key = "toto.txt"
-        expected = "content of file".encode("utf-8")
+        expected = b"content of file"
 
         await repo.create_bucket()
         repo.change_bucket("new-bucket")

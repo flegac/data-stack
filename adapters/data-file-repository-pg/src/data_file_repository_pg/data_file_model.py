@@ -1,17 +1,17 @@
 from datetime import datetime
 
 from meteo_measures.domain.entities.datafile_lifecycle import DataFileLifecycle
-from sqlalchemy import Column, DateTime
+from sqlalchemy import Column, DateTime, String
 from sqlalchemy import Enum as SqlEnum
-from sqlalchemy import String
 from sqlalchemy.orm import declarative_base
 
 Base = declarative_base()
 
 
+# pylint: disable=too-few-public-methods
 class DataFileModel(Base):
     __tablename__ = "datafile"
-    key = Column(String, primary_key=True)
+    data_id = Column(String, primary_key=True)
     source_hash = Column(String, nullable=False)
     source_uri = Column(String, nullable=False)
     status = Column(SqlEnum(DataFileLifecycle), nullable=False)

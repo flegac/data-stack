@@ -1,12 +1,13 @@
 from functools import cached_property
 from pathlib import Path
-from typing import IO, Optional, override
+from typing import IO, override
 
 import aioboto3
 from botocore.config import Config
-from file_repository_s3.s3_config import S3Config
 from loguru import logger
 from meteo_measures.domain.ports.file_repository import FileRepository
+
+from file_repository_s3.s3_config import S3Config
 
 
 class S3FileRepository(FileRepository):
@@ -34,33 +35,31 @@ class S3FileRepository(FileRepository):
                 print(f"Bucket {bucket} created successfully.")
             except s3_client.exceptions.BucketAlreadyOwnedByYou:
                 pass
-            except Exception as e:
+            except Exception as e:  # pylint: disable=broad-exception-caught
                 print(f"Bucket {bucket}: {e}")
 
     @override
-    async def upload_file(self, object_key: str, file_content: bytes | IO):
+    async def upload_file(self, file_id: str, file_content: bytes | IO):
         bucket = self.current_bucket()
         try:
             async with self.session.client(
                 "s3", endpoint_url=self.config.endpoint, config=self.s3_config
             ) as s3_client:
                 await s3_client.put_object(
-                    Bucket=bucket, Key=object_key, Body=file_content
+                    Bucket=bucket, Key=file_id, Body=file_content
                 )
-                logger.info(
-                    f"File {object_key} uploaded successfully to bucket {bucket}."
-                )
+                logger.info(f"File {file_id} uploaded successfully to bucket {bucket}.")
         except Exception as e:
             logger.error(f"Bucket {bucket}: {e}")
             raise e
 
     @override
-    async def read_content(self, key: str) -> Optional[bytes]:
+    async def read_content(self, file_id: str) -> bytes | None:
         bucket = self.current_bucket()
         async with self.session.client(
             "s3", endpoint_url=self.config.endpoint, config=self.s3_config
         ) as s3_client:
-            response = await s3_client.get_object(Bucket=bucket, Key=key)
+            response = await s3_client.get_object(Bucket=bucket, Key=file_id)
             async with response["Body"] as stream:
                 return await stream.read()
 

@@ -24,7 +24,7 @@ class TestInfluDbMeasureIO(IsolatedAsyncioTestCase):
 
         for measures in provider:
             # max_value = measures.measures["value"].max()
-            logger.debug(
+            logger.info(
                 f"{measures.sensor.id}[{measures.sensor.type.name}]\n"
                 f"{measures.sensor.location}\n{measures.measures.head()}"
             )

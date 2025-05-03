@@ -6,9 +6,10 @@ from measure_repository_influxdb.influxdb_measure_repository import (
 )
 from message_queue_kafka.kafka_factory import KafkaMQFactory
 
-from wires.config import Config
+from meteo_app.wires.config import Config
 
 
+# pylint: disable=too-few-public-methods
 class Repositories(containers.DeclarativeContainer):
     config = providers.Container(Config)
     mq_factory = providers.Singleton(KafkaMQFactory, config=config.kafka)

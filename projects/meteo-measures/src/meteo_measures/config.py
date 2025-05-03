@@ -1,4 +1,5 @@
 from message_queue.mq_topic import MQTopic
+
 from meteo_measures.domain.entities.data_file_serializer import DataFileSerializer
 from meteo_measures.domain.entities.measures.measure_serializer import MeasureSerializer
 

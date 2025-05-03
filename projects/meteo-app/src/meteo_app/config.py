@@ -2,7 +2,7 @@ from file_repository_s3.s3_config import S3Config
 from measure_repository_influxdb.influxdb_config import InfluxDBConfig
 from message_queue_kafka.kafka_config import KafkaConfig
 
-POSTGRE_URl = "postgresql+asyncpg://admin:adminpassword@localhost:5432/mydatabase"
+POSTGRE_URL = "postgresql+asyncpg://admin:adminpassword@localhost:5432/mydatabase"
 
 S3_CONFIG = S3Config(
     endpoint="http://localhost:9000",
@@ -13,8 +13,7 @@ S3_CONFIG = S3Config(
 INFLUX_DB_CONFIG = InfluxDBConfig(
     url="http://localhost:8086",
     org="myorg",
-    token="SDha-behzzOhZyZ1v1xfnjKtDhWbk_uZDuLyUJvHXY"
-    "QSGSJkwXBVFj9F8dhnPMZoXLkRRuih_E5gJfJ3d3sdBw==",
+    token="server-token",
     bucket="meteo-data",
 )
 

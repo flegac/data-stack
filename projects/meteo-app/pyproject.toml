@@ -1,0 +1,24 @@
+[project]
+name = "meteo-app"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+authors = [
+    { name = "flegac", email = "florent.legac@gmail.com" }
+]
+requires-python = ">=3.12"
+dependencies = [
+    "cfgrib>=0.9.15.0",
+    "fastapi>=0.115.12",
+    "python-multipart>=0.0.20",
+    "scipy>=1.15.2",
+    "uvicorn>=0.34.2",
+]
+
+[project.scripts]
+file-uploader= "meteo_app.datafile_uploader:main"
+ingestion-listener= "meteo_app.datafile_ingestion_listener:main"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"

@@ -1,5 +1,6 @@
 from abc import ABC, abstractmethod
-from typing import Any, Generator, Iterable
+from collections.abc import Generator, Iterable
+from typing import Any
 
 from meteo_measures.domain.entities.measure_query import MeasureQuery
 from meteo_measures.domain.entities.measures.measure_series import MeasureSeries

@@ -1,6 +1,7 @@
 from dataclasses import dataclass
 
 import pandas as pd
+
 from meteo_measures.domain.entities.measures.measurement import Measurement
 from meteo_measures.domain.entities.measures.sensor import Sensor
 
@@ -23,7 +24,7 @@ class MeasureSeries:
         )
 
     def __iter__(self):
-        for index, row in self.measures.iterrows():
+        for _, row in self.measures.iterrows():
             yield Measurement(
                 sensor=self.sensor, datetime=row["datetime"], value=row["value"]
             )

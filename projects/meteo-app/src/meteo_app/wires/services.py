@@ -9,9 +9,10 @@ from meteo_measures.domain.services.data_file_upload_service import (
     DataFileUploadService,
 )
 
-from wires.repositories import Repositories
+from meteo_app.wires.repositories import Repositories
 
 
+# pylint: disable=too-few-public-methods
 class Services(containers.DeclarativeContainer):
     repositories = providers.Container(Repositories)
 
