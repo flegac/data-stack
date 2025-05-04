@@ -63,7 +63,7 @@ services:
     environment:
       POSTGRES_USER: admin
       POSTGRES_PASSWORD: adminpassword
-      POSTGRES_DB: mydatabase
+      POSTGRES_DB: meteo-db
     volumes:
       - postgres-data:/data/measures/postgresql
 

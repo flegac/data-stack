@@ -5,6 +5,7 @@ from meteo_domain.entities.datafile_lifecycle import DataFileLifecycle
 
 
 class DataFileRepository(ABC):
+
     @abstractmethod
     async def update_status(self, item: DataFile, status: DataFileLifecycle): ...
 
@@ -13,6 +14,9 @@ class DataFileRepository(ABC):
 
     @abstractmethod
     async def find_by_id(self, data_id: str) -> DataFile | None: ...
+
+    @abstractmethod
+    async def find_by_hash(self, source_hash: str) -> list[DataFile]: ...
 
     @abstractmethod
     async def delete_by_id(self, data_id: DataFile): ...

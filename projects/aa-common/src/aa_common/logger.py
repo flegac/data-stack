@@ -1,11 +1,11 @@
 import sys
 
 FORMAT = (
+    "<yellow>{thread.name: <8}@{process.name: >6}</yellow> | "
     "<green>{time:YYYY-MM-DD HH:mm:ss.SSS}</green> | "
     "<level>{level: <7}</level> | "
     "<cyan>{name}:{line}</cyan> | <level>{function}</level>\n"
-    # "<yellow>pid:{process.id: >6} thread:{thread.id: >6} "
-    # "elapsed: {elapsed}</yellow> \n"
+    # "<yellow>elapsed: {elapsed}</yellow> \n"
     "{message}"
 )
 

@@ -25,6 +25,15 @@ class DataFileUploadService:
     async def upload_single(self, path: Path) -> DataFile | None:
         item = DataFile.from_file(path)
         logger.info(item)
+
+        if existing := await self.data_file_repository.find_by_id(item.data_id):
+            logger.warning(f'"{item.data_id}" already exists:\n{existing}')
+        if existing := await self.data_file_repository.find_by_hash(item.source_hash):
+            logger.warning(
+                f'source_hash "{item.source_hash}" already exists:\n'
+                f"{[_.data_id for _ in existing]}"
+            )
+
         await self.data_file_repository.create_or_update(item)
 
         try:

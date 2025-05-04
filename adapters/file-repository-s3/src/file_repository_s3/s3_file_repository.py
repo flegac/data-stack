@@ -5,9 +5,9 @@ from typing import IO, override
 import aioboto3
 from botocore.config import Config
 from loguru import logger
-from meteo_domain.ports.file_repository import FileRepository
 
 from file_repository_s3.s3_config import S3Config
+from meteo_domain.ports.file_repository import FileRepository
 
 
 class S3FileRepository(FileRepository):
@@ -31,15 +31,22 @@ class S3FileRepository(FileRepository):
             "s3", endpoint_url=self.config.endpoint, config=self.s3_config
         ) as s3_client:
             try:
-                await s3_client.create_bucket(Bucket=bucket)
-                print(f"Bucket {bucket} created successfully.")
-            except s3_client.exceptions.BucketAlreadyOwnedByYou:
-                pass
-            except Exception as e:  # pylint: disable=broad-exception-caught
-                print(f"Bucket {bucket}: {e}")
+                await s3_client.head_bucket(Bucket=bucket)
+                logger.info(f'Bucket "{bucket}" already exists.')
+            except s3_client.exceptions.ClientError as e:
+                logger.info(f'Bucket "{bucket}" not found: creating it ...')
+                try:
+                    await s3_client.create_bucket(Bucket=bucket)
+                    logger.info(f'Bucket "{bucket}" created successfully.')
+                except s3_client.exceptions.BucketAlreadyOwnedByYou:
+                    pass
+                except Exception as e:  # pylint: disable=broad-exception-caught
+                    logger.info(f'Bucket "{bucket}": {e}')
 
     @override
     async def upload_file(self, file_id: str, file_content: bytes | IO):
+        await self.create_bucket()
+
         bucket = self.current_bucket()
         try:
             async with self.session.client(
@@ -48,7 +55,9 @@ class S3FileRepository(FileRepository):
                 await s3_client.put_object(
                     Bucket=bucket, Key=file_id, Body=file_content
                 )
-                logger.info(f"File {file_id} uploaded successfully to bucket {bucket}.")
+                logger.info(
+                    f'File "{file_id}" uploaded successfully to bucket {bucket}.'
+                )
         except Exception as e:
             logger.error(f"Bucket {bucket}: {e}")
             raise e

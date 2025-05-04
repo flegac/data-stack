@@ -65,7 +65,6 @@ class PgDataFileRepository(DataFileRepository):
 
     @override
     async def find_by_id(self, data_id: str):
-        logger.info(f"{data_id}")
         async with self.transaction() as session:
             stmt = select(self.model).where(self.model.data_id == data_id)
             result = await session.execute(stmt)
@@ -80,6 +79,23 @@ class PgDataFileRepository(DataFileRepository):
                     last_update_date=row.last_update_date,
                 )
             return None
+
+    @override
+    async def find_by_hash(self, source_hash: str) -> list[DataFile]:
+        async with self.transaction() as session:
+            stmt = select(self.model).where(self.model.source_hash == source_hash)
+            result = await session.execute(stmt)
+            return [
+                DataFile(
+                    data_id=row.data_id,
+                    source_uri=row.source_uri,
+                    source_hash=row.source_hash,
+                    status=row.status,
+                    creation_date=row.creation_date,
+                    last_update_date=row.last_update_date,
+                )
+                for row in result.scalars().all()
+            ]
 
     @override
     async def update_status(self, item: DataFile, status: DataFileLifecycle):
@@ -122,7 +138,6 @@ class PgDataFileRepository(DataFileRepository):
 
     @override
     async def read_all(self):
-        logger.info("")
         async with self.transaction() as session:
             result = await session.execute(select(self.model))
         for row in result.scalars().all():
