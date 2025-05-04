@@ -1,13 +1,11 @@
 from dependency_injector import containers, providers
-from meteo_measures.domain.services.data_file_ingestion_service import (
+from meteo_domain.services.data_file_ingestion_service import (
     DataFileIngestionService,
 )
-from meteo_measures.domain.services.data_file_messaging_service import (
+from meteo_domain.services.data_file_messaging_service import (
     DataFileMessagingService,
 )
-from meteo_measures.domain.services.data_file_upload_service import (
-    DataFileUploadService,
-)
+from meteo_domain.services.data_file_upload_service import DataFileUploadService
 
 from meteo_app.wires.repositories import Repositories
 

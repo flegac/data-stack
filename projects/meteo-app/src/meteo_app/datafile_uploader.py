@@ -2,12 +2,10 @@ import asyncio
 import datetime
 
 from aa_common.constants import EXPORT_PATH
-from meteo_measures.domain.entities.coordinate import Coordinate
-from meteo_measures.domain.entities.meta_data_file import MetaDataFile
-from meteo_measures.domain.entities.variable import Variable
-from meteo_measures.domain.services.data_file_creation_service import (
-    DataFileCreationService,
-)
+from meteo_domain.entities.coordinate import Coordinate
+from meteo_domain.entities.meta_data_file import MetaDataFile
+from meteo_domain.entities.variable import Variable
+from meteo_domain.services.data_file_creation_service import DataFileCreationService
 
 from meteo_app.wires.config import INI_FILE
 from meteo_app.wires.services import Services

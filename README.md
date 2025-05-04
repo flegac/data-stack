@@ -15,7 +15,7 @@ Attempt to create a complete architecture to handle meteorological data.
 
 - [ ] Generate graphics, data visualisation, frontend (?)
 - [ ] Prediction, machine learning, experiments on data
-- [ ] DevOps: packaging, monitoring, scalability (Prometheus, Grafana, Kubernetes) 
+- [ ] DevOps: packaging, monitoring, scalability (Prometheus, Grafana, Kubernetes)
 
 **personal goals:**
 
@@ -41,7 +41,7 @@ uv sync --all-packages
 ```
 
 ```bash
-# lint, format, analyze (pre-commit)
+# lint, format (pre-commit)
 uv run pre-commit run --all-files
 ```
 

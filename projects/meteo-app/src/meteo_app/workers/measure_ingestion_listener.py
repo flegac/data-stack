@@ -3,9 +3,9 @@ from dataclasses import dataclass
 from dependency_injector.wiring import Provide
 from loguru import logger
 from message_queue.mq_factory import MQFactory
-from meteo_measures.config import specific_measure_topic
-from meteo_measures.domain.entities.measures.measurement import Measurement
-from meteo_measures.domain.ports.measure_repository import MeasureRepository
+from meteo_domain.config import specific_measure_topic
+from meteo_domain.entities.measures.measurement import Measurement
+from meteo_domain.ports.measure_repository import MeasureRepository
 
 
 @dataclass
@@ -21,5 +21,5 @@ class MeasureIngestionListener:
         await consumer.listen(self.measure_handler)
 
     async def measure_handler(self, measure: Measurement):
-        logger.info(f"measure_handler: {measure}")
+        logger.info(f"{measure}")
         await self.repo.save(measure)

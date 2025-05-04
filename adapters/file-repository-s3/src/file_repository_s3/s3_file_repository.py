@@ -5,7 +5,7 @@ from typing import IO, override
 import aioboto3
 from botocore.config import Config
 from loguru import logger
-from meteo_measures.domain.ports.file_repository import FileRepository
+from meteo_domain.ports.file_repository import FileRepository
 
 from file_repository_s3.s3_config import S3Config
 

@@ -4,12 +4,12 @@ from typing import Any, override
 import openmeteo_requests
 import pandas as pd
 import requests_cache
-from meteo_measures.domain.entities.measure_query import MeasureQuery
-from meteo_measures.domain.entities.measures.location import Location
-from meteo_measures.domain.entities.measures.measure_series import MeasureSeries
-from meteo_measures.domain.entities.measures.measurement import Measurement
-from meteo_measures.domain.entities.measures.sensor import Sensor
-from meteo_measures.domain.ports.measure_repository import MeasureRepository
+from meteo_domain.entities.measure_query import MeasureQuery
+from meteo_domain.entities.measures.location import Location
+from meteo_domain.entities.measures.measure_series import MeasureSeries
+from meteo_domain.entities.measures.measurement import Measurement
+from meteo_domain.entities.measures.sensor import Sensor
+from meteo_domain.ports.measure_repository import MeasureRepository
 from retry_requests import retry
 
 OPEN_METEO_URL = "https://archive-api.open-meteo.com/v1/archive"

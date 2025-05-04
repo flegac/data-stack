@@ -3,8 +3,8 @@ from pathlib import Path
 from unittest import IsolatedAsyncioTestCase
 
 from data_file_repository_pg.pg_data_file_repository import PgDataFileRepository
-from meteo_measures.domain.entities.data_file import DataFile
-from meteo_measures.domain.entities.datafile_lifecycle import DataFileLifecycle
+from meteo_domain.entities.data_file import DataFile
+from meteo_domain.entities.datafile_lifecycle import DataFileLifecycle
 
 
 class TestPgDataFileRepository(IsolatedAsyncioTestCase):

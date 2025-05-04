@@ -5,13 +5,14 @@ from typing import Any, override
 import pandas as pd
 import xarray as xr
 from loguru import logger
-from meteo_measures.domain.entities.data_file import DataFile
-from meteo_measures.domain.entities.measure_query import MeasureQuery
-from meteo_measures.domain.entities.measures.location import Location
-from meteo_measures.domain.entities.measures.measure_series import MeasureSeries
-from meteo_measures.domain.entities.measures.measurement import Measurement
-from meteo_measures.domain.entities.measures.sensor import Sensor
-from meteo_measures.domain.ports.measure_repository import MeasureRepository
+
+from meteo_domain.entities.data_file import DataFile
+from meteo_domain.entities.measure_query import MeasureQuery
+from meteo_domain.entities.measures.location import Location
+from meteo_domain.entities.measures.measure_series import MeasureSeries
+from meteo_domain.entities.measures.measurement import Measurement
+from meteo_domain.entities.measures.sensor import Sensor
+from meteo_domain.ports.measure_repository import MeasureRepository
 
 
 class DataFileMeasureRepository(MeasureRepository):
@@ -37,7 +38,6 @@ class DataFileMeasureRepository(MeasureRepository):
         dataset = self.data_file.raw
         latitudes = dataset["latitude"]
         longitudes = dataset["longitude"]
-        print(len(latitudes), len(longitudes))
 
         variables = [
             _ for _ in self.data_file.variables if _ not in ["latitude", "longitude"]

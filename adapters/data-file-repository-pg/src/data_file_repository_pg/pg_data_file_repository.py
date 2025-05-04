@@ -4,15 +4,15 @@ from typing import override
 
 import databases
 from loguru import logger
-from meteo_measures.domain.entities.data_file import DataFile
-from meteo_measures.domain.entities.datafile_lifecycle import DataFileLifecycle
-from meteo_measures.domain.ports.data_file_repository import DataFileRepository
 from sqlalchemy import delete, update
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
 from sqlalchemy.future import select
 from sqlalchemy.orm import sessionmaker
 
 from data_file_repository_pg.data_file_model import DataFileModel
+from meteo_domain.entities.data_file import DataFile
+from meteo_domain.entities.datafile_lifecycle import DataFileLifecycle
+from meteo_domain.ports.data_file_repository import DataFileRepository
 
 
 class CancelTransactionError(Exception):
@@ -65,7 +65,7 @@ class PgDataFileRepository(DataFileRepository):
 
     @override
     async def find_by_id(self, data_id: str):
-        logger.info(f"find_by_id: {data_id}")
+        logger.info(f"{data_id}")
         async with self.transaction() as session:
             stmt = select(self.model).where(self.model.data_id == data_id)
             result = await session.execute(stmt)
@@ -83,9 +83,7 @@ class PgDataFileRepository(DataFileRepository):
 
     @override
     async def update_status(self, item: DataFile, status: DataFileLifecycle):
-        logger.info(
-            f"update_status: {item.data_id}: {item.status.name} -> {status.name}"
-        )
+        logger.info(f"{item.data_id}: {item.status.name} -> {status.name}")
         async with self.transaction() as session:
             stmt = (
                 update(self.model)
@@ -100,7 +98,7 @@ class PgDataFileRepository(DataFileRepository):
 
     @override
     async def create_or_update(self, item: DataFile):
-        logger.info(f"create_or_update: {item}")
+        logger.info(f"{item}")
         async with self.transaction() as session:
             item.last_update_date = datetime.now()
             await session.merge(
@@ -116,7 +114,7 @@ class PgDataFileRepository(DataFileRepository):
 
     @override
     async def delete_by_id(self, data_id: str):
-        logger.info(f"delete_by_id: {data_id}")
+        logger.info(f"{data_id}")
         async with self.transaction() as session:
             await session.execute(
                 delete(self.model).where(self.model.data_id == data_id)
@@ -124,7 +122,7 @@ class PgDataFileRepository(DataFileRepository):
 
     @override
     async def read_all(self):
-        logger.info("read_all")
+        logger.info("")
         async with self.transaction() as session:
             result = await session.execute(select(self.model))
         for row in result.scalars().all():

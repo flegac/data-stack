@@ -6,11 +6,11 @@ from typing import Any, override
 from influxdb_client import InfluxDBClient, Point
 from influxdb_client.client.write_api import SYNCHRONOUS
 from loguru import logger
-from meteo_measures.domain.entities.measure_query import MeasureQuery
-from meteo_measures.domain.entities.measures.measure_series import MeasureSeries
-from meteo_measures.domain.entities.measures.measurement import Measurement
-from meteo_measures.domain.entities.measures.sensor import Sensor, SensorId
-from meteo_measures.domain.ports.measure_repository import MeasureRepository
+from meteo_domain.entities.measure_query import MeasureQuery
+from meteo_domain.entities.measures.measure_series import MeasureSeries
+from meteo_domain.entities.measures.measurement import Measurement
+from meteo_domain.entities.measures.sensor import Sensor, SensorId
+from meteo_domain.ports.measure_repository import MeasureRepository
 
 from measure_repository_influxdb.influxdb_config import InfluxDBConfig
 
@@ -29,7 +29,7 @@ class InfluxDbMeasureRepository(MeasureRepository):
 
     @override
     async def save(self, measure: Measurement):
-        logger.info(f"save: {measure.sensor}")
+        logger.info(f"{measure.sensor}")
 
         self._write_api.write(
             bucket=self.config.bucket,
@@ -41,9 +41,7 @@ class InfluxDbMeasureRepository(MeasureRepository):
     async def save_batch(self, measures: Iterable[Measurement]):
         records = [measure_to_point(_) for _ in measures]
         logger.info(
-            f"save_batch: "
-            f"org={self.config.org} bucket={self.config.bucket}: "
-            f"{len(records)}"
+            f"org={self.config.org} bucket={self.config.bucket}: {len(records)}"
         )
         self._write_api.write(
             bucket=self.config.bucket, org=self.config.org, record=records
@@ -51,9 +49,9 @@ class InfluxDbMeasureRepository(MeasureRepository):
 
     @override
     def search(self, query: MeasureQuery) -> Generator[MeasureSeries, Any, None]:
-        logger.info(f"search: {query}")
+        logger.info(f"{query}")
         flux_query = query_to_flux(query=query, bucket=self.config.bucket)
-        logger.info(f"query:\n{flux_query}")
+        logger.info(f"flux:\n{flux_query}")
         tables = self._query_api.query(flux_query, org=self.config.org)
 
         sensors: dict[tuple[SensorId, str], Sensor] = {}

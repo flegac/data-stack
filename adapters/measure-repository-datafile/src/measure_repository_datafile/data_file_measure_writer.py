@@ -1,8 +1,8 @@
 from typing import override
 
-from meteo_measures.domain.entities.measures.measure_series import MeasureSeries
-from meteo_measures.domain.entities.measures.measurement import Measurement
-from meteo_measures.domain.ports.measure_writer import MeasureWriter
+from meteo_domain.entities.measures.measure_series import MeasureSeries
+from meteo_domain.entities.measures.measurement import Measurement
+from meteo_domain.ports.measure_writer import MeasureWriter
 
 
 class FileMeasureWriter(MeasureWriter):

@@ -4,7 +4,7 @@ from unittest import IsolatedAsyncioTestCase
 from aa_common.constants import DATASET_ROOT_PATH
 from loguru import logger
 from measure_repository_datafile.data_file_measure_reader import DataFileMeasureReader
-from meteo_measures.domain.entities.data_file import DataFile
+from meteo_domain.entities.data_file import DataFile
 
 
 class TestInfluDbMeasureIO(IsolatedAsyncioTestCase):

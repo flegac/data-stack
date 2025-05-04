@@ -1,9 +1,9 @@
 from collections.abc import Generator
 from typing import Any, override
 
-from meteo_measures.domain.entities.data_file import DataFile
-from meteo_measures.domain.entities.measures.measure_series import MeasureSeries
-from meteo_measures.domain.ports.measure_reader import MeasureReader
+from meteo_domain.entities.data_file import DataFile
+from meteo_domain.entities.measures.measure_series import MeasureSeries
+from meteo_domain.ports.measure_reader import MeasureReader
 
 from measure_repository_datafile.data_file_measure_repository import (
     DataFileMeasureRepository,

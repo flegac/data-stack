@@ -4,6 +4,7 @@ version = "0.1.0"
 description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.12"
+dependencies = []
 
 [tool.uv.workspace]
 members = [
@@ -14,7 +15,8 @@ members = [
 [tool.uv.sources]
 aa-common = { workspace = true }
 
-meteo-measures = { workspace = true }
+meteo-domain = { workspace = true }
+meteo-app = { workspace = true }
 
 message-queue = { workspace = true }
 message-queue-kafka = { workspace = true }
@@ -62,6 +64,7 @@ dev = [
     "coverage>=7.8.0",
     "flake8>=7.2.0",
     "isort>=6.0.1",
+    "pdoc>=15.0.3",
     "pre-commit>=4.2.0",
     "pydeps>=3.0.1",
     "pylint>=3.3.6",

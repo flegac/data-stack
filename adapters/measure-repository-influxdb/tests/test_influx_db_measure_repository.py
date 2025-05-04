@@ -9,12 +9,12 @@ from measure_repository_influxdb.influxdb_measure_repository import (
     query_to_flux,
 )
 from meteo_app.config import INFLUX_DB_CONFIG
-from meteo_measures.domain.entities.measure_query import MeasureQuery
-from meteo_measures.domain.entities.measures.location import Location
-from meteo_measures.domain.entities.measures.measure_series import MeasureSeries
-from meteo_measures.domain.entities.measures.measurement import Measurement
-from meteo_measures.domain.entities.measures.period import Period
-from meteo_measures.domain.entities.measures.sensor import Sensor
+from meteo_domain.entities.measure_query import MeasureQuery
+from meteo_domain.entities.measures.location import Location
+from meteo_domain.entities.measures.measure_series import MeasureSeries
+from meteo_domain.entities.measures.measurement import Measurement
+from meteo_domain.entities.measures.period import Period
+from meteo_domain.entities.measures.sensor import Sensor
 
 
 class TestInfluDbMeasureRepository(IsolatedAsyncioTestCase):
