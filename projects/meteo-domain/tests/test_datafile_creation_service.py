@@ -2,9 +2,9 @@ from datetime import datetime
 from unittest import TestCase
 
 from aa_common.constants import EXPORT_PATH
-from meteo_domain.entities.coordinate import Coordinate
-from meteo_domain.entities.meta_data_file import MetaDataFile
-from meteo_domain.entities.variable import Variable
+from meteo_domain.entities.meta_data_file.coordinate import Coordinate
+from meteo_domain.entities.meta_data_file.meta_data_file import MetaDataFile
+from meteo_domain.entities.meta_data_file.variable import Variable
 from meteo_domain.services.data_file_creation_service import DataFileCreationService
 
 

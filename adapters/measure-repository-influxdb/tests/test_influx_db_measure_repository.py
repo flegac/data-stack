@@ -10,8 +10,8 @@ from measure_repository_influxdb.influxdb_measure_repository import (
 )
 from measure_repository_influxdb.query_mapping import query_to_flux
 from meteo_app.config import INFLUX_DB_CONFIG
-from meteo_domain.entities.measure_query import MeasureQuery
 from meteo_domain.entities.measures.location import Location
+from meteo_domain.entities.measures.measure_query import MeasureQuery
 from meteo_domain.entities.measures.measure_series import MeasureSeries
 from meteo_domain.entities.measures.measurement import Measurement
 from meteo_domain.entities.measures.period import Period

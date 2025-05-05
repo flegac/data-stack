@@ -4,7 +4,7 @@ Attempt to create a complete architecture to handle meteorological data.
 
 **short-term (WIP):**
 
-- [ ] upload grib/hdf5 `DataFile` (FastAPI)
+- [X] upload grib/hdf5 `DataFile` (FastAPI)
 - [X] archive `DataFile` (S3 / MinIO / Posix)
 - [X] manage `DataFile` lifecycle (PostgreSQL, Kafka)
 - [X] ingest `DataFile` as a set of `Measurements`

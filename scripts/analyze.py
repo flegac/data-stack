@@ -86,13 +86,13 @@ def main():
         root_dir=ROOT_PATH,
         output_dir=OUTPUT_DIR / "doc",
     )
-    # dump_command_result(
-    #     command="uv pip tree",
-    #     execution_dir=ROOT_PATH,
-    #     output_file=ROOT_PATH / "docs/generated/pip-tree.md",
-    # )
-    # for project_toml in ROOT_PATH.glob("**/pyproject.toml"):
-    #     analyze_project(project_toml)
+    dump_command_result(
+        command="uv pip tree",
+        execution_dir=ROOT_PATH,
+        output_file=ROOT_PATH / "docs/generated/pip-tree.md",
+    )
+    for project_toml in ROOT_PATH.glob("**/pyproject.toml"):
+        analyze_project(project_toml)
 
 
 def generate_docs(root_dir: Path, output_dir: Path) -> None:
@@ -106,12 +106,14 @@ def generate_docs(root_dir: Path, output_dir: Path) -> None:
     files = [
         *root_dir.rglob("adapters/**/*.py"),
         *root_dir.rglob("projects/**/*.py"),
+        *root_dir.rglob("connectors/**/*.py"),
     ]
 
     accepted = [
         "entities",
         "service",
         "repository",
+        "connector",
     ]
 
     for py_file in files:

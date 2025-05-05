@@ -7,8 +7,8 @@ import xarray as xr
 from loguru import logger
 
 from meteo_domain.entities.data_file import DataFile
-from meteo_domain.entities.measure_query import MeasureQuery
 from meteo_domain.entities.measures.location import Location
+from meteo_domain.entities.measures.measure_query import MeasureQuery
 from meteo_domain.entities.measures.measure_series import MeasureSeries
 from meteo_domain.entities.measures.measurement import Measurement
 from meteo_domain.entities.measures.sensor import Sensor

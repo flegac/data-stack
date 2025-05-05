@@ -5,7 +5,7 @@ from typing import Any, override
 from influxdb_connector.influx_db_connection import InfluxDbConnection
 from influxdb_connector.influxdb_config import InfluxDBConfig
 from measure_repository_influxdb.query_mapping import query_to_flux, measure_to_point
-from meteo_domain.entities.measure_query import MeasureQuery
+from meteo_domain.entities.measures.measure_query import MeasureQuery
 from meteo_domain.entities.measures.measure_series import MeasureSeries
 from meteo_domain.entities.measures.measurement import Measurement
 from meteo_domain.entities.measures.sensor import Sensor, SensorId

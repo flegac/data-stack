@@ -1,5 +1,4 @@
-from aiokafka import AIOKafkaConsumer
-from confluent_kafka import Producer
+from aiokafka import AIOKafkaConsumer, AIOKafkaProducer
 
 from kafka_connector.kafka_config import KafkaConfig
 from message_queue.mq_topic import MQTopic
@@ -10,23 +9,25 @@ class KafkaConnection:
     def __init__(self, config: KafkaConfig):
         self.config = config
 
-    def consumer(self, topic: MQTopic[Input, Output], group_id: str = None):
+    def consumer(
+        self,
+        topic: MQTopic[Input, Output],
+        group_id: str = None,
+        auto_offset_reset="latest",
+    ):
         return AIOKafkaConsumer(
             topic.topic,
             bootstrap_servers=self.config.broker_url,
-            auto_offset_reset="earliest",
+            auto_offset_reset=auto_offset_reset,
             group_id=group_id,
         )
 
     def producer(self):
-        return Producer(
-            {
-                "bootstrap.servers": self.config.broker_url,
-                "security.protocol": "PLAINTEXT",
-                "acks": 0,
-                "retries": 2,
-                "queue.buffering.max.kbytes": 1024 * 1024,
-                "batch.num.messages": 1024,
-                "linger.ms": 25,
-            }
+        return AIOKafkaProducer(
+            bootstrap_servers=self.config.broker_url,
+            acks=0,
+            request_timeout_ms=2000,
+            retry_backoff_ms=100,
+            max_batch_size=1024 * 1024,
+            linger_ms=25,
         )

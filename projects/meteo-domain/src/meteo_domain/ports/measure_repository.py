@@ -2,7 +2,7 @@ from abc import ABC, abstractmethod
 from collections.abc import Generator, Iterable
 from typing import Any
 
-from meteo_domain.entities.measure_query import MeasureQuery
+from meteo_domain.entities.measures.measure_query import MeasureQuery
 from meteo_domain.entities.measures.measure_series import MeasureSeries
 from meteo_domain.entities.measures.measurement import Measurement
 

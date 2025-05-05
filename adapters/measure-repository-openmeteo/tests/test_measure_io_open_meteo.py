@@ -4,8 +4,8 @@ from unittest import IsolatedAsyncioTestCase
 from measure_repository_openmeteo.open_meteo_measure_repository import (
     OpenMeteoMeasureRepository,
 )
-from meteo_domain.entities.measure_query import MeasureQuery
 from meteo_domain.entities.measures.location import Location
+from meteo_domain.entities.measures.measure_query import MeasureQuery
 from meteo_domain.entities.measures.period import Period
 
 
