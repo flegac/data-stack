@@ -1,5 +1,5 @@
 from pathlib import Path
-from typing import IO, override
+from typing import IO, override, AsyncGenerator, Any
 
 from loguru import logger
 
@@ -31,6 +31,10 @@ class S3FileRepository(FileRepository):
                     pass
                 except Exception as e:  # pylint: disable=broad-exception-caught
                     logger.info(f'Bucket "{bucket}": {e}')
+
+    @override
+    async def delete_bucket(self, bucket: str = None):
+        raise NotImplementedError
 
     @override
     async def upload_file(self, file_id: str, file_content: bytes | IO):
@@ -66,7 +70,7 @@ class S3FileRepository(FileRepository):
                 yield name
 
     @override
-    async def list_files(self):
+    async def list_files(self) -> AsyncGenerator[str, Any]:
         bucket = self.current_bucket()
         async with self.connection.client() as s3_client:
             response = await s3_client.list_objects_v2(Bucket=bucket)

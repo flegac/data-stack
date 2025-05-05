@@ -18,3 +18,10 @@ class WorkspaceService:
     async def init_workspace(self, ws: Workspace):
         ws = await self.ws_repository.create(ws)
         await self.file_repository.create_bucket(ws.datafile_bucket)
+
+    async def delete_workspace(self, ws: Workspace):
+        await self.file_repository.delete_bucket(ws.datafile_bucket)
+        await self.ws_repository.delete(ws)
+
+    async def find_data_files(self, ws: Workspace):
+        return await self.data_file_repository.find_by_workspace(ws.id)

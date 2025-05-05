@@ -1,5 +1,5 @@
 from datetime import datetime
-from typing import override
+from typing import override, AsyncGenerator
 
 from loguru import logger
 from sqlalchemy import delete, update
@@ -52,6 +52,10 @@ class PgDataFileRepository(DataFileRepository):
             ]
 
     @override
+    async def find_by_workspace(self, workspace_id: str) -> list[DataFile]:
+        raise NotImplementedError
+
+    @override
     async def update_status(self, item: DataFile, status: DataFileLifecycle):
         logger.info(f"{item.data_id}: {item.status.name} -> {status.name}")
         async with self.connection.transaction() as session:
@@ -91,7 +95,7 @@ class PgDataFileRepository(DataFileRepository):
             )
 
     @override
-    async def read_all(self):
+    async def read_all(self) -> AsyncGenerator[DataFile, None]:
         async with self.connection.transaction() as session:
             result = await session.execute(select(self.model))
         for row in result.scalars().all():

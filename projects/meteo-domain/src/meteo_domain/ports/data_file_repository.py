@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod
+from typing import AsyncGenerator
 
 from meteo_domain.entities.data_file import DataFile
 from meteo_domain.entities.datafile_lifecycle import DataFileLifecycle
@@ -19,10 +20,13 @@ class DataFileRepository(ABC):
     async def find_by_hash(self, source_hash: str) -> list[DataFile]: ...
 
     @abstractmethod
+    async def find_by_workspace(self, workspace_id: str) -> list[DataFile]: ...
+
+    @abstractmethod
     async def delete_by_id(self, data_id: DataFile): ...
 
     @abstractmethod
-    async def read_all(self): ...
+    async def read_all(self) -> AsyncGenerator[DataFile, None]: ...
 
     @abstractmethod
     async def init(self): ...

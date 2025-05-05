@@ -1,5 +1,5 @@
 from pathlib import Path
-from typing import IO, override
+from typing import IO, override, Any, AsyncGenerator
 
 from loguru import logger
 
@@ -18,6 +18,11 @@ class PosixFileRepository(FileRepository):
         logger.info(f"{bucket}")
         path = self.root / bucket
         path.mkdir(parents=True, exist_ok=True)
+
+    @override
+    async def delete_bucket(self, bucket: str = None):
+        path = self.root / bucket
+        path.rmdir()
 
     @override
     async def upload_file(self, file_id: str, file_content: bytes | IO):
@@ -43,7 +48,7 @@ class PosixFileRepository(FileRepository):
                 yield _.name
 
     @override
-    async def list_files(self):
+    async def list_files(self) -> AsyncGenerator[str, Any]:
         path = self.root / self.current_bucket()
         for _ in path.iterdir():
             if _.is_file():
