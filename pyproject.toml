@@ -9,7 +9,8 @@ dependencies = []
 [tool.uv.workspace]
 members = [
     "projects/*",
-    "adapters/*"
+    "adapters/*",
+    "connectors/*",
 ]
 
 [tool.uv.sources]
@@ -32,6 +33,12 @@ measure-repository = { workspace = true }
 measure-repository-datafile = { workspace = true }
 measure-repository-influxdb = { workspace = true }
 measure-repository-openmeteo = { workspace = true }
+
+# connectors
+pg-connector = { workspace = true }
+influxdb-connector = { workspace = true }
+s3-connector = { workspace = true }
+kafka-connector = { workspace = true }
 
 [tool.ruff]
 # Règles à activer
@@ -66,6 +73,7 @@ dev = [
     "isort>=6.0.1",
     "pdoc>=15.0.3",
     "pre-commit>=4.2.0",
+    "prospector>=1.16.1",
     "pydeps>=3.0.1",
     "pylint>=3.3.6",
     "radon>=6.0.1",

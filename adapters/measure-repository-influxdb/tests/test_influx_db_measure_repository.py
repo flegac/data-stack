@@ -4,10 +4,11 @@ import random
 from unittest import IsolatedAsyncioTestCase
 
 from loguru import logger
+
 from measure_repository_influxdb.influxdb_measure_repository import (
     InfluxDbMeasureRepository,
-    query_to_flux,
 )
+from measure_repository_influxdb.query_mapping import query_to_flux
 from meteo_app.config import INFLUX_DB_CONFIG
 from meteo_domain.entities.measure_query import MeasureQuery
 from meteo_domain.entities.measures.location import Location

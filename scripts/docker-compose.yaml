@@ -67,42 +67,42 @@ services:
     volumes:
       - postgres-data:/data/measures/postgresql
 
-  prometheus:
-    image: prom/prometheus:latest
-    container_name: prometheus
-    ports:
-      - "9090:9090"
-    volumes:
-      - ./prometheus.yaml:/etc/prometheus/prometheus.yaml
-    command:
-      - '--config.file=/etc/prometheus/prometheus.yaml'
-
-  grafana:
-    image: grafana/grafana:latest
-    container_name: grafana
-    ports:
-      - "3000:3000"
-    environment:
-      GF_SECURITY_ADMIN_USER: admin
-      GF_SECURITY_ADMIN_PASSWORD: adminpassword
-    volumes:
-      - grafana-data:/var/lib/grafana
-    depends_on:
-      - prometheus
-
-  conduktor:
-    image: conduktor/conduktor-platform:latest
-    container_name: conduktor
-    ports:
-      - "8080:8080"
-      - "9095:9095"
-    environment:
-      KAFKA_BOOTSTRAP_SERVER: kafka:9092
-      CONDUKTOR_BACKEND_PORT: 9095
-      CDK_DATABASE_URL: "postgresql://admin:adminpassword@postgres:5432/mydatabase"
-    depends_on:
-      - kafka
-      - postgres
+#  prometheus:
+#    image: prom/prometheus:latest
+#    container_name: prometheus
+#    ports:
+#      - "9090:9090"
+#    volumes:
+#      - ./prometheus.yaml:/etc/prometheus/prometheus.yaml
+#    command:
+#      - '--config.file=/etc/prometheus/prometheus.yaml'
+#
+#  grafana:
+#    image: grafana/grafana:latest
+#    container_name: grafana
+#    ports:
+#      - "3000:3000"
+#    environment:
+#      GF_SECURITY_ADMIN_USER: admin
+#      GF_SECURITY_ADMIN_PASSWORD: adminpassword
+#    volumes:
+#      - grafana-data:/var/lib/grafana
+#    depends_on:
+#      - prometheus
+#
+#  conduktor:
+#    image: conduktor/conduktor-platform:latest
+#    container_name: conduktor
+#    ports:
+#      - "8080:8080"
+#      - "9095:9095"
+#    environment:
+#      KAFKA_BOOTSTRAP_SERVER: kafka:9092
+#      CONDUKTOR_BACKEND_PORT: 9095
+#      CDK_DATABASE_URL: "postgresql://admin:adminpassword@postgres:5432/meteo-db"
+#    depends_on:
+#      - kafka
+#      - postgres
 
 volumes:
   influxdb-data:

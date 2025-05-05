@@ -1,18 +1,20 @@
 from dependency_injector import containers, providers
 
 from data_file_repository_pg.pg_data_file_repository import PgDataFileRepository
-from file_repository_s3.s3_config import S3Config
 from file_repository_s3.s3_file_repository import S3FileRepository
-from measure_repository_influxdb.influxdb_config import InfluxDBConfig
+from influxdb_connector.influxdb_config import InfluxDBConfig
+from kafka_connector.kafka_config import KafkaConfig
+from kafka_connector.kafka_connection import KafkaConnection
 from measure_repository_influxdb.influxdb_measure_repository import (
     InfluxDbMeasureRepository,
 )
-from message_queue_kafka.kafka_config import KafkaConfig
 from message_queue_kafka.kafka_factory import KafkaMQFactory
 from meteo_backend.core.config.settings import Settings
 from meteo_domain.services.data_file_ingestion_service import DataFileIngestionService
 from meteo_domain.services.data_file_messaging_service import DataFileMessagingService
 from meteo_domain.services.data_file_upload_service import DataFileUploadService
+from s3_connector.s3_config import S3Config
+from s3_connector.s3_connection import S3Connection
 
 
 class Container(containers.DeclarativeContainer):
@@ -28,12 +30,14 @@ class Container(containers.DeclarativeContainer):
         endpoint=settings.provided.S3_ENDPOINT,
     )
 
+    s3_connection = providers.Singleton(S3Connection, s3_config)
+
     # File Repository
     file_repository = providers.Singleton(
         S3FileRepository,
         local_path=settings.provided.LOCAL_STORAGE_PATH,
         bucket=settings.provided.S3_BUCKET,
-        config=s3_config,
+        connection=s3_connection,
     )
 
     # PostgreSQL URL construction
@@ -66,13 +70,13 @@ class Container(containers.DeclarativeContainer):
     kafka_config = providers.Singleton(
         KafkaConfig,
         broker_url=settings.provided.KAFKA_BROKER_URL,
-        group_id=settings.provided.KAFKA_GROUP_ID,
     )
+    kafka_connection = providers.Singleton(KafkaConnection, kafka_config)
 
     # Message Queue Factory
     mq_factory = providers.Singleton(
         KafkaMQFactory,
-        kafka_config,
+        kafka_connection,
     )
 
     # Service de Messaging

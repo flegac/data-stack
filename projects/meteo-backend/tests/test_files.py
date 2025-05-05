@@ -2,7 +2,7 @@ from unittest import IsolatedAsyncioTestCase
 
 from fastapi.testclient import TestClient
 
-from meteo_backend.main import create_app
+from meteo_backend.app_factory import create_app
 from meteo_domain.entities.data_file import DataFile
 from meteo_domain.entities.datafile_lifecycle import DataFileLifecycle
 from mocked_container import MockedContainer

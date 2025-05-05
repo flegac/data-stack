@@ -3,6 +3,7 @@ import threading
 import time
 from unittest import IsolatedAsyncioTestCase
 
+from kafka_connector.kafka_connection import KafkaConnection
 from message_queue.mq_topic import MQTopic
 from message_queue_kafka.kafka_factory import KafkaMQFactory
 from meteo_app.config import KAFKA_CONFIG
@@ -11,7 +12,8 @@ from meteo_app.config import KAFKA_CONFIG
 class TestKafkaMQ(IsolatedAsyncioTestCase):
     async def asyncSetUp(self):
         topic = MQTopic(topic="test-topic")
-        self.factory = KafkaMQFactory(KAFKA_CONFIG)
+        connection = KafkaConnection(KAFKA_CONFIG)
+        self.factory = KafkaMQFactory(connection)
         self.producer = self.factory.producer(topic)
         self.consumer = self.factory.consumer(topic)
         self.expected_messages = [f"message-{i}" for i in range(4)]

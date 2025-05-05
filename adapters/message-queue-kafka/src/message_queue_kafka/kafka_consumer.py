@@ -1,29 +1,22 @@
 from collections.abc import Awaitable, Callable
 from typing import Any, override
 
-from aiokafka import AIOKafkaConsumer
 from loguru import logger
+
+from kafka_connector.kafka_connection import KafkaConnection
 from message_queue.mq_consumer import MQConsumer
 from message_queue.mq_topic import MQTopic
 from message_queue.serializer import Input, Output
 
-from message_queue_kafka.kafka_config import KafkaConfig
-
 
 class KafkaConsumer(MQConsumer[Input]):
-    def __init__(self, topic: MQTopic[Input, Output], config: KafkaConfig):
-        logger.info(f"KafkaConsumer[{topic.topic}]: {config}")
+    def __init__(self, topic: MQTopic[Input, Output], connection: KafkaConnection):
         self.topic = topic
-        self.config = config
-        self.consumer = AIOKafkaConsumer(
-            self.topic.topic,
-            bootstrap_servers=config.broker_url,
-            group_id=config.group_id,
-            auto_offset_reset="earliest",
-        )
+        self.consumer = connection.consumer(topic)
 
     @override
     async def listen(self, on_message: Callable[[Input], Awaitable[Any]]):
+        logger.info(f"listen on topic: {self.topic.topic}")
         await self.consumer.start()
         try:
             async for msg in self.consumer:

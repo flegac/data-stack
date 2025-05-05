@@ -4,13 +4,14 @@ from typing import Any, override
 import openmeteo_requests
 import pandas as pd
 import requests_cache
+from retry_requests import retry
+
 from meteo_domain.entities.measure_query import MeasureQuery
 from meteo_domain.entities.measures.location import Location
 from meteo_domain.entities.measures.measure_series import MeasureSeries
 from meteo_domain.entities.measures.measurement import Measurement
 from meteo_domain.entities.measures.sensor import Sensor
 from meteo_domain.ports.measure_repository import MeasureRepository
-from retry_requests import retry
 
 OPEN_METEO_URL = "https://archive-api.open-meteo.com/v1/archive"
 
@@ -25,7 +26,7 @@ class OpenMeteoMeasureRepository(MeasureRepository):
         raise NotImplementedError
 
     @override
-    def search(self, query: MeasureQuery) -> Generator[MeasureSeries, Any, None]:
+    def search(self, query: MeasureQuery = None) -> Generator[MeasureSeries, Any, None]:
         if not (measure_type := query.measure_type):
             raise ValueError("measure_type is required")
         if not (location := query.location):

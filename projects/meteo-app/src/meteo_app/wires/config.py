@@ -1,9 +1,10 @@
 from pathlib import Path
 
 from dependency_injector import containers, providers
-from file_repository_s3.s3_config import S3Config
-from measure_repository_influxdb.influxdb_config import InfluxDBConfig
-from message_queue_kafka.kafka_config import KafkaConfig
+
+from influxdb_connector.influxdb_config import InfluxDBConfig
+from kafka_connector.kafka_config import KafkaConfig
+from s3_connector.s3_config import S3Config
 
 INI_FILE = Path(__file__).parent / "config.ini"
 
@@ -11,9 +12,7 @@ INI_FILE = Path(__file__).parent / "config.ini"
 # pylint: disable=too-few-public-methods
 class Config(containers.DeclarativeContainer):
     config: providers.Configuration = providers.Configuration()
-    kafka = providers.Singleton(
-        KafkaConfig, config.kafka.broker_url, config.kafka.group_id
-    )
+    kafka = providers.Singleton(KafkaConfig, config.kafka.broker_url)
 
     database_url = config.database.url
     local_path = config.local.path

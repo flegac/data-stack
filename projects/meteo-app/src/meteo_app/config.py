@@ -1,8 +1,8 @@
-from file_repository_s3.s3_config import S3Config
-from measure_repository_influxdb.influxdb_config import InfluxDBConfig
-from message_queue_kafka.kafka_config import KafkaConfig
+from influxdb_connector.influxdb_config import InfluxDBConfig
+from kafka_connector.kafka_config import KafkaConfig
+from s3_connector.s3_config import S3Config
 
-POSTGRE_URL = "postgresql+asyncpg://admin:adminpassword@localhost:5432/mydatabase"
+POSTGRE_URL = "postgresql+asyncpg://admin:adminpassword@localhost:5432/meteo-db"
 
 S3_CONFIG = S3Config(
     endpoint="http://localhost:9000",
@@ -17,4 +17,4 @@ INFLUX_DB_CONFIG = InfluxDBConfig(
     bucket="meteo-data",
 )
 
-KAFKA_CONFIG = KafkaConfig(broker_url="localhost:9092", group_id="meteo-group")
+KAFKA_CONFIG = KafkaConfig(broker_url="localhost:9092")

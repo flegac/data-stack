@@ -1,7 +1,8 @@
 from dataclasses import dataclass
-from typing import Generic, SupportsFloat, TypeVar
+from datetime import datetime
+from typing import Generic, SupportsFloat, TypeVar, SupportsInt
 
-T = TypeVar("T", bound=SupportsFloat)
+T = TypeVar("T", bound=SupportsFloat | SupportsInt | datetime)
 
 
 @dataclass

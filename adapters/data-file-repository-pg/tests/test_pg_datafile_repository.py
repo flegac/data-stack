@@ -12,7 +12,7 @@ class TestPgDataFileRepository(IsolatedAsyncioTestCase):
         logging.getLogger("asyncio").setLevel(logging.ERROR)
         self.repo = PgDataFileRepository(
             database_url="postgresql+asyncpg://"
-            "admin:adminpassword@localhost:5432/mydatabase"
+            "admin:adminpassword@localhost:5432/meteo-db"
         )
 
     async def test_transaction(self):
@@ -22,7 +22,7 @@ class TestPgDataFileRepository(IsolatedAsyncioTestCase):
         await repo.create_or_update(data_file)
         await self.log_all()
 
-        async with repo.transaction():
+        async with repo.connection.transaction():
             data_file.data_id = "toto"
             await repo.create_or_update(data_file)
             await self.log_all()
@@ -30,7 +30,7 @@ class TestPgDataFileRepository(IsolatedAsyncioTestCase):
             data_file.data_id = "titi"
             await repo.create_or_update(data_file)
             await self.log_all()
-            repo.cancel_transaction()
+            repo.connection.cancel_transaction()
 
         await self.log_all()
 

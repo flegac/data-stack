@@ -2,19 +2,21 @@ import logging
 from pathlib import Path
 from unittest import IsolatedAsyncioTestCase
 
-from file_repository_s3.s3_config import S3Config
 from file_repository_s3.s3_file_repository import S3FileRepository
+from s3_connector.s3_config import S3Config
+from s3_connector.s3_connection import S3Connection
 
 
 class TestS3FileRepository(IsolatedAsyncioTestCase):
     async def asyncSetUp(self):
         logging.getLogger("asyncio").setLevel(logging.ERROR)
+        config = S3Config(
+            endpoint="http://localhost:9000",
+            access_key="admin",
+            secret_key="adminpassword",
+        )
         self.repo = S3FileRepository(
-            config=S3Config(
-                endpoint="http://localhost:9000",
-                access_key="admin",
-                secret_key="adminpassword",
-            ),
+            connection=S3Connection(config),
             local_path=Path("/tmp/test/local"),
         )
 
@@ -39,4 +41,4 @@ class TestS3FileRepository(IsolatedAsyncioTestCase):
             print(f"{bucket}: {files}")
             for file in files:
                 content = await repo.read_content(file)
-                print(f"\t{file}: {content}")
+                print(f"\t{file}: {content[:32]}")
