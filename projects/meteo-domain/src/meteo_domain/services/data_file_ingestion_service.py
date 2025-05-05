@@ -1,5 +1,7 @@
 from aa_common.logger import logger
-from measure_repository_datafile.data_file_measure_reader import DataFileMeasureReader
+from measure_repository_datafile.data_file_measure_repository import (
+    DataFileMeasureRepository,
+)
 
 from meteo_domain.entities.data_file import DataFile
 from meteo_domain.entities.datafile_lifecycle import DataFileLifecycle
@@ -32,6 +34,7 @@ class DataFileIngestionService:
 
     async def ingest_file(self, item: DataFile):
         logger.info(f"{item}")
+
         try:
             assert item.status in [DataFileLifecycle.upload_completed]
 
@@ -41,8 +44,8 @@ class DataFileIngestionService:
 
             item.local_path = await self.file_repository.download_file(item.data_id)
 
-            reader = DataFileMeasureReader(item)
-            provider = reader.read_all()
+            source_repository = DataFileMeasureRepository(item)
+            provider = source_repository.search()
 
             try:
                 batch: list[Measurement] = []

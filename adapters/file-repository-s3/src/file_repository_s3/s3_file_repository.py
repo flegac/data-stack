@@ -15,8 +15,9 @@ class S3FileRepository(FileRepository):
         self.connection = connection
 
     @override
-    async def create_bucket(self):
-        bucket = self.current_bucket()
+    async def create_bucket(self, bucket: str = None):
+        if bucket is None:
+            bucket = self.current_bucket()
         async with self.connection.client() as s3_client:
             try:
                 await s3_client.head_bucket(Bucket=bucket)

@@ -1,9 +1,12 @@
 from itertools import islice
 from unittest import IsolatedAsyncioTestCase
 
-from aa_common.constants import DATASET_ROOT_PATH
 from loguru import logger
-from measure_repository_datafile.data_file_measure_reader import DataFileMeasureReader
+
+from aa_common.constants import DATASET_ROOT_PATH
+from measure_repository_datafile.data_file_measure_repository import (
+    DataFileMeasureRepository,
+)
 from meteo_domain.entities.data_file import DataFile
 
 
@@ -18,13 +21,13 @@ class TestInfluDbMeasureIO(IsolatedAsyncioTestCase):
 
         grib = DataFile.from_file(path=paths[-1])
 
-        reader = DataFileMeasureReader(grib)
+        repository = DataFileMeasureRepository(grib)
 
-        provider = islice(reader.read_all(), 5)
+        provider = islice(repository.search(), 5)
 
         for measures in provider:
             # max_value = measures.measures["value"].max()
             logger.info(
-                f"{measures.sensor.id}[{measures.sensor.type.name}]\n"
+                f"{measures.sensor.id}[{measures.sensor.type}]\n"
                 f"{measures.sensor.location}\n{measures.measures.head()}"
             )

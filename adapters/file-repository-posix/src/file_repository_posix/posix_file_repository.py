@@ -2,6 +2,7 @@ from pathlib import Path
 from typing import IO, override
 
 from loguru import logger
+
 from meteo_domain.ports.file_repository import FileRepository
 
 
@@ -11,9 +12,11 @@ class PosixFileRepository(FileRepository):
         self.root = remote_path
 
     @override
-    async def create_bucket(self):
-        logger.info(f"{self.current_bucket()}")
-        path = self.root / self.current_bucket()
+    async def create_bucket(self, bucket: str = None):
+        if bucket is None:
+            bucket = self.current_bucket()
+        logger.info(f"{bucket}")
+        path = self.root / bucket
         path.mkdir(parents=True, exist_ok=True)
 
     @override

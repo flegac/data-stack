@@ -7,10 +7,11 @@ from pathlib import Path
 import xarray as xr
 
 from meteo_domain.entities.datafile_lifecycle import DataFileLifecycle
+from meteo_domain.entities.workspace.workspace import WorkObject
 
 
-@dataclass
-class DataFile:
+@dataclass(kw_only=True)
+class DataFile(WorkObject):
     data_id: str
     source_hash: str
     source_uri: str
