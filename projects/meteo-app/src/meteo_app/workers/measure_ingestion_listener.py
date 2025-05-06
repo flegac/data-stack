@@ -2,7 +2,7 @@ from dataclasses import dataclass
 
 from dependency_injector.wiring import Provide
 from loguru import logger
-from message_queue.mq_factory import MQFactory
+from message_queue.mq_backend import MQBackend
 from meteo_domain.config import specific_measure_topic
 from meteo_domain.entities.measures.measurement import Measurement
 from meteo_domain.ports.measure_repository import MeasureRepository
@@ -12,7 +12,7 @@ from meteo_domain.ports.measure_repository import MeasureRepository
 class MeasureIngestionListener:
     topic: str = "temperature"
     repo: MeasureRepository = Provide["repositories.measure_repository"]
-    factory: MQFactory = Provide["repositories.mq_factory"]
+    factory: MQBackend = Provide["repositories.mq_factory"]
 
     async def run(self):
         topic = specific_measure_topic(self.topic)

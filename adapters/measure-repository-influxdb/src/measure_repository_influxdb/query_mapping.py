@@ -1,5 +1,4 @@
 from influxdb_client import Point
-
 from meteo_domain.entities.measures.measure_query import MeasureQuery
 from meteo_domain.entities.measures.measurement import Measurement
 

@@ -1,9 +1,8 @@
 from itertools import islice
 from unittest import IsolatedAsyncioTestCase
 
-from loguru import logger
-
 from aa_common.constants import DATASET_ROOT_PATH
+from loguru import logger
 from measure_repository_datafile.data_file_measure_repository import (
     DataFileMeasureRepository,
 )

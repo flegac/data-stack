@@ -1,12 +1,11 @@
 from abc import ABC, abstractmethod
-from typing import AsyncGenerator
+from collections.abc import AsyncGenerator
 
 from meteo_domain.entities.data_file import DataFile
 from meteo_domain.entities.datafile_lifecycle import DataFileLifecycle
 
 
 class DataFileRepository(ABC):
-
     @abstractmethod
     async def update_status(self, item: DataFile, status: DataFileLifecycle): ...
 

@@ -1,4 +1,4 @@
-from datetime import datetime, UTC
+from datetime import UTC, datetime
 
 from dependency_injector.wiring import inject
 from fastapi import APIRouter, Depends
@@ -12,7 +12,7 @@ router = APIRouter()
 @router.get("/health")
 @inject
 async def health_check(
-    context: ApplicationContext = Depends(get_context),
+    context: ApplicationContext = Depends(get_context),  # noqa: B008
 ):
     return {
         "status": "healthy",

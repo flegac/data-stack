@@ -1,9 +1,8 @@
 import traceback
 from typing import override
 
-from loguru import logger
-
 from kafka_connector.kafka_connection import KafkaConnection
+from loguru import logger
 from message_queue.mq_producer import MQProducer
 from message_queue.mq_topic import MQTopic
 from message_queue.serializer import Input, Output
@@ -45,7 +44,8 @@ class KafkaProducer(MQProducer[Input]):
             await self.producer.start()
             self._started = True
 
-    async def close(self):
+    @override
+    async def stop(self):
         if self._started:
             await self.producer.stop()
             self._started = False

@@ -1,7 +1,6 @@
 from pathlib import Path
 
 from dependency_injector import containers, providers
-
 from influxdb_connector.influxdb_config import InfluxDBConfig
 from kafka_connector.kafka_config import KafkaConfig
 from s3_connector.s3_config import S3Config

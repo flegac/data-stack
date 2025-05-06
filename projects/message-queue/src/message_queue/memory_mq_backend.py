@@ -3,8 +3,8 @@ from collections import defaultdict
 from collections.abc import Awaitable, Callable
 from typing import Any, override
 
+from message_queue.mq_backend import MQBackend
 from message_queue.mq_consumer import MQConsumer
-from message_queue.mq_factory import MQFactory
 from message_queue.mq_producer import MQProducer
 from message_queue.mq_topic import MQTopic
 from message_queue.serializer import Input
@@ -43,7 +43,7 @@ class MemoryMQConsumer(MQConsumer[Input]):
         self._running = False
 
 
-class MemoryMQFactory(MQFactory):
+class MemoryMQBackend(MQBackend):
     def __init__(self):
         self.topics: dict[str, list] = defaultdict(list)
 

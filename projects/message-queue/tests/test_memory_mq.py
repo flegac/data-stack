@@ -1,37 +1,17 @@
 import asyncio
-import threading
-import time
-from unittest import IsolatedAsyncioTestCase
+from unittest import TestCase
 
-from message_queue.memory_mq_factory import MemoryMQFactory
-from message_queue.mq_topic import MQTopic
+from message_queue.memory_mq_backend import MemoryMQBackend
+from message_queue.mq_backend_checker import mq_backend_checker
 
 
-class TestMemoryMQ(IsolatedAsyncioTestCase):
-    async def asyncSetUp(self):
-        topic = MQTopic(topic="test-topic")
-        self.factory = MemoryMQFactory()
-        self.producer = self.factory.producer(topic)
-        self.consumer = self.factory.consumer(topic)
-        self.expected_messages = [f"message-{i}" for i in range(10)]
-        self.received_messages = []
-
-    async def message_handler(self, item):
-        self.received_messages.append(item)
-        if len(self.received_messages) >= len(self.expected_messages):
-            await self.consumer.stop()
-
-    def producer_thread(self, producer):
-        for msg in self.expected_messages:
-            asyncio.run(producer.write_single(msg))
-            time.sleep(0.5)
-
-    async def test_listener(self):
-        producer_thread = threading.Thread(
-            target=self.producer_thread, args=(self.producer,)
+class TestMemoryMQBackend(TestCase):
+    def test_it(self):
+        backend = MemoryMQBackend()
+        asyncio.run(
+            mq_backend_checker(
+                backend,
+                message_number=3,
+                timeout_sec=0.25,
+            )
         )
-        producer_thread.start()
-        await self.consumer.listen(self.message_handler)
-        producer_thread.join()
-
-        self.assertEqual(self.received_messages, self.expected_messages)

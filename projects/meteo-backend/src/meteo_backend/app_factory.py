@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from starlette.middleware.cors import CORSMiddleware
 
-from meteo_backend.api.routes import health, files
+from meteo_backend.api.routes import files, health
 from meteo_backend.core.config.container import Container
 from meteo_backend.core.config.settings import Settings
 

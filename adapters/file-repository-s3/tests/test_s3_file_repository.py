@@ -1,7 +1,7 @@
 import logging
-from pathlib import Path
 from unittest import IsolatedAsyncioTestCase
 
+from aa_common.constants import LOCAL_TEST_PATH
 from file_repository_s3.s3_file_repository import S3FileRepository
 from s3_connector.s3_config import S3Config
 from s3_connector.s3_connection import S3Connection
@@ -17,7 +17,7 @@ class TestS3FileRepository(IsolatedAsyncioTestCase):
         )
         self.repo = S3FileRepository(
             connection=S3Connection(config),
-            local_path=Path("/tmp/test/local"),
+            local_path=LOCAL_TEST_PATH,
         )
 
     async def test_s3_file_repository(self):

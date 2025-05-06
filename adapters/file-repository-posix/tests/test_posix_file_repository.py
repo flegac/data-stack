@@ -1,7 +1,7 @@
 import logging
-from pathlib import Path
 from unittest import IsolatedAsyncioTestCase
 
+from aa_common.constants import LOCAL_TEST_PATH
 from file_repository_posix.posix_file_repository import PosixFileRepository
 
 
@@ -9,8 +9,8 @@ class TestPosixFileRepository(IsolatedAsyncioTestCase):
     async def asyncSetUp(self):
         logging.getLogger("asyncio").setLevel(logging.ERROR)
         self.repo = PosixFileRepository(
-            remote_path=Path("/tmp/test/remote"),
-            local_path=Path("/tmp/test/local"),
+            remote_path=LOCAL_TEST_PATH / "remote",
+            local_path=LOCAL_TEST_PATH / "local",
         )
 
     async def test_posix_file_repository(self):

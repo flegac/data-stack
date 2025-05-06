@@ -1,18 +1,21 @@
 import asyncio
 import datetime
 
+from kafka_connector.kafka_connection import KafkaConnection
 from measure_repository_openmeteo.open_meteo_measure_repository import (
     OpenMeteoMeasureRepository,
 )
-from message_queue_kafka.kafka_factory import KafkaMQFactory
-from meteo_app.config import KAFKA_CONFIG
+from message_queue_kafka.kafka_factory import KafkaMQBackend
 from meteo_domain.config import specific_measure_topic
 from meteo_domain.entities.measures.location import Location
 from meteo_domain.entities.measures.measure_query import MeasureQuery
 from meteo_domain.entities.measures.period import Period
 
+from meteo_app.config import KAFKA_CONFIG
+
 
 async def main():
+    kafka_connection = KafkaConnection(KAFKA_CONFIG)
     repo = OpenMeteoMeasureRepository()
     variable = "temperature"
 
@@ -25,7 +28,7 @@ async def main():
         location=Location(latitude=43.6043, longitude=1.4437),
     )
     topic = specific_measure_topic(variable)
-    producer = KafkaMQFactory(KAFKA_CONFIG).producer(topic)
+    producer = KafkaMQBackend(kafka_connection).producer(topic)
     for data in repo.search(query):
         await producer.write_batch(data)
 

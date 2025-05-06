@@ -4,7 +4,6 @@ import random
 from unittest import IsolatedAsyncioTestCase
 
 from loguru import logger
-
 from measure_repository_influxdb.influxdb_measure_repository import (
     InfluxDbMeasureRepository,
 )

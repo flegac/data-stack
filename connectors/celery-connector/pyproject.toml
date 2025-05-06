@@ -1,0 +1,16 @@
+[project]
+name = "celery-connector"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+authors = [
+    { name = "flegac", email = "florent.legac@gmail.com" }
+]
+requires-python = ">=3.12"
+dependencies = [
+    "redis>=6.0.0",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"

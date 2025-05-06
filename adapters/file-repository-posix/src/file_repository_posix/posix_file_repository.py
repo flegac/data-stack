@@ -1,8 +1,8 @@
+from collections.abc import AsyncGenerator
 from pathlib import Path
-from typing import IO, override, Any, AsyncGenerator
+from typing import IO, Any, override
 
 from loguru import logger
-
 from meteo_domain.ports.file_repository import FileRepository
 
 

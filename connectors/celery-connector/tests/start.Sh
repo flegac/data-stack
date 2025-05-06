@@ -1,0 +1,1 @@
+celery -A demo_celery worker --loglevel=INFO

@@ -18,3 +18,6 @@ class MQProducer(Generic[Input]):
 
     @abstractmethod
     async def flush(self): ...
+
+    @abstractmethod
+    async def stop(self): ...

@@ -6,8 +6,7 @@ from typing import IO, Any
 
 
 class FileRepository(ABC):
-    def __init__(self, local_path: Path | str, bucket: str | None = None):
-        local_path = Path(local_path)
+    def __init__(self, local_path: Path, bucket: str | None = None):
         local_path.mkdir(parents=True, exist_ok=True)
         self.local_path = local_path
         self._bucket = _check_bucket(bucket or "default")

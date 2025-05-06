@@ -1,6 +1,5 @@
-from dependency_injector import containers, providers
-
 from data_file_repository_pg.pg_data_file_repository import PgDataFileRepository
+from dependency_injector import containers, providers
 from file_repository_s3.s3_file_repository import S3FileRepository
 from influxdb_connector.influxdb_config import InfluxDBConfig
 from kafka_connector.kafka_config import KafkaConfig
@@ -8,13 +7,14 @@ from kafka_connector.kafka_connection import KafkaConnection
 from measure_repository_influxdb.influxdb_measure_repository import (
     InfluxDbMeasureRepository,
 )
-from message_queue_kafka.kafka_factory import KafkaMQFactory
-from meteo_backend.core.config.settings import Settings
+from message_queue_kafka.kafka_factory import KafkaMQBackend
 from meteo_domain.services.data_file_ingestion_service import DataFileIngestionService
 from meteo_domain.services.data_file_messaging_service import DataFileMessagingService
 from meteo_domain.services.data_file_upload_service import DataFileUploadService
 from s3_connector.s3_config import S3Config
 from s3_connector.s3_connection import S3Connection
+
+from meteo_backend.core.config.settings import Settings
 
 
 class Container(containers.DeclarativeContainer):
@@ -75,7 +75,7 @@ class Container(containers.DeclarativeContainer):
 
     # Message Queue Factory
     mq_factory = providers.Singleton(
-        KafkaMQFactory,
+        KafkaMQBackend,
         kafka_connection,
     )
 

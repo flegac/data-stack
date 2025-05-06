@@ -1,10 +1,9 @@
 from datetime import datetime
 
+from meteo_domain.entities.datafile_lifecycle import DataFileLifecycle
 from sqlalchemy import Column, DateTime, String
 from sqlalchemy import Enum as SqlEnum
 from sqlalchemy.orm import declarative_base
-
-from meteo_domain.entities.datafile_lifecycle import DataFileLifecycle
 
 Base = declarative_base()
 

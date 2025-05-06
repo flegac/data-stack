@@ -1,8 +1,8 @@
+from collections.abc import AsyncGenerator
 from pathlib import Path
-from typing import IO, override, AsyncGenerator, Any
+from typing import IO, Any, override
 
 from loguru import logger
-
 from meteo_domain.ports.file_repository import FileRepository
 from s3_connector.s3_connection import S3Connection
 
@@ -22,7 +22,7 @@ class S3FileRepository(FileRepository):
             try:
                 await s3_client.head_bucket(Bucket=bucket)
                 logger.info(f'Bucket "{bucket}" already exists.')
-            except s3_client.exceptions.ClientError as e:
+            except s3_client.exceptions.ClientError:
                 logger.info(f'Bucket "{bucket}" not found: creating it ...')
                 try:
                     await s3_client.create_bucket(Bucket=bucket)

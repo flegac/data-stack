@@ -1,8 +1,8 @@
 from aiokafka import AIOKafkaConsumer, AIOKafkaProducer
-
-from kafka_connector.kafka_config import KafkaConfig
 from message_queue.mq_topic import MQTopic
 from message_queue.serializer import Input, Output
+
+from kafka_connector.kafka_config import KafkaConfig
 
 
 class KafkaConnection:

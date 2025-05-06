@@ -1,6 +1,6 @@
-from fastapi import APIRouter, UploadFile, Depends
-
 from aa_common.logger import logger
+from fastapi import APIRouter, Depends, UploadFile
+
 from meteo_backend.core.application_context import ApplicationContext
 from meteo_backend.core.dependencies import get_context
 
@@ -10,7 +10,7 @@ router = APIRouter()
 @router.post("/upload")
 async def upload_file(
     file: UploadFile,
-    context: ApplicationContext = Depends(get_context),
+    context: ApplicationContext = Depends(get_context),  # noqa: B008
 ):
     filepath = context.settings.LOCAL_STORAGE_PATH / "uploads" / file.filename
     filepath.parent.mkdir(parents=True, exist_ok=True)

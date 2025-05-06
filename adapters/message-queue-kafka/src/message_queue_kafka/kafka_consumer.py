@@ -1,9 +1,8 @@
 from collections.abc import Awaitable, Callable
 from typing import Any, override
 
-from loguru import logger
-
 from kafka_connector.kafka_connection import KafkaConnection
+from loguru import logger
 from message_queue.mq_consumer import MQConsumer
 from message_queue.mq_topic import MQTopic
 from message_queue.serializer import Input, Output

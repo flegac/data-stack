@@ -1,5 +1,6 @@
 from pathlib import Path
 
+from aa_common.constants import LOCAL_STORAGE_PATH
 from pydantic_settings import BaseSettings
 
 
@@ -9,7 +10,7 @@ class Settings(BaseSettings):
     PORT: int = 8000
     VERSION: str = "1.0.0"
     CORS_ORIGINS: list[str] = ["*"]
-    LOCAL_STORAGE_PATH: Path = Path("/tmp/meteo-files")
+    LOCAL_STORAGE_PATH: Path = LOCAL_STORAGE_PATH
 
     # API Settings
     API_VERSION: str = "v1"

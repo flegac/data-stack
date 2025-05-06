@@ -1,7 +1,7 @@
 from functools import cached_property
 
 from loguru import logger
-from message_queue.mq_factory import MQFactory
+from message_queue.mq_backend import MQBackend
 
 from meteo_domain.config import (
     DATAFILE_ERROR_TOPIC,
@@ -17,7 +17,7 @@ class DataFileMessagingService:
     def __init__(
         self,
         data_file_repository: DataFileRepository,
-        mq_factory: MQFactory,
+        mq_factory: MQBackend,
     ):
         self.data_file_repository = data_file_repository
         self.mq_factory = mq_factory

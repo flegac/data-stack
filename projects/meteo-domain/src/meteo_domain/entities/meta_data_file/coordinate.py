@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 from datetime import datetime
-from typing import Generic, SupportsFloat, TypeVar, SupportsInt
+from typing import Generic, SupportsFloat, SupportsInt, TypeVar
 
 T = TypeVar("T", bound=SupportsFloat | SupportsInt | datetime)
 
