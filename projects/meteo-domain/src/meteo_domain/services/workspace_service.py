@@ -1,7 +1,7 @@
-from meteo_domain.entities.workspace.workspace import Workspace
+from meteo_domain.entities.workspace import Workspace
 from meteo_domain.ports.data_file_repository import DataFileRepository
 from meteo_domain.ports.file_repository import FileRepository
-from meteo_domain.ports.workspace_repository import WorkspaceRepository
+from meteo_domain.ports.ws_repository import WorkspaceRepository
 
 
 class WorkspaceService:
@@ -24,4 +24,4 @@ class WorkspaceService:
         await self.ws_repository.delete(ws)
 
     async def find_data_files(self, ws: Workspace):
-        return await self.data_file_repository.find_by_workspace(ws.id)
+        return await self.data_file_repository.find_by_workspace(ws.workspace_id)

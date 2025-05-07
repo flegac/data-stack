@@ -7,7 +7,7 @@ from pathlib import Path
 import xarray as xr
 
 from meteo_domain.entities.datafile_lifecycle import DataFileLifecycle
-from meteo_domain.entities.workspace.workspace import WorkObject
+from meteo_domain.entities.workspace import WorkObject
 
 
 @dataclass(kw_only=True)

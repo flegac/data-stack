@@ -1,5 +1,5 @@
 from aa_common.logger import logger
-from measure_repository_datafile.data_file_measure_repository import (
+from posix_measure_repository.data_file_measure_repository import (
     DataFileMeasureRepository,
 )
 

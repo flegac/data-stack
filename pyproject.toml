@@ -16,25 +16,33 @@ members = [
 ]
 
 [tool.uv.sources]
-aa-common = { workspace = true }
 
-meteo-domain = { workspace = true }
 meteo-app = { workspace = true }
 
+# domain
+aa-common = { workspace = true }
+meteo-domain = { workspace = true }
 message-queue = { workspace = true }
-message-queue-kafka = { workspace = true }
 
+#ports
 data-file-repository = { workspace = true }
-data-file-repository-pg = { workspace = true }
-
+workspace-repository = { workspace = true }
 file-repository = { workspace = true }
-file-repository-posix = { workspace = true }
-file-repository-s3 = { workspace = true }
-
 measure-repository = { workspace = true }
-measure-repository-datafile = { workspace = true }
-measure-repository-influxdb = { workspace = true }
-measure-repository-openmeteo = { workspace = true }
+
+# adapters
+kafka-message-queue = { workspace = true }
+redis-message-queue = { workspace = true }
+
+pg-data-file-repository = { workspace = true }
+pg-workspace-repository = { workspace = true }
+
+s3-file-repository = { workspace = true }
+posix-file-repository = { workspace = true }
+
+posix-measure-repository = { workspace = true }
+influxdb-measure-repository = { workspace = true }
+openmeteo-measure-repository = { workspace = true }
 
 # connectors
 pg-connector = { workspace = true }

@@ -27,6 +27,8 @@ async def mq_backend_checker(
             await producer.write_single(msg)
 
     consumer_task = asyncio.create_task(consumer.listen(message_handler))
+    await asyncio.sleep(0.5)
+
     producer_task = asyncio.create_task(produce_messages())
 
     await asyncio.sleep(timeout_sec)

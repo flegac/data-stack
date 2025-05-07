@@ -57,3 +57,8 @@ class PgConnection:
 
     async def disconnect(self):
         await self.database.disconnect()
+
+    async def init_table(self, model):
+        await self.connect()
+        async with self.engine.begin() as conn:
+            await conn.run_sync(model.metadata.create_all)
