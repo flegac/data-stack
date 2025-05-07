@@ -1,7 +1,7 @@
 from aiokafka import AIOKafkaConsumer, AIOKafkaProducer
-from message_queue.mq_topic import MQTopic
-from message_queue.serializer import Input, Output
 
+from aa_common.mq.mq_topic import MQTopic
+from aa_common.mq.serializer import Input, Output
 from kafka_connector.kafka_config import KafkaConfig
 
 

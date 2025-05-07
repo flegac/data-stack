@@ -1,34 +1,20 @@
-from abc import ABC, abstractmethod
+from abc import abstractmethod
 from collections.abc import AsyncGenerator
+from dataclasses import dataclass
 
+from aa_common.repo.repository import Repository
 from meteo_domain.entities.data_file import DataFile
-from meteo_domain.entities.datafile_lifecycle import DataFileLifecycle
 
 
-class DataFileRepository(ABC):
-    @abstractmethod
-    async def create_or_update(self, item: DataFile): ...
+@dataclass
+class DataFileQuery:
+    workspace_id: str | None = None
+    source_hash: str | None = None
 
-    @abstractmethod
-    async def update_status(self, item: DataFile, status: DataFileLifecycle): ...
 
-    @abstractmethod
-    async def delete_by_id(self, data_id: DataFile): ...
+class DataFileRepository(Repository[DataFile]):
 
     @abstractmethod
-    async def find_by_id(self, data_id: str) -> DataFile | None: ...
-
-    @abstractmethod
-    async def find_all(self) -> AsyncGenerator[DataFile, None]: ...
-
-    @abstractmethod
-    async def find_by_hash(self, source_hash: str) -> list[DataFile]: ...
-
-    @abstractmethod
-    async def find_by_workspace(self, workspace_id: str) -> list[DataFile]: ...
-
-    @abstractmethod
-    async def init(self): ...
-
-    @abstractmethod
-    async def close(self): ...
+    async def find_all(
+        self, query: DataFileQuery | None = None
+    ) -> AsyncGenerator[DataFile, None]: ...

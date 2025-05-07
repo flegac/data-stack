@@ -1,10 +1,10 @@
 import asyncio
 from unittest import TestCase
 
+from aa_common.mq.mq_backend_checker import mq_backend_checker
 from kafka_connector.kafka_config import KafkaConfig
 from kafka_connector.kafka_connection import KafkaConnection
 from kafka_message_queue.kafka_factory import KafkaMQBackend
-from message_queue.mq_backend_checker import mq_backend_checker
 
 
 class TestKafkaMQBackend(TestCase):

@@ -3,7 +3,7 @@ name = "data-stack"
 version = "0.1.0"
 description = "Add your description here"
 readme = "README.md"
-requires-python = ">=3.12"
+requires-python = ">=3.13"
 dependencies = [
     "celery>=5.5.2",
 ]
@@ -22,7 +22,6 @@ meteo-app = { workspace = true }
 # domain
 aa-common = { workspace = true }
 meteo-domain = { workspace = true }
-message-queue = { workspace = true }
 
 #ports
 data-file-repository = { workspace = true }
@@ -33,10 +32,7 @@ measure-repository = { workspace = true }
 # adapters
 kafka-message-queue = { workspace = true }
 redis-message-queue = { workspace = true }
-
-pg-data-file-repository = { workspace = true }
-pg-workspace-repository = { workspace = true }
-
+pg-meteo-adapters = { workspace = true }
 s3-file-repository = { workspace = true }
 posix-file-repository = { workspace = true }
 

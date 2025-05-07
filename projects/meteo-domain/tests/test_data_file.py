@@ -1,6 +1,7 @@
 from unittest import TestCase
 
 from aa_common.constants import DATASET_ROOT_PATH, EXPORT_PATH
+from aa_common.logger import logger
 from meteo_domain.entities.data_file import DataFile
 
 
@@ -14,10 +15,13 @@ class TestDataFile(TestCase):
         )
 
         data = grib.raw
-        print(data)
+        logger.info(data)
+
+        metadata = grib.metadata
+        logger.info(metadata)
 
         data.to_netcdf(EXPORT_PATH / "data.h5")
         data.to_dataframe().to_csv(EXPORT_PATH / "data.csv")
 
         xxx = DataFile.from_file(EXPORT_PATH / "data.h5")
-        print(xxx.raw)
+        logger.info(xxx.raw)

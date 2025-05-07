@@ -2,7 +2,7 @@ import logging
 from unittest import IsolatedAsyncioTestCase
 
 from aa_common.constants import LOCAL_TEST_PATH
-from file_repository_posix.posix_file_repository import PosixFileRepository
+from posix_file_repository.posix_file_repository import PosixFileRepository
 
 
 class TestPosixFileRepository(IsolatedAsyncioTestCase):

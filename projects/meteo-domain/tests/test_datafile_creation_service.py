@@ -1,7 +1,7 @@
 from datetime import datetime
 from unittest import TestCase
 
-from aa_common.constants import EXPORT_PATH
+from aa_common.constants import EXPORT_PATH, LOCAL_TEST_PATH
 from meteo_domain.entities.meta_data_file.coordinate import Coordinate
 from meteo_domain.entities.meta_data_file.meta_data_file import MetaDataFile
 from meteo_domain.entities.meta_data_file.variable import Variable
@@ -32,5 +32,5 @@ class TestDataFileCreationService(TestCase):
                     Variable("pression", ["latitude", "longitude"]),
                 ],
             ),
-            output_file=EXPORT_PATH / "random.grib",
+            output_file=LOCAL_TEST_PATH / "random.grib",
         )

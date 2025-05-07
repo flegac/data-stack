@@ -6,7 +6,7 @@ readme = "README.md"
 authors = [
     { name = "flegac", email = "florent.legac@gmail.com" }
 ]
-requires-python = ">=3.12"
+requires-python = ">=3.13"
 dependencies = [
     "aioboto3>=14.1.0",
     "aiohappyeyeballs>=2.6.1",

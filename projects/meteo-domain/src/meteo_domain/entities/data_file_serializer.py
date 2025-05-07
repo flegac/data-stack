@@ -3,8 +3,7 @@ from dataclasses import asdict
 from datetime import datetime
 from typing import TypeVar, override
 
-from message_queue.serializer import Serializer
-
+from aa_common.mq.serializer import Serializer
 from meteo_domain.entities.data_file import DataFile
 from meteo_domain.entities.datafile_lifecycle import DataFileLifecycle
 

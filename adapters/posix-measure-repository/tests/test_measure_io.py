@@ -1,8 +1,9 @@
 from itertools import islice
 from unittest import IsolatedAsyncioTestCase
 
-from aa_common.constants import DATASET_ROOT_PATH
 from loguru import logger
+
+from aa_common.constants import DATASET_ROOT_PATH
 from meteo_domain.entities.data_file import DataFile
 from posix_measure_repository.data_file_measure_repository import (
     DataFileMeasureRepository,
@@ -18,7 +19,10 @@ class TestInfluDbMeasureIO(IsolatedAsyncioTestCase):
             DATASET_ROOT_PATH / "CDS-hydro-2020-10-22.nc",
         ]
 
-        grib = DataFile.from_file(path=paths[-1])
+        grib = DataFile.from_file(
+            path=paths[-1],
+            uid="test_io",
+        )
 
         repository = DataFileMeasureRepository(grib)
 

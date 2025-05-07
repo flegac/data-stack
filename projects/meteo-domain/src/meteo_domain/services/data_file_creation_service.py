@@ -3,13 +3,17 @@ from pathlib import Path
 
 import numpy as np
 import xarray as xr
-from aa_common.logger import logger
 
+from aa_common.logger import logger
 from meteo_domain.entities.data_file import DataFile
 from meteo_domain.entities.meta_data_file.meta_data_file import MetaDataFile
 
 
 class DataFileCreationService:
+
+    def create_from_path(self, path: Path, uid: str | None = None):
+        return DataFile.from_file(path, uid)
+
     def create_from_xarray(self, ds: xr.Dataset, output_file: Path):
         output_file.parent.mkdir(parents=True, exist_ok=True)
 
@@ -19,7 +23,7 @@ class DataFileCreationService:
                 ds[coord_name] = coord.astype("datetime64[ns]")
 
         ds.to_netcdf(output_file, engine="h5netcdf")
-        return DataFile.from_file(output_file)
+        return self.create_from_path(output_file)
 
     def randomize(self, metadata_file: MetaDataFile, output_file: Path) -> DataFile:
         logger.info(f"output: {output_file}\n{metadata_file}")

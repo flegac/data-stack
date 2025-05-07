@@ -1,4 +1,5 @@
 from dependency_injector import containers, providers
+
 from influxdb_connector.influxdb_config import InfluxDBConfig
 from influxdb_measure_repository.influxdb_measure_repository import (
     InfluxDbMeasureRepository,
@@ -6,15 +7,14 @@ from influxdb_measure_repository.influxdb_measure_repository import (
 from kafka_connector.kafka_config import KafkaConfig
 from kafka_connector.kafka_connection import KafkaConnection
 from kafka_message_queue import KafkaMQBackend
+from meteo_backend.core.config.settings import Settings
 from meteo_domain.services.data_file_ingestion_service import DataFileIngestionService
 from meteo_domain.services.data_file_messaging_service import DataFileMessagingService
 from meteo_domain.services.data_file_upload_service import DataFileUploadService
-from pg_datafile_repository.pg_data_file_repository import PgDataFileRepository
+from pg_meteo_adapters.data_file_repository import PgDataFileRepository
 from s3_connector.s3_config import S3Config
 from s3_connector.s3_connection import S3Connection
 from s3_file_repository import S3FileRepository
-
-from meteo_backend.core.config.settings import Settings
 
 
 class Container(containers.DeclarativeContainer):

@@ -6,7 +6,7 @@ readme = "README.md"
 authors = [
     { name = "flegac", email = "florent.legac@gmail.com" }
 ]
-requires-python = ">=3.12"
+requires-python = ">=3.13"
 dependencies = [
     "databases>=0.9.0",
     "sqlalchemy>=2.0.40",

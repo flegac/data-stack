@@ -1,6 +1,7 @@
 from unittest import IsolatedAsyncioTestCase
 
 from fastapi.testclient import TestClient
+
 from meteo_backend.app_factory import create_app
 from meteo_domain.entities.data_file import DataFile
 from meteo_domain.entities.datafile_lifecycle import DataFileLifecycle
@@ -34,9 +35,8 @@ class TestFilesAPI(IsolatedAsyncioTestCase):
 
         # Créer un DataFile de test pour le retour du service
         test_data_file = DataFile(
-            data_id=test_filename,
+            uid=test_filename,
             source_hash="abc123",
-            source_uri=str(test_path),
             status=DataFileLifecycle.upload_completed,
         )
 

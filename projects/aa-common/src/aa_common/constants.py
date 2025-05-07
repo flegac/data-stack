@@ -2,9 +2,8 @@ from pathlib import Path
 
 DATASET_ROOT_PATH = Path.home() / "Documents" / "Data" / "Datasets"
 
-EXPORT_PATH = Path.cwd() / "exports"
 
 LOCAL_STORAGE_PATH = Path("/tmp/meteo-files")
+EXPORT_PATH = LOCAL_STORAGE_PATH / "exports"
 
-
-LOCAL_TEST_PATH = Path("/tmp/meteo-files-test")
+LOCAL_TEST_PATH = LOCAL_STORAGE_PATH / "tests"

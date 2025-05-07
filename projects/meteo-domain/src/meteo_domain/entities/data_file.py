@@ -1,49 +1,65 @@
 import hashlib
 from dataclasses import dataclass, field
-from datetime import datetime
 from functools import cached_property
 from pathlib import Path
 
 import xarray as xr
 
 from meteo_domain.entities.datafile_lifecycle import DataFileLifecycle
+from meteo_domain.entities.meta_data_file.coordinate import Coordinate
+from meteo_domain.entities.meta_data_file.meta_data_file import MetaDataFile
+from meteo_domain.entities.meta_data_file.variable import Variable
 from meteo_domain.entities.workspace import WorkObject
 
 
 @dataclass(kw_only=True)
 class DataFile(WorkObject):
-    data_id: str
+    uid: str
     source_hash: str
-    source_uri: str
     local_path: Path | None = None
     status: DataFileLifecycle = field(default=DataFileLifecycle.created)
-    creation_date: datetime = field(default_factory=datetime.now)
-    last_update_date: datetime = field(default_factory=datetime.now)
 
     @staticmethod
-    def from_file(path: Path, data_id: str | None = None):
-        if data_id is None:
-            data_id = path.name
+    def from_file(path: Path, uid: str | None = None):
+        if uid is None:
+            uid = path.name
         return DataFile(
-            data_id=data_id,
+            uid=uid,
             source_hash=compute_hash(path),
-            source_uri=str(path),
             local_path=path,
-        )
+        ).auto_check()
 
     @cached_property
     def raw(self):
         return xr.open_dataset(self.local_path)
 
+    @cached_property
+    def metadata(self):
+        raw = self.raw
+        return MetaDataFile(
+            coords=[Coordinate(str(k), list(v)) for k, v in raw.coords.items()],
+            variables=[
+                Variable(str(k), list(v.coords.keys()))
+                for k, v in raw.data_vars.items()
+                if "bounds" not in k
+            ],
+            metadata=raw.attrs,
+        )
+
     @property
     def variables(self) -> list[str]:
         return list(self.raw.data_vars)
 
+    def auto_check(self):
+        self.metadata.check_coords()
+        return self
+
     def __repr__(self):
         return (
-            f"data_id: {self.data_id}\n"
+            f"uid: {self.uid}\n"
+            f'workspace_id: "{self.workspace_id}"\n'
+            f'tags: "{self.tags}"\n'
             f"status: {self.status.name}\n"
-            f"source_uri: {self.source_uri}\n"
             f"local_path: {self.local_path}\n"
             f"source_hash: {self.source_hash}\n"
             f"last_update_date: {self.last_update_date}"

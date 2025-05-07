@@ -1,9 +1,8 @@
 from typing import override
 
+from aa_common.mq.mq_backend import MQBackend
+from aa_common.mq.mq_topic import MQTopic
 from kafka_connector.kafka_connection import KafkaConnection
-from message_queue.mq_backend import MQBackend
-from message_queue.mq_topic import MQTopic
-
 from kafka_message_queue.kafka_consumer import KafkaConsumer
 from kafka_message_queue.kafka_producer import KafkaProducer
 

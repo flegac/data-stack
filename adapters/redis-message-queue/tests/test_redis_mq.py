@@ -1,10 +1,10 @@
 import asyncio
 from unittest import TestCase
 
-from message_queue.mq_backend_checker import mq_backend_checker
-from message_queue_redis.redis_config import RedisConfig
-from message_queue_redis.redis_connection import RedisConnection
-from message_queue_redis.redis_factory import RedisMQBackend
+from aa_common.mq.mq_backend_checker import mq_backend_checker
+from redis_message_queue.redis_config import RedisConfig
+from redis_message_queue.redis_connection import RedisConnection
+from redis_message_queue.redis_factory import RedisMQBackend
 
 
 class TestRedisMQBackend(TestCase):

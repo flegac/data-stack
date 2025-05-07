@@ -24,4 +24,4 @@ class WorkspaceService:
         await self.ws_repository.delete(ws)
 
     async def find_data_files(self, ws: Workspace):
-        return await self.data_file_repository.find_by_workspace(ws.workspace_id)
+        return await self.data_file_repository.find_by_workspace(ws.uid)
