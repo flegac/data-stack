@@ -4,7 +4,7 @@ from loguru import logger
 
 from meteo_domain.entities.data_file import DataFile
 from meteo_domain.entities.datafile_lifecycle import DataFileLifecycle
-from meteo_domain.ports.data_file_repository import DataFileRepository, DataFileQuery
+from meteo_domain.ports.data_file_repository import DataFileQuery, DataFileRepository
 from meteo_domain.ports.file_repository import FileRepository
 from meteo_domain.services.data_file_messaging_service import (
     DataFileMessagingService,

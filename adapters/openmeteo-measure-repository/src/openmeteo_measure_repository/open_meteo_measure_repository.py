@@ -25,7 +25,7 @@ class OpenMeteoMeasureRepository(MeasureRepository):
         raise NotImplementedError
 
     @override
-    def search(self, query: MeasureQuery = None) -> Generator[MeasureSeries, Any, None]:
+    def search(self, query: MeasureQuery = None) -> Generator[MeasureSeries, Any]:
         if not (measure_type := query.measure_type):
             raise ValueError("measure_type is required")
         if not (location := query.location):

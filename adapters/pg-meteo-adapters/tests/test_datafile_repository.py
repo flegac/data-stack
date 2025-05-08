@@ -16,7 +16,6 @@ class TestDataFileRepository(IsolatedAsyncioTestCase):
         await self.repo.init()
 
     async def test_it(self):
-
         await check_repository(
             self.repo,
             DataFile(uid="toto", source_hash="toto-hash"),

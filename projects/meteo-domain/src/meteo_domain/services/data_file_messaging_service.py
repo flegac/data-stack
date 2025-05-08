@@ -1,8 +1,8 @@
 from functools import cached_property
 
+from aa_common.mq.mq_backend import MQBackend
 from loguru import logger
 
-from aa_common.mq.mq_backend import MQBackend
 from meteo_domain.config import (
     DATAFILE_ERROR_TOPIC,
     DATAFILE_INGESTION_TOPIC,

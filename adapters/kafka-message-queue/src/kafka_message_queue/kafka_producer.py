@@ -1,11 +1,10 @@
 import traceback
-from typing import override, Any
-
-from loguru import logger
+from typing import Any, override
 
 from aa_common.mq.mq_producer import MQProducer
 from aa_common.mq.mq_topic import MQTopic
 from kafka_connector.kafka_connection import KafkaConnection
+from loguru import logger
 
 
 class KafkaProducer[Input](MQProducer[Input]):

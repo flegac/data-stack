@@ -1,6 +1,6 @@
 from abc import abstractmethod
 from collections.abc import Awaitable, Callable
-from typing import Any, Generic
+from typing import Any
 
 
 class MQConsumer[Input]:

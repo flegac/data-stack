@@ -29,7 +29,7 @@ class InfluxDbMeasureRepository(MeasureRepository):
         self.connection.write(record=records)
 
     @override
-    def search(self, query: MeasureQuery = None) -> Generator[MeasureSeries, Any, None]:
+    def search(self, query: MeasureQuery = None) -> Generator[MeasureSeries, Any]:
         flux_query = query_to_flux(query=query, bucket=self.config.bucket)
         tables = self.connection.query(flux_query)
         sensors: dict[tuple[SensorId, str], Sensor] = {}

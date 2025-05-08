@@ -32,7 +32,7 @@ class DataFileMeasureRepository(MeasureRepository):
         raise NotImplementedError
 
     @override
-    def search(self, query: MeasureQuery = None) -> Generator[MeasureSeries, Any, None]:
+    def search(self, query: MeasureQuery = None) -> Generator[MeasureSeries, Any]:
         # TODO: filter according to query # pylint: disable=fixme
         dataset = self.data_file.raw
         latitudes = dataset["latitude"]

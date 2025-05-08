@@ -1,6 +1,5 @@
 from abc import abstractmethod
 from collections.abc import Iterable
-from typing import Generic
 
 
 class MQProducer[Input]:

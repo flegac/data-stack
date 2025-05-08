@@ -1,11 +1,11 @@
 from abc import ABC, abstractmethod
-from typing import Any, AsyncGenerator
+from collections.abc import AsyncGenerator
+from typing import Any
 
 type UID = str
 
 
 class Repository[Entity](ABC):
-
     @abstractmethod
     async def create_or_update(self, item: Entity) -> UID: ...
 

@@ -1,15 +1,15 @@
 import json
 import traceback
-from typing import override, Any
+from typing import Any, override
 
 from aa_common.logger import logger
 from aa_common.mq.mq_producer import MQProducer
 from aa_common.mq.mq_topic import MQTopic
+
 from redis_message_queue.redis_connection import RedisConnection
 
 
 class RedisProducer[Input](MQProducer[Input]):
-
     def __init__(self, topic: MQTopic[Input, Any], connection: RedisConnection):
         self.topic = topic
         self.connection = connection

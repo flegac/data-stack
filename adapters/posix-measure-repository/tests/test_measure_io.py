@@ -1,9 +1,8 @@
 from itertools import islice
 from unittest import IsolatedAsyncioTestCase
 
-from loguru import logger
-
 from aa_common.constants import DATASET_ROOT_PATH
+from loguru import logger
 from meteo_domain.entities.data_file import DataFile
 from posix_measure_repository.data_file_measure_repository import (
     DataFileMeasureRepository,

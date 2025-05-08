@@ -1,8 +1,7 @@
 from pathlib import Path
 
-from pydantic_settings import BaseSettings
-
 from aa_common.constants import LOCAL_STORAGE_PATH
+from pydantic_settings import BaseSettings
 
 
 class Settings(BaseSettings):

@@ -3,6 +3,7 @@ from collections.abc import AsyncGenerator
 from dataclasses import dataclass
 
 from aa_common.repo.repository import Repository
+
 from meteo_domain.entities.data_file import DataFile
 
 
@@ -13,8 +14,7 @@ class DataFileQuery:
 
 
 class DataFileRepository(Repository[DataFile]):
-
     @abstractmethod
     def find_all(
         self, query: DataFileQuery | None = None
-    ) -> AsyncGenerator[DataFile, None]: ...
+    ) -> AsyncGenerator[DataFile]: ...

@@ -1,13 +1,13 @@
 from dependency_injector import containers, providers
-
 from influxdb_measure_repository.influxdb_measure_repository import (
     InfluxDbMeasureRepository,
 )
 from kafka_message_queue.kafka_factory import KafkaMQBackend
-from meteo_app.wires.config import Config
 from pg_meteo_adapters.data_file_repository import PgDataFileRepository
 from pg_meteo_adapters.ws_repository import PgWorkspaceRepository
 from s3_file_repository.s3_file_repository import S3FileRepository
+
+from meteo_app.wires.config import Config
 
 
 # pylint: disable=too-few-public-methods

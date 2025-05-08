@@ -1,6 +1,6 @@
+from aa_common.mq.mq_topic import MQTopic
 from aiokafka import AIOKafkaConsumer, AIOKafkaProducer
 
-from aa_common.mq.mq_topic import MQTopic
 from kafka_connector.kafka_config import KafkaConfig
 
 

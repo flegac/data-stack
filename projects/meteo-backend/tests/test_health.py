@@ -1,7 +1,6 @@
 import unittest
 
 from fastapi.testclient import TestClient
-
 from meteo_backend.app_main import app
 
 

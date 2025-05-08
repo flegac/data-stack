@@ -1,16 +1,16 @@
+from collections.abc import AsyncGenerator
 from datetime import datetime
-from typing import override, Any, AsyncGenerator
-
-from sqlalchemy import delete, select
+from typing import Any, override
 
 from aa_common.logger import logger
-from aa_common.repo.repository import Repository, UID
+from aa_common.repo.repository import UID, Repository
+from sqlalchemy import delete, select
+
 from pg_connector.model_mapping import ModelMapping
 from pg_connector.pg_connection import PgConnection
 
 
 class PgRepository[Entity, DbModel](Repository[Entity]):
-
     def __init__(
         self,
         database_url: str,

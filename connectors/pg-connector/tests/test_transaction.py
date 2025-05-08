@@ -2,12 +2,11 @@ import logging
 from dataclasses import dataclass
 from unittest import IsolatedAsyncioTestCase
 
-from sqlalchemy import Column, String
-from sqlalchemy.orm import declarative_base
-
 from aa_common.repo.repository_checker import check_repository
 from pg_connector.model_mapping import ModelMapping
 from pg_connector.pg_repository import PgRepository
+from sqlalchemy import Column, String
+from sqlalchemy.orm import declarative_base
 
 
 @dataclass

@@ -1,11 +1,10 @@
 from collections.abc import Awaitable, Callable
 from typing import Any, override
 
-from loguru import logger
-
 from aa_common.mq.mq_consumer import MQConsumer
 from aa_common.mq.mq_topic import MQTopic
 from kafka_connector.kafka_connection import KafkaConnection
+from loguru import logger
 
 
 class KafkaConsumer[Input](MQConsumer[Input]):

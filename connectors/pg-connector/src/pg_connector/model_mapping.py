@@ -1,15 +1,11 @@
-from abc import ABC
-from typing import Type
-
 from sqlalchemy import inspect
 
 
-class ModelMapping[Entity, DbModel](ABC):
-
+class ModelMapping[Entity, DbModel]:
     def __init__(
         self,
-        entity: Type[Entity],
-        model: Type[DbModel],
+        entity: type[Entity],
+        model: type[DbModel],
     ):
         self.entity = entity
         self.model = model

@@ -1,7 +1,6 @@
 from unittest import IsolatedAsyncioTestCase
 
 from fastapi.testclient import TestClient
-
 from meteo_backend.core.app_factory import create_app
 from meteo_domain.entities.data_file import DataFile
 from meteo_domain.entities.datafile_lifecycle import DataFileLifecycle
@@ -14,7 +13,7 @@ class TestFilesAPI(IsolatedAsyncioTestCase):
         self.container = MockedContainer()
 
         # Créer l'application avec le container de test
-        self.app, settings = create_app(self.container)
+        self.app = create_app(self.container)
 
         # Créer le client de test
         self.client = TestClient(self.app)
@@ -29,9 +28,6 @@ class TestFilesAPI(IsolatedAsyncioTestCase):
         # Préparer un fichier de test
         test_content = b"test file content"
         test_filename = "test_file.nc"
-        test_path = (
-            self.container.settings().LOCAL_STORAGE_PATH / "uploads" / test_filename
-        )
 
         # Créer un DataFile de test pour le retour du service
         test_data_file = DataFile(
@@ -42,7 +38,7 @@ class TestFilesAPI(IsolatedAsyncioTestCase):
 
         # Configurer les mocks
         self.mock_data_file_repository.find_by_id.return_value = None
-        self.mock_data_file_repository.find_by_hash.return_value = []
+        self.mock_data_file_repository.find_all.return_value = []
         self.mock_messaging_service.ingestion_producer.write_single.return_value = None
 
         # Simuler l'upload de fichier
