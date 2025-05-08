@@ -6,15 +6,18 @@ from influxdb_measure_repository.influxdb_measure_repository import (
 )
 from kafka_connector.kafka_config import KafkaConfig
 from kafka_connector.kafka_connection import KafkaConnection
-from kafka_message_queue import KafkaMQBackend
+from kafka_message_queue.kafka_factory import KafkaMQBackend
 from meteo_backend.core.config.settings import Settings
 from meteo_domain.services.data_file_ingestion_service import DataFileIngestionService
 from meteo_domain.services.data_file_messaging_service import DataFileMessagingService
 from meteo_domain.services.data_file_upload_service import DataFileUploadService
 from pg_meteo_adapters.data_file_repository import PgDataFileRepository
+from redis_message_queue.redis_config import RedisConfig
+from redis_message_queue.redis_connection import RedisConnection
+from redis_message_queue.redis_factory import RedisMQBackend
 from s3_connector.s3_config import S3Config
 from s3_connector.s3_connection import S3Connection
-from s3_file_repository import S3FileRepository
+from s3_file_repository.s3_file_repository import S3FileRepository
 
 
 class Container(containers.DeclarativeContainer):
@@ -66,6 +69,18 @@ class Container(containers.DeclarativeContainer):
         config=influxdb_config,
     )
 
+    # configure redis
+    redis_config = providers.Singleton(
+        RedisConfig,
+        host=settings.provided.REDIS_HOST,
+        port=settings.provided.REDIS_PORT,
+    )
+    redis_connection = providers.Singleton(RedisConnection, redis_config)
+    redis_mq_factory = providers.Singleton(
+        RedisMQBackend,
+        redis_connection,
+    )
+
     # Configuration Kafka
     kafka_config = providers.Singleton(
         KafkaConfig,
@@ -73,8 +88,7 @@ class Container(containers.DeclarativeContainer):
     )
     kafka_connection = providers.Singleton(KafkaConnection, kafka_config)
 
-    # Message Queue Factory
-    mq_factory = providers.Singleton(
+    kafka_mq_factory = providers.Singleton(
         KafkaMQBackend,
         kafka_connection,
     )
@@ -83,7 +97,7 @@ class Container(containers.DeclarativeContainer):
     messaging_service = providers.Singleton(
         DataFileMessagingService,
         data_file_repository=data_file_repository,
-        mq_factory=mq_factory,
+        mq_factory=redis_mq_factory,
     )
 
     # Service d'Upload

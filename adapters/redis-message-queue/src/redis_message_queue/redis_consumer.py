@@ -7,8 +7,8 @@ from aa_common.mq.mq_topic import MQTopic
 from redis_message_queue.redis_connection import RedisConnection
 
 
-class RedisConsumer(MQConsumer[Input]):
-    def __init__(self, topic: MQTopic[Input, Output], connection: RedisConnection):
+class RedisConsumer[Input](MQConsumer[Input]):
+    def __init__(self, topic: MQTopic[Input, Any], connection: RedisConnection):
         self.topic = topic
         self.connection = connection
         self._redis = None

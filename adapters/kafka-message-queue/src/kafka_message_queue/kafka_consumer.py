@@ -8,8 +8,8 @@ from aa_common.mq.mq_topic import MQTopic
 from kafka_connector.kafka_connection import KafkaConnection
 
 
-class KafkaConsumer(MQConsumer[Input]):
-    def __init__(self, topic: MQTopic[Input, Output], connection: KafkaConnection):
+class KafkaConsumer[Input](MQConsumer[Input]):
+    def __init__(self, topic: MQTopic[Input, Any], connection: KafkaConnection):
         self.topic = topic
         self.consumer = connection.consumer(topic)
 

@@ -1,6 +1,6 @@
 import json
 import traceback
-from typing import override
+from typing import override, Any
 
 from aa_common.logger import logger
 from aa_common.mq.mq_producer import MQProducer
@@ -8,8 +8,9 @@ from aa_common.mq.mq_topic import MQTopic
 from redis_message_queue.redis_connection import RedisConnection
 
 
-class RedisProducer(MQProducer[Input]):
-    def __init__(self, topic: MQTopic[Input, Output], connection: RedisConnection):
+class RedisProducer[Input](MQProducer[Input]):
+
+    def __init__(self, topic: MQTopic[Input, Any], connection: RedisConnection):
         self.topic = topic
         self.connection = connection
         self._started = False
@@ -46,7 +47,7 @@ class RedisProducer(MQProducer[Input]):
         # Redis pubsub est immédiat, pas besoin de flush
         pass
 
-    async def close(self):
+    async def stop(self):
         if self._started and self._redis:
             await self._redis.aclose()
             self._started = False

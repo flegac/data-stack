@@ -1,5 +1,5 @@
 import traceback
-from typing import override
+from typing import override, Any
 
 from loguru import logger
 
@@ -8,8 +8,8 @@ from aa_common.mq.mq_topic import MQTopic
 from kafka_connector.kafka_connection import KafkaConnection
 
 
-class KafkaProducer(MQProducer[Input]):
-    def __init__(self, topic: MQTopic[Input, Output], connection: KafkaConnection):
+class KafkaProducer[Input](MQProducer[Input]):
+    def __init__(self, topic: MQTopic[Input, Any], connection: KafkaConnection):
         self.topic = topic
         self.producer = connection.producer()
         self._started = False

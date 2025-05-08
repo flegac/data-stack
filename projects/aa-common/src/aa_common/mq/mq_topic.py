@@ -1,4 +1,4 @@
-from aa_common.mq.serializer import Input, Output, Serializer
+from aa_common.mq.serializer import Serializer
 
 
 # pylint: disable=too-few-public-methods

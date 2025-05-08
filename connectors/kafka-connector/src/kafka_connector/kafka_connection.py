@@ -1,7 +1,6 @@
 from aiokafka import AIOKafkaConsumer, AIOKafkaProducer
 
 from aa_common.mq.mq_topic import MQTopic
-from aa_common.mq.serializer import Input, Output
 from kafka_connector.kafka_config import KafkaConfig
 
 
@@ -9,7 +8,7 @@ class KafkaConnection:
     def __init__(self, config: KafkaConfig):
         self.config = config
 
-    def consumer(
+    def consumer[Input, Output](
         self,
         topic: MQTopic[Input, Output],
         group_id: str = None,

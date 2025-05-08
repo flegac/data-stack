@@ -42,12 +42,16 @@ class PgRepository[Entity, DbModel](Repository[Entity]):
     @override
     async def find_by_id(self, primary_key: UID):
         async with self.connection.transaction() as session:
-            stmt = select(self.model).where(self.mapping.primary_key == primary_key)
+            stmt = select(self.mapping.model).where(
+                self.mapping.primary_key == primary_key
+            )
             result = await session.execute(stmt)
             row = result.scalar_one_or_none()
             if row:
+                values = self.mapping.extract_dict(row)
+                logger.info(f"{self.mapping.model}\n{values}")
                 return self.mapping.model_to_entity(
-                    **self.mapping.model.extract_dict(row),
+                    row,
                 )
             return None
 

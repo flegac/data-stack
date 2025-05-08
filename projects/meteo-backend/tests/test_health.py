@@ -1,7 +1,8 @@
 import unittest
 
 from fastapi.testclient import TestClient
-from meteo_backend.main import app
+
+from meteo_backend.app_main import app
 
 
 class TestHealthAPI(unittest.TestCase):

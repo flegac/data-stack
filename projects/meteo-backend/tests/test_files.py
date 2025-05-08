@@ -2,7 +2,7 @@ from unittest import IsolatedAsyncioTestCase
 
 from fastapi.testclient import TestClient
 
-from meteo_backend.app_factory import create_app
+from meteo_backend.core.app_factory import create_app
 from meteo_domain.entities.data_file import DataFile
 from meteo_domain.entities.datafile_lifecycle import DataFileLifecycle
 from mocked_container import MockedContainer
@@ -55,7 +55,7 @@ class TestFilesAPI(IsolatedAsyncioTestCase):
         # Vérifier la réponse
         self.assertEqual(response.status_code, 200)
         data = response.json()
-        self.assertEqual(data["data_id"], test_filename)
+        self.assertEqual(data["uid"], test_filename)
         self.assertEqual(DataFileLifecycle(data["status"]), test_data_file.status)
 
         # Vérifier les appels aux repositories

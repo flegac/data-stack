@@ -1,8 +1,4 @@
 from aa_common.logger import logger
-from posix_measure_repository.data_file_measure_repository import (
-    DataFileMeasureRepository,
-)
-
 from meteo_domain.entities.data_file import DataFile
 from meteo_domain.entities.datafile_lifecycle import DataFileLifecycle
 from meteo_domain.entities.measures.measurement import Measurement
@@ -11,6 +7,9 @@ from meteo_domain.ports.file_repository import FileRepository
 from meteo_domain.ports.measure_repository import MeasureRepository
 from meteo_domain.services.data_file_messaging_service import (
     DataFileMessagingService,
+)
+from posix_measure_repository.data_file_measure_repository import (
+    DataFileMeasureRepository,
 )
 
 BATCH_SIZE = 10_000
@@ -42,7 +41,7 @@ class DataFileIngestionService:
                 item, DataFileLifecycle.ingestion_in_progress
             )
 
-            item.local_path = await self.file_repository.download_file(item.data_id)
+            item.local_path = await self.file_repository.download_file(item.uid)
 
             source_repository = DataFileMeasureRepository(item)
             provider = source_repository.search()

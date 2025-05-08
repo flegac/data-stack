@@ -31,7 +31,7 @@ Attempt to create a complete architecture to handle meteorological data.
 ## Setup
 
 ```bash
-# create/update virtual env
+# create virtual env
 uv venv
 ```
 
@@ -48,4 +48,11 @@ uv run pre-commit run --all-files
 ```bash
 # generate docs
 uv run scripts/analyze.py
+```
+
+```bash
+# run server
+
+cd projects/meteo-backend
+
 ```

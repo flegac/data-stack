@@ -27,7 +27,7 @@ class ModelMapping[Entity, DbModel](ABC):
 
     def model_to_entity(self, model: DbModel) -> Entity:
         return self.entity(
-            **self.model.extract_dict(model),
+            **self.extract_dict(model),
         )
 
     def entity_to_model(self, item: Entity) -> DbModel:

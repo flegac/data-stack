@@ -15,6 +15,6 @@ class DataFileQuery:
 class DataFileRepository(Repository[DataFile]):
 
     @abstractmethod
-    async def find_all(
+    def find_all(
         self, query: DataFileQuery | None = None
     ) -> AsyncGenerator[DataFile, None]: ...

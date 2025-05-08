@@ -40,7 +40,6 @@ class DataFileMessagingService:
 
     async def error_handler(self, item: DataFile, error: Exception = None):
         logger.warning(f"_handle_error: {error}: {item}")
-        await self.data_file_repository.update_status(
-            item, DataFileLifecycle.ingestion_failed
-        )
+        item.status = DataFileLifecycle.ingestion_failed
+        await self.data_file_repository.create_or_update(item)
         await self.error_producer.write_single(item)

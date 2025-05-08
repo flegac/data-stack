@@ -29,10 +29,10 @@ class TestSettings(unittest.TestCase):
     def test_settings_from_env(self):
         settings = Settings()
         self.assertEqual(settings.API_KEY, "your-api-key-here")
-        self.assertEqual(settings.HOST, "0.0.0.0")
-        self.assertEqual(settings.PORT, 8000)
+        self.assertEqual(settings.APP_HOST, "0.0.0.0")
+        self.assertEqual(settings.APP_PORT, 8000)
         self.assertTrue(settings.DEBUG)
-        self.assertEqual(settings.VERSION, "1.0.0")
+        self.assertEqual(settings.APP_VERSION, "1.0.0")
         self.assertEqual(
             settings.CORS_ORIGINS, ["http://localhost:3000", "http://localhost:8080"]
         )
@@ -44,10 +44,10 @@ class TestSettings(unittest.TestCase):
 
         settings = Settings()
         # Vérifier les valeurs par défaut
-        self.assertEqual(settings.HOST, "0.0.0.0")
-        self.assertEqual(settings.PORT, 8000)
+        self.assertEqual(settings.APP_HOST, "0.0.0.0")
+        self.assertEqual(settings.APP_PORT, 8000)
         self.assertFalse(settings.DEBUG)
-        self.assertEqual(settings.VERSION, "1.0.0")
+        self.assertEqual(settings.APP_VERSION, "1.0.0")
         self.assertEqual(settings.CORS_ORIGINS, ["*"])
 
 

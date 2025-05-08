@@ -16,6 +16,6 @@ async def health_check(
 ):
     return {
         "status": "healthy",
-        "version": context.settings.VERSION,
+        "version": context.settings.APP_VERSION,
         "timestamp": datetime.now(UTC).isoformat(),
     }
