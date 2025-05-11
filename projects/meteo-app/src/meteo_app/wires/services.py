@@ -1,10 +1,9 @@
 from dependency_injector import containers, providers
-from meteo_domain.services.data_file_ingestion_service import DataFileIngestionService
-from meteo_domain.services.data_file_messaging_service import DataFileMessagingService
-from meteo_domain.services.data_file_upload_service import DataFileUploadService
-from meteo_domain.services.workspace_service import WorkspaceService
 
 from meteo_app.wires.repositories import Repositories
+from meteo_domain.services.datafile_messaging_service import DataFileMessagingService
+from meteo_domain.services.datafile_service import DataFileService
+from meteo_domain.services.workspace_service import WorkspaceService
 
 
 # pylint: disable=too-few-public-methods
@@ -16,14 +15,8 @@ class Services(containers.DeclarativeContainer):
         data_file_repository=repositories.data_file_repository,
         mq_factory=repositories.mq_factory,
     )
-    upload_service = providers.Singleton(
-        DataFileUploadService,
-        data_file_repository=repositories.data_file_repository,
-        file_repository=repositories.file_repository,
-        messaging=messaging_service,
-    )
-    ingestion_service = providers.Singleton(
-        DataFileIngestionService,
+    datafile_service = providers.Singleton(
+        DataFileService,
         data_file_repository=repositories.data_file_repository,
         file_repository=repositories.file_repository,
         messaging=messaging_service,

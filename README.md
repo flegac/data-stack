@@ -8,8 +8,8 @@ Attempt to create a complete architecture to handle meteorological data.
 - [X] archive `DataFile` (S3 / MinIO / Posix)
 - [X] manage `DataFile` lifecycle (PostgreSQL, Kafka)
 - [X] ingest `DataFile` as a set of `Measurements`
-- [ ] Efficient temporal access to `Measurements` (InfluxDB)
-- [ ] Efficient spatial query (PostGIS?)
+- [X] Efficient temporal access to `Measurements` (InfluxDB)
+- [X] Efficient spatial query (PostGIS)
 
 **middle-term (TODO):**
 
@@ -20,7 +20,7 @@ Attempt to create a complete architecture to handle meteorological data.
 **personal goals:**
 
 - benchmark different Techs (message queues, databases)
-- experiments with code organisation / technics
+- experiments with code structure / technics
 
 ## Documentation
 
@@ -52,7 +52,16 @@ uv run scripts/analyze.py
 
 ```bash
 # run server
-
 cd projects/meteo-backend
-
 ```
+
+```bash
+# test project
+uv run coverage run -m pytest
+```
+
+```bash
+# generate coverage
+uv run coverage html -d docs/coverage
+```
+

@@ -1,5 +1,5 @@
-import asyncio
 from datetime import datetime, UTC, timedelta
+from unittest import TestCase
 
 from tqdm import tqdm
 
@@ -12,32 +12,22 @@ from meteo_domain.entities.measure_query import MeasureQuery
 from meteo_domain.entities.measurement.measurement import Measurement
 from meteo_domain.entities.sensor import Sensor
 from meteo_domain.entities.temporal.period import Period
+from meteo_domain.ports.measure_repository import MeasureRepository
+from meteo_domain.ports.sensor_repository import SensorRepository
 from meteo_domain.utils import generate_french_locations
 from sql_connector.sql_connection import SqlConnection
 from sql_meteo_adapters.sensor_repository import SqlSensorRepository
 
+PARIS = Location(latitude=48.8566, longitude=2.3522)
+search_radius_km = 500
+locations = 100
+period_hours = 200
+batch_size = 200_000
 
-async def test_weather_db():
-    PARIS = Location(latitude=48.8566, longitude=2.3522)
-    search_radius_km = 500
-    locations = 100
-    period_hours = 200
-    batch_size = 200_000
 
-    # repositories
-    sensor_repo = SqlSensorRepository(
-        SqlConnection(
-            "postgresql+asyncpg://admin:adminpassword@localhost:5432/meteo-db"
-        )
-    )
-    temperature_repo = InfluxDbMeasureRepository(
-        InfluxDBConfig(
-            url="http://localhost:8086",
-            token="server-token",
-            org="myorg",
-            bucket="meteo-data",
-        )
-    )
+async def weather_workflow(
+    sensor_repo: SensorRepository, temperature_repo: MeasureRepository
+):
 
     await sensor_repo.init(reset=True)
     await temperature_repo.init()
@@ -97,5 +87,24 @@ async def test_weather_db():
             #     )
 
 
-if __name__ == "__main__":
-    asyncio.run(test_weather_db())
+class TestPostgisInfluxdb(TestCase):
+
+    def setUp(self):
+        self.sensor_repo = SqlSensorRepository(
+            SqlConnection(
+                "postgresql+asyncpg://admin:adminpassword@localhost:5432/meteo-db"
+            )
+        )
+        self.temperature_repo = InfluxDbMeasureRepository(
+            InfluxDBConfig(
+                url="http://localhost:8086",
+                token="server-token",
+                org="myorg",
+                bucket="meteo-data",
+            )
+        )
+
+    def test_it(self):
+        import asyncio
+
+        asyncio.run(weather_workflow(self.sensor_repo, self.temperature_repo))

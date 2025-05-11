@@ -1,14 +1,15 @@
 from dataclasses import dataclass
 
 from dependency_injector.wiring import Provide
-from meteo_domain.services.data_file_ingestion_service import (
-    DataFileIngestionService,
+
+from meteo_domain.services.datafile_service import (
+    DataFileService,
 )
 
 
 @dataclass
 class DataFileIngestionListener:
-    service: DataFileIngestionService = Provide["ingestion_service"]
+    service: DataFileService = Provide["datafile_service"]
 
     async def run(self):
-        await self.service.ingestion_listener()
+        await self.service.start_ingest_listener()

@@ -1,19 +1,23 @@
+import asyncio
 import logging
-from unittest import IsolatedAsyncioTestCase
+from unittest import TestCase
 
 from aa_common.constants import LOCAL_TEST_PATH
 from posix_file_repository.posix_file_repository import PosixFileRepository
 
 
-class TestPosixFileRepository(IsolatedAsyncioTestCase):
-    async def asyncSetUp(self):
+class TestPosixFileRepository(TestCase):
+    def setUp(self):
         logging.getLogger("asyncio").setLevel(logging.ERROR)
         self.repo = PosixFileRepository(
             remote_path=LOCAL_TEST_PATH / "remote",
             local_path=LOCAL_TEST_PATH / "local",
         )
 
-    async def test_posix_file_repository(self):
+    def test_posix_file_repository(self):
+        asyncio.run(self.posix_file_repository())
+
+    async def posix_file_repository(self):
         repo = self.repo
         key = "toto.txt"
         expected = b"content of file"

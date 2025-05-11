@@ -1,5 +1,5 @@
 import datetime
-from unittest import IsolatedAsyncioTestCase
+from unittest import IsolatedAsyncioTestCase, TestCase
 
 from meteo_domain.entities.geo_spatial.location import Location
 from meteo_domain.entities.measure_query import MeasureQuery
@@ -10,11 +10,11 @@ from openmeteo_measure_repository.open_meteo_measure_repository import (
 )
 
 
-class TestInfluDbMeasureRepository(IsolatedAsyncioTestCase):
-    async def asyncSetUp(self):
+class TestInfluDbMeasureRepository(TestCase):
+    def setUp(self):
         self.repo = OpenMeteoMeasureRepository()
 
-    async def test_search(self):
+    def test_search(self):
         query = MeasureQuery(
             sources=[
                 Sensor(

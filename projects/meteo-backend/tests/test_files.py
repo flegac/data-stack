@@ -1,4 +1,4 @@
-from unittest import IsolatedAsyncioTestCase
+from unittest import TestCase
 
 from fastapi.testclient import TestClient
 
@@ -8,7 +8,7 @@ from meteo_domain.entities.datafile_lifecycle import DataFileLifecycle
 from mocked_container import MockedContainer
 
 
-class TestFilesAPI(IsolatedAsyncioTestCase):
+class TestFilesAPI(TestCase):
     def setUp(self):
         # Créer le container de test
         self.container = MockedContainer()
@@ -25,7 +25,7 @@ class TestFilesAPI(IsolatedAsyncioTestCase):
         self.mock_data_file_repository = self.container.data_file_repository()
         self.mock_messaging_service = self.container.messaging_service()
 
-    async def test_upload_file(self):
+    def test_upload_file(self):
         # Préparer un fichier de test
         test_content = b"test file content"
         test_filename = "test_file.nc"

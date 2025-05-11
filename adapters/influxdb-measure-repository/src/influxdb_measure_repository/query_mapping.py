@@ -34,10 +34,12 @@ def query_to_flux(query: MeasureQuery, bucket: str):
                 )
 
     # sources
-    sensor_ids = [_.uid for _ in query.sources]
-    sensor_list = ",".join([f'"{_}"' for _ in sensor_ids])
+    if query.sources is not None:
+        sensor_ids = [_.uid for _ in query.sources]
+        sensor_list = ",".join([f'"{_}"' for _ in sensor_ids])
+        flux_query += f"\n    |> filter(fn: (r) => contains(value: r.sensor_id, set: [{sensor_list}]))"
+
     flux_query += (
-        f"\n    |> filter(fn: (r) => contains(value: r.sensor_id, set: [{sensor_list}]))"
         f"\n    |> aggregateWindow(every: 1h, fn: mean, createEmpty: false)"
         f'\n    |> group(columns: ["sensor_id"])'
     )

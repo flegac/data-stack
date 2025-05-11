@@ -1,10 +1,10 @@
 import os
-import unittest
+from unittest import TestCase
 
 from meteo_backend.core.config.settings import Settings
 
 
-class TestSettings(unittest.TestCase):
+class TestSettings(TestCase):
     def setUp(self):
         # Sauvegarder les variables d'environnement originales
         self.original_env = dict(os.environ)
@@ -49,7 +49,3 @@ class TestSettings(unittest.TestCase):
         self.assertFalse(settings.DEBUG)
         self.assertEqual(settings.APP_VERSION, "1.0.0")
         self.assertEqual(settings.CORS_ORIGINS, ["*"])
-
-
-if __name__ == "__main__":
-    unittest.main()

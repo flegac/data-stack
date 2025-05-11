@@ -1,5 +1,5 @@
 from itertools import islice
-from unittest import IsolatedAsyncioTestCase
+from unittest import TestCase
 
 from loguru import logger
 
@@ -10,8 +10,9 @@ from posix_measure_repository.data_file_measure_repository import (
 )
 
 
-class TestInfluDbMeasureIO(IsolatedAsyncioTestCase):
-    async def test_io(self):
+class TestInfluDbMeasureIO(TestCase):
+
+    def test_io(self):
         paths = [
             DATASET_ROOT_PATH / "CDS-2025-01.grib",
             DATASET_ROOT_PATH / "CDS-1983-10-22.nc",
@@ -30,7 +31,4 @@ class TestInfluDbMeasureIO(IsolatedAsyncioTestCase):
 
         for measures in provider:
             # max_value = measures.measures["value"].max()
-            logger.info(
-                f"{measures.sensor.uid}[{measures.sensor.measure_type}]\n"
-                f"{measures.sensor.location}\n{measures.measures.head()}"
-            )
+            logger.info(f"{measures}")

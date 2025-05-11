@@ -81,17 +81,26 @@ def dump_command_result(command: str, execution_dir: Path, output_file: Path):
         _.write("```\n")
 
 
+def is_path_ignored(path: Path):
+    for _ in IGNORED:
+        if _ in str(path):
+            return True
+    return False
+
+
 def main():
-    generate_docs(
-        root_dir=ROOT_PATH,
-        output_dir=OUTPUT_DIR / "doc",
-    )
-    dump_command_result(
-        command="uv pip tree",
-        execution_dir=ROOT_PATH,
-        output_file=ROOT_PATH / "docs/generated/pip-tree.md",
-    )
+    # generate_docs(
+    #     root_dir=ROOT_PATH,
+    #     output_dir=OUTPUT_DIR / "doc",
+    # )
+    # dump_command_result(
+    #     command="uv pip tree",
+    #     execution_dir=ROOT_PATH,
+    #     output_file=ROOT_PATH / "docs/generated/pip-tree.md",
+    # )
     for project_toml in ROOT_PATH.glob("**/pyproject.toml"):
+        if is_path_ignored(project_toml):
+            continue
         analyze_project(project_toml)
 
 

@@ -1,14 +1,8 @@
 import hashlib
 from dataclasses import dataclass, field
-from functools import cached_property
 from pathlib import Path
 
-import xarray as xr
-
 from meteo_domain.entities.datafile_lifecycle import DataFileLifecycle
-from meteo_domain.entities.meta_data_file.coordinate import Coordinate
-from meteo_domain.entities.meta_data_file.meta_data_file import MetaDataFile
-from meteo_domain.entities.meta_data_file.variable import Variable
 from meteo_domain.entities.workspace import WorkObject
 
 
@@ -27,32 +21,7 @@ class DataFile(WorkObject):
             uid=uid,
             source_hash=compute_hash(path),
             local_path=path,
-        ).auto_check()
-
-    @cached_property
-    def raw(self):
-        return xr.open_dataset(self.local_path)
-
-    @cached_property
-    def metadata(self):
-        raw = self.raw
-        return MetaDataFile(
-            coords=[Coordinate(str(k), list(v)) for k, v in raw.coords.items()],
-            variables=[
-                Variable(str(k), list(v.coords.keys()))
-                for k, v in raw.data_vars.items()
-                if "bounds" not in k
-            ],
-            metadata=raw.attrs,
         )
-
-    @property
-    def variables(self) -> list[str]:
-        return list(self.raw.data_vars)
-
-    def auto_check(self):
-        self.metadata.check_coords()
-        return self
 
     def __repr__(self):
         return (

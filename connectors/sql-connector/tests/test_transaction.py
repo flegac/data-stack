@@ -1,40 +1,46 @@
+import asyncio
 import logging
 from dataclasses import dataclass
-from unittest import IsolatedAsyncioTestCase
+from unittest import TestCase
 
 from sqlmodel import SQLModel, Field
 
 from aa_common.repo.repository_checker import check_repository
 from sql_connector.model_mapping import ModelMapping
+from sql_connector.sql_connection import SqlConnection
 from sql_connector.sql_repository import SqlRepository
 
 
 @dataclass
-class Entity:
+class DomainEntity:
     id: str
     name: str
 
 
-class EntityModel(SQLModel, table=True):
+class ModelEntity(SQLModel, table=True):
     id: str = Field(primary_key=True)
     name: str
 
 
-class TestSqlRepository(IsolatedAsyncioTestCase):
-    async def asyncSetUp(self):
+class TestSqlRepository(TestCase):
+    def setUp(self):
         logging.getLogger("asyncio").setLevel(logging.ERROR)
         self.repo = SqlRepository(
-            database_url="postgresql+asyncpg://"
-            "admin:adminpassword@localhost:5432/meteo-db",
-            mapping=ModelMapping(Entity, EntityModel),
+            connection=SqlConnection(
+                "postgresql+asyncpg://admin:adminpassword@localhost:5432/meteo-db"
+            ),
+            mapper=ModelMapping(DomainEntity, ModelEntity),
         )
-        await self.repo.init()
 
-    async def test_transaction(self):
+    def test_transaction(self):
+        asyncio.run(self.run_transaction())
+
+    async def run_transaction(self):
+        await self.repo.init()
         connection = self.repo.connection
 
         async with connection.transaction():
-            await check_repository(self.repo, Entity(id="toto", name="toto"))
+            await check_repository(self.repo, DomainEntity(id="toto", name="toto"))
             print("whatever1")
         async with connection.transaction():
             print("whatever2")

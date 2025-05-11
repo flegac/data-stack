@@ -1,7 +1,8 @@
+import asyncio
 import datetime
 import logging
 import random
-from unittest import IsolatedAsyncioTestCase
+from unittest import TestCase
 
 from loguru import logger
 
@@ -17,8 +18,8 @@ from meteo_domain.entities.sensor import Sensor
 from meteo_domain.entities.temporal.period import Period
 
 
-class TestInfluDbMeasureRepository(IsolatedAsyncioTestCase):
-    async def asyncSetUp(self):
+class TestInfluDbMeasureRepository(TestCase):
+    def setUp(self):
         logging.getLogger("asyncio").setLevel(logging.ERROR)
         self.repo = InfluxDbMeasureRepository(INFLUX_DB_CONFIG)
         self.sensor = Sensor(
@@ -27,7 +28,7 @@ class TestInfluDbMeasureRepository(IsolatedAsyncioTestCase):
             location=Location(latitude=43.6043, longitude=1.4437),
         )
 
-    async def test_flux_query(self):
+    def test_flux_query(self):
         query = MeasureQuery(
             sources=[self.sensor],
             period=Period(
@@ -39,16 +40,18 @@ class TestInfluDbMeasureRepository(IsolatedAsyncioTestCase):
         query_string = query_to_flux(query, "my-bucket")
         print(query_string)
 
-    async def test_save(self):
-        await self.repo.save(
-            Measurement(
-                time=datetime.datetime.now(datetime.UTC),
-                value=random.random(),
-                sensor=self.sensor,
+    def test_save(self):
+        asyncio.run(
+            self.repo.save(
+                Measurement(
+                    time=datetime.datetime.now(datetime.UTC),
+                    value=random.random(),
+                    sensor=self.sensor,
+                )
             )
         )
 
-    async def test_save_batch(self):
+    def test_save_batch(self):
         def measure_generator():
             for i in range(10000):
                 yield Measurement(
@@ -58,10 +61,9 @@ class TestInfluDbMeasureRepository(IsolatedAsyncioTestCase):
                     sensor=self.sensor,
                 )
 
-        await self.repo.save_batch(measure_generator())
+        asyncio.run(self.repo.save_batch(measure_generator()))
 
-    async def test_search(self):
-
+    def test_search(self):
         def measure_generator():
             for i in range(10000):
                 yield Measurement(
@@ -71,7 +73,7 @@ class TestInfluDbMeasureRepository(IsolatedAsyncioTestCase):
                     sensor=self.sensor,
                 )
 
-        await self.repo.save_batch(measure_generator())
+        asyncio.run(self.repo.save_batch(measure_generator()))
 
         query = MeasureQuery(
             sources=[self.sensor],

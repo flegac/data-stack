@@ -25,4 +25,4 @@ async def upload_file(
     with filepath.open("wb") as f:
         content = await file.read()
         f.write(content)
-    return await context.file_service.upload_single(ws, filepath)
+    return await context.datafile_service.upload_single(ws, filepath)

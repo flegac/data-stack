@@ -23,6 +23,10 @@ class Workspace(Updatable):
     inclusion_tags: list[str] = field(default_factory=list)
     exclusion_tags: list[str] = field(default_factory=list)
 
+    @staticmethod
+    def from_name(name: str):
+        return Workspace(uid=name, name=name)
+
     @property
     def datafile_bucket(self):
         return f"{self.uid}-datafile-bucket"

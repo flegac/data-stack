@@ -3,8 +3,7 @@ from collections.abc import Generator, Iterable
 from typing import Any
 
 from meteo_domain.entities.measure_query import MeasureQuery
-from meteo_domain.entities.measurement.measure_series import MeasureSeries
-from meteo_domain.entities.measurement.measurement import Measurement
+from meteo_domain.entities.measurement.measurement import Measurement, Measurements
 
 
 class MeasureRepository(ABC):
@@ -19,7 +18,7 @@ class MeasureRepository(ABC):
     @abstractmethod
     def search(
         self, query: MeasureQuery | None = None
-    ) -> Generator[MeasureSeries, Any]: ...
+    ) -> Generator[Measurements, Any]: ...
 
     @abstractmethod
     async def init(self, reset: bool = False): ...

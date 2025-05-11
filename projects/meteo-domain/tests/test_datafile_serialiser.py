@@ -13,7 +13,6 @@ class TestDataFileSerializer(TestCase):
         item = DataFile.from_file(
             path=DATASET_ROOT_PATH / "CDS-hydro-2020-10-22.nc",
         )
-        logger.info(item.metadata)
 
         expected = serializer.serialize(item)
 

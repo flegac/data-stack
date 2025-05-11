@@ -1,5 +1,6 @@
+import asyncio
 import logging
-from unittest import IsolatedAsyncioTestCase
+from unittest import TestCase
 
 from aa_common.constants import LOCAL_TEST_PATH
 from s3_connector.s3_config import S3Config
@@ -7,8 +8,8 @@ from s3_connector.s3_connection import S3Connection
 from s3_file_repository.s3_file_repository import S3FileRepository
 
 
-class TestS3FileRepository(IsolatedAsyncioTestCase):
-    async def asyncSetUp(self):
+class TestS3FileRepository(TestCase):
+    def setUp(self):
         logging.getLogger("asyncio").setLevel(logging.ERROR)
         config = S3Config(
             endpoint="http://localhost:9000",
@@ -20,7 +21,10 @@ class TestS3FileRepository(IsolatedAsyncioTestCase):
             local_path=LOCAL_TEST_PATH,
         )
 
-    async def test_s3_file_repository(self):
+    def test_s3_file_repository(self):
+        asyncio.run(self.run_s3_file_repository())
+
+    async def run_s3_file_repository(self):
         repo = self.repo
         key = "toto.txt"
         expected = b"content of file"

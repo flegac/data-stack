@@ -5,7 +5,7 @@ from aa_common.constants import EXPORT_PATH, LOCAL_TEST_PATH
 from meteo_domain.entities.meta_data_file.coordinate import Coordinate
 from meteo_domain.entities.meta_data_file.meta_data_file import MetaDataFile
 from meteo_domain.entities.meta_data_file.variable import Variable
-from meteo_domain.services.data_file_creation_service import DataFileCreationService
+from meteo_domain.services.datafile_creation_service import DataFileCreationService
 
 
 class TestDataFileCreationService(TestCase):

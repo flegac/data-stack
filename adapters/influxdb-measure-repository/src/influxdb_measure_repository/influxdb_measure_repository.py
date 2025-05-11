@@ -6,8 +6,7 @@ from influxdb_connector.influxdb_config import InfluxDBConfig
 from influxdb_measure_repository.measure_mapper import MeasureMapper
 from influxdb_measure_repository.query_mapping import query_to_flux
 from meteo_domain.entities.measure_query import MeasureQuery
-from meteo_domain.entities.measurement.measure_series import MeasureSeries
-from meteo_domain.entities.measurement.measurement import Measurement
+from meteo_domain.entities.measurement.measurement import Measurement, Measurements
 from meteo_domain.ports.measure_repository import MeasureRepository
 
 
@@ -31,7 +30,7 @@ class InfluxDbMeasureRepository(MeasureRepository):
     def search(
         self,
         query: MeasureQuery = None,
-    ) -> Generator[MeasureSeries, None, None]:
+    ) -> Generator[Measurements, None, None]:
         sensor_ids = [_.uid for _ in query.sources]
         sensor_mapping = dict(zip(sensor_ids, query.sources))
 
@@ -48,7 +47,7 @@ class InfluxDbMeasureRepository(MeasureRepository):
                         time=record.get_time(),
                     )
                 )
-            yield MeasureSeries.from_measures(
+            yield Measurements.from_measures(
                 sensor=sensor_mapping[table.records[0].values.get("sensor_id")],
                 measures=measurements,
             )

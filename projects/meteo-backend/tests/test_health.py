@@ -1,10 +1,11 @@
-import unittest
+from unittest import TestCase
 
 from fastapi.testclient import TestClient
+
 from meteo_backend.app_main import app
 
 
-class TestHealthAPI(unittest.TestCase):
+class TestHealthAPI(TestCase):
     def setUp(self):
         self.client = TestClient(app)
 

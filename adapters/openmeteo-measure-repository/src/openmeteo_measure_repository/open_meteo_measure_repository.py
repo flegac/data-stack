@@ -1,14 +1,13 @@
+import datetime
 from collections.abc import Generator, Iterable
 from typing import Any, override
 
 import openmeteo_requests
-import pandas as pd
 import requests_cache
 from retry_requests import retry
 
 from meteo_domain.entities.measure_query import MeasureQuery
-from meteo_domain.entities.measurement.measure_series import MeasureSeries
-from meteo_domain.entities.measurement.measurement import Measurement
+from meteo_domain.entities.measurement.measurement import Measurement, Measurements
 from meteo_domain.ports.measure_repository import MeasureRepository
 
 OPEN_METEO_URL = "https://archive-api.open-meteo.com/v1/archive"
@@ -27,7 +26,7 @@ class OpenMeteoMeasureRepository(MeasureRepository):
         raise NotImplementedError
 
     @override
-    def search(self, query: MeasureQuery = None) -> Generator[MeasureSeries, Any]:
+    def search(self, query: MeasureQuery = None) -> Generator[Measurements, Any]:
         if not (period := query.period):
             raise ValueError("period is required")
 
@@ -53,17 +52,26 @@ class OpenMeteoMeasureRepository(MeasureRepository):
 
             location_0 = responses[0]
             hourly = location_0.Hourly()
-            yield MeasureSeries(
+
+            start_time = datetime.datetime.fromtimestamp(hourly.Time(), tz=datetime.UTC)
+            interval = hourly.Interval()
+
+            values = hourly.Variables(0).ValuesAsNumpy()
+            times = [
+                start_time + datetime.timedelta(seconds=i * interval)
+                for i in range(len(values))
+            ]
+
+            measures = [
+                Measurement(
+                    sensor=sensor,
+                    time=time,
+                    value=value,
+                )
+                for time, value in zip(times, values)
+            ]
+
+            yield Measurements.from_measures(
                 sensor=sensor,
-                measures=pd.DataFrame(
-                    data={
-                        "time": pd.date_range(
-                            start=pd.to_datetime(hourly.Time(), unit="s", utc=True),
-                            end=pd.to_datetime(hourly.TimeEnd(), unit="s", utc=True),
-                            freq=pd.Timedelta(seconds=hourly.Interval()),
-                            inclusive="left",
-                        ),
-                        "value": hourly.Variables(0).ValuesAsNumpy(),
-                    }
-                ),
+                measures=measures,
             )
