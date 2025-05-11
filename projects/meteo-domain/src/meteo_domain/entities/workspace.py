@@ -31,4 +31,4 @@ class Workspace(Updatable):
 @dataclass(kw_only=True)
 class WorkObject(Updatable):
     workspace_id: UID | None = None
-    tags: list[str] = field(default_factory=list)
+    # tags: list[str] = field(default_factory=list)

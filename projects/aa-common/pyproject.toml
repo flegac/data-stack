@@ -10,6 +10,8 @@ requires-python = ">=3.13"
 dependencies = [
     "dependency-injector>=4.46.0",
     "loguru>=0.7.3",
+    "psutil>=7.0.0",
+    "tqdm>=4.67.1",
 ]
 
 [build-system]

@@ -2,9 +2,10 @@ from pathlib import Path
 
 from loguru import logger
 
-from meteo_domain.entities.data_file import DataFile
+from meteo_domain.entities.datafile import DataFile
 from meteo_domain.entities.datafile_lifecycle import DataFileLifecycle
-from meteo_domain.ports.data_file_repository import DataFileQuery, DataFileRepository
+from meteo_domain.entities.workspace import Workspace
+from meteo_domain.ports.data_file_repository import DataFileRepository
 from meteo_domain.ports.file_repository import FileRepository
 from meteo_domain.services.data_file_messaging_service import (
     DataFileMessagingService,
@@ -26,14 +27,15 @@ class DataFileUploadService:
         item.status = status
         await self.data_file_repository.create_or_update(item)
 
-    async def upload_single(self, path: Path) -> DataFile | None:
+    async def upload_single(self, ws: Workspace, path: Path) -> DataFile | None:
         item = DataFile.from_file(path)
+        item.workspace = ws.uid
         logger.info(item)
 
         if existing := await self.data_file_repository.find_by_id(item.uid):
             logger.warning(f'"{item.uid}" already exists:\n{existing}')
         if existing := self.data_file_repository.find_all(
-            DataFileQuery(source_hash=item.source_hash)
+            source_hash=item.source_hash,
         ):
             logger.warning(
                 f'source_hash "{item.source_hash}" already exists:\n'

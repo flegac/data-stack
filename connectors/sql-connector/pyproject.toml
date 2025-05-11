@@ -1,0 +1,21 @@
+[project]
+name = "sql-connector"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+authors = [
+    { name = "flegac", email = "florent.legac@gmail.com" }
+]
+requires-python = ">=3.13"
+dependencies = [
+    "databases>=0.9.0",
+    "sqlalchemy>=2.0.40",
+    "asyncpg>=0.30.0",
+    "sqlmodel>=0.0.24",
+    "shapely>=2.1.0",
+    "geoalchemy2>=0.17.1",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"

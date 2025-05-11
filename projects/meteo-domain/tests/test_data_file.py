@@ -2,7 +2,7 @@ from unittest import TestCase
 
 from aa_common.constants import DATASET_ROOT_PATH, EXPORT_PATH
 from aa_common.logger import logger
-from meteo_domain.entities.data_file import DataFile
+from meteo_domain.entities.datafile import DataFile
 
 
 class TestDataFile(TestCase):

@@ -5,16 +5,18 @@ from typing import Any, override
 import pandas as pd
 import xarray as xr
 from loguru import logger
-from meteo_domain.entities.data_file import DataFile
-from meteo_domain.entities.measures.location import Location
-from meteo_domain.entities.measures.measure_query import MeasureQuery
-from meteo_domain.entities.measures.measure_series import MeasureSeries
-from meteo_domain.entities.measures.measurement import Measurement
-from meteo_domain.entities.measures.sensor import Sensor
+
+from meteo_domain.entities.datafile import DataFile
+from meteo_domain.entities.geo_spatial.location import Location
+from meteo_domain.entities.measure_query import MeasureQuery
+from meteo_domain.entities.measurement.measure_series import MeasureSeries
+from meteo_domain.entities.measurement.measurement import Measurement
+from meteo_domain.entities.sensor import Sensor
 from meteo_domain.ports.measure_repository import MeasureRepository
 
 
 class DataFileMeasureRepository(MeasureRepository):
+
     def __init__(self, data_file: DataFile):
         self.data_file = data_file
         self.show_config()
@@ -48,8 +50,8 @@ class DataFileMeasureRepository(MeasureRepository):
                     for lon_idx in range(len(longitudes)):
                         temperatures = MeasureSeries(
                             sensor=Sensor(
-                                id="cds",
-                                type=variable,
+                                uid="cds",
+                                measure_type=variable,
                                 location=Location(
                                     latitude=float(latitudes.values[lat_idx]),
                                     longitude=float(longitudes.values[lon_idx]),
@@ -62,6 +64,10 @@ class DataFileMeasureRepository(MeasureRepository):
                         yield temperatures
             except Exception as e:  # pylint: disable=broad-exception-caught
                 logger.warning(f"Could not handle variable=[{variable}] : {e}")
+
+    @override
+    async def init(self, reset: bool = False):
+        pass
 
     @staticmethod
     def _extract_time_series(

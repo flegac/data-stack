@@ -1,59 +1,81 @@
-from collections import defaultdict
 from collections.abc import Generator, Iterable
-from typing import Any, override
+from typing import override
 
 from influxdb_connector.influx_db_connection import InfluxDbConnection
 from influxdb_connector.influxdb_config import InfluxDBConfig
-from meteo_domain.entities.measures.measure_query import MeasureQuery
-from meteo_domain.entities.measures.measure_series import MeasureSeries
-from meteo_domain.entities.measures.measurement import Measurement
-from meteo_domain.entities.measures.sensor import Sensor, SensorId
+from influxdb_measure_repository.measure_mapper import MeasureMapper
+from influxdb_measure_repository.query_mapping import query_to_flux
+from meteo_domain.entities.measure_query import MeasureQuery
+from meteo_domain.entities.measurement.measure_series import MeasureSeries
+from meteo_domain.entities.measurement.measurement import Measurement
 from meteo_domain.ports.measure_repository import MeasureRepository
-
-from influxdb_measure_repository.query_mapping import measure_to_point, query_to_flux
 
 
 class InfluxDbMeasureRepository(MeasureRepository):
     def __init__(self, config: InfluxDBConfig):
         self.config = config
         self.connection = InfluxDbConnection(config)
+        self.mapper = MeasureMapper()
 
     @override
-    async def save(self, measure: Measurement):
-        record = measure_to_point(measure)
-        self.connection.write(record=record)
+    async def save_batch(
+        self,
+        measures: Iterable[Measurement],
+        chunk_size: int = 100_000,
+    ):
+        self.connection.write_batch(
+            map(self.mapper.to_model, measures), chunk_size=chunk_size
+        )
 
     @override
-    async def save_batch(self, measures: Iterable[Measurement]):
-        records = [measure_to_point(_) for _ in measures]
-        self.connection.write(record=records)
+    def search(
+        self,
+        query: MeasureQuery = None,
+    ) -> Generator[MeasureSeries, None, None]:
+        sensor_ids = [_.uid for _ in query.sources]
+        sensor_mapping = dict(zip(sensor_ids, query.sources))
 
-    @override
-    def search(self, query: MeasureQuery = None) -> Generator[MeasureSeries, Any]:
         flux_query = query_to_flux(query=query, bucket=self.config.bucket)
         tables = self.connection.query(flux_query)
-        sensors: dict[tuple[SensorId, str], Sensor] = {}
-        measurements: dict[tuple[SensorId, str], list[Measurement]] = defaultdict(list)
 
         for table in tables:
+            measurements = []
             for record in table.records:
-                sensor = Sensor(
-                    id=record.values["sensor_id"],
-                    type=record.values["_measurement"],
-                    # location=Location(
-                    #     latitude=record['latitude'],
-                    #     longitude=record['longitude'],
-                    #     altitude=record['altitude']
-                    # )
-                )
-                key = (sensor.id, sensor.type)
-                sensors[key] = sensor
-                measurements[key].append(
+                measurements.append(
                     Measurement(
-                        datetime=record.values["_time"],
-                        value=record.values["_value"],
+                        sensor=sensor_mapping[record.values.get("sensor_id")],
+                        value=record.get_value(),
+                        time=record.get_time(),
                     )
                 )
+            yield MeasureSeries.from_measures(
+                sensor=sensor_mapping[table.records[0].values.get("sensor_id")],
+                measures=measurements,
+            )
 
-        for key, measures in measurements.items():
-            yield MeasureSeries.from_measures(sensors[key], measures)
+    @override
+    async def init(self, reset: bool = False):
+        buckets_api = self.connection.client.buckets_api()
+        try:
+            bucket = next(
+                (
+                    b
+                    for b in buckets_api.find_buckets().buckets
+                    if b.name == self.config.bucket
+                ),
+                None,
+            )
+            if bucket:
+                buckets_api.delete_bucket(bucket.id)
+        except Exception as e:
+            print(f"Warning: Could not delete existing bucket: {e}")
+
+        try:
+            org = self.connection.client.organizations_api().find_organizations()[0]
+            buckets_api.create_bucket(bucket_name=self.config.bucket, org_id=org.id)
+        except Exception as e:
+            print(f"Warning: Could not create bucket: {e}")
+
+    def __del__(self):
+        if hasattr(self, "influx_connection"):
+            self.influx_connection.close()

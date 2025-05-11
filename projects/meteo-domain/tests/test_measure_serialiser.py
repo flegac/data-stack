@@ -1,10 +1,10 @@
 import datetime
 from unittest import TestCase
 
-from meteo_domain.entities.measures.location import Location
-from meteo_domain.entities.measures.measure_serializer import MeasureSerializer
-from meteo_domain.entities.measures.measurement import Measurement
-from meteo_domain.entities.measures.sensor import Sensor
+from meteo_domain.entities.geo_spatial.location import Location
+from meteo_domain.entities.measurement.measure_serializer import MeasureSerializer
+from meteo_domain.entities.measurement.measurement import Measurement
+from meteo_domain.entities.sensor import Sensor
 
 
 class TestMeasureSerializer(TestCase):
@@ -12,15 +12,15 @@ class TestMeasureSerializer(TestCase):
         serializer = MeasureSerializer()
 
         sensor = Sensor(
-            id="MySensor",
-            type="temperature",
+            uid="MySensor",
+            measure_type="temperature",
             location=Location(
                 latitude=12.3,
                 longitude=25.3,
             ),
         )
 
-        item = Measurement(value=33, datetime=datetime.datetime.now(), sensor=sensor)
+        item = Measurement(value=33, time=datetime.datetime.now(), sensor=sensor)
 
         expected = serializer.serialize(item)
 

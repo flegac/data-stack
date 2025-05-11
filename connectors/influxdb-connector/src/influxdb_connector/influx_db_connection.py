@@ -1,11 +1,13 @@
 from functools import cached_property
-from typing import Any
+from itertools import islice
+from typing import Any, Iterable
 
 from influxdb_client import InfluxDBClient
 from influxdb_client.client.flux_table import TableList
 from influxdb_client.client.write_api import SYNCHRONOUS
 from loguru import logger
 
+from aa_common.memory import get_detailed_memory_info
 from influxdb_connector.influxdb_config import InfluxDBConfig
 
 
@@ -13,8 +15,18 @@ class InfluxDbConnection:
     def __init__(self, config: InfluxDBConfig):
         self.config = config
 
+    def write_batch(self, records: Iterable[Any], chunk_size: int = 100_000):
+        def chunks(iterator, size):
+            iterator = iter(iterator)
+            return iter(lambda: list(islice(iterator, size)), [])
+
+        parts = chunks(records, chunk_size)
+        for chunk in parts:
+            self.write(chunk)
+            logger.info(f"Wrote {len(chunk)} records, {get_detailed_memory_info()}")
+
     def write(self, record: Any):
-        return self.write_api.write(
+        self.write_api.write(
             bucket=self.config.bucket,
             org=self.config.org,
             record=record,

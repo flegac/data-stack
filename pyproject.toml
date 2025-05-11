@@ -32,7 +32,7 @@ measure-repository = { workspace = true }
 # adapters
 kafka-message-queue = { workspace = true }
 redis-message-queue = { workspace = true }
-pg-meteo-adapters = { workspace = true }
+sql-meteo-adapters = { workspace = true }
 s3-file-repository = { workspace = true }
 posix-file-repository = { workspace = true }
 
@@ -41,7 +41,7 @@ influxdb-measure-repository = { workspace = true }
 openmeteo-measure-repository = { workspace = true }
 
 # connectors
-pg-connector = { workspace = true }
+sql-connector = { workspace = true }
 influxdb-connector = { workspace = true }
 s3-connector = { workspace = true }
 kafka-connector = { workspace = true }

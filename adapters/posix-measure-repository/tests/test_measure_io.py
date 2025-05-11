@@ -1,9 +1,10 @@
 from itertools import islice
 from unittest import IsolatedAsyncioTestCase
 
-from aa_common.constants import DATASET_ROOT_PATH
 from loguru import logger
-from meteo_domain.entities.data_file import DataFile
+
+from aa_common.constants import DATASET_ROOT_PATH
+from meteo_domain.entities.datafile import DataFile
 from posix_measure_repository.data_file_measure_repository import (
     DataFileMeasureRepository,
 )
@@ -30,6 +31,6 @@ class TestInfluDbMeasureIO(IsolatedAsyncioTestCase):
         for measures in provider:
             # max_value = measures.measures["value"].max()
             logger.info(
-                f"{measures.sensor.id}[{measures.sensor.type}]\n"
+                f"{measures.sensor.uid}[{measures.sensor.measure_type}]\n"
                 f"{measures.sensor.location}\n{measures.measures.head()}"
             )

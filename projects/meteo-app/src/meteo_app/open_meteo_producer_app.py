@@ -3,15 +3,14 @@ import datetime
 
 from kafka_connector.kafka_connection import KafkaConnection
 from kafka_message_queue import KafkaMQBackend
+from meteo_app.config import KAFKA_CONFIG
 from meteo_domain.config import specific_measure_topic
-from meteo_domain.entities.measures.location import Location
-from meteo_domain.entities.measures.measure_query import MeasureQuery
-from meteo_domain.entities.measures.period import Period
+from meteo_domain.entities.geo_spatial.location import Location
+from meteo_domain.entities.measure_query import MeasureQuery
+from meteo_domain.entities.temporal.period import Period
 from openmeteo_measure_repository import (
     OpenMeteoMeasureRepository,
 )
-
-from meteo_app.config import KAFKA_CONFIG
 
 
 async def main():

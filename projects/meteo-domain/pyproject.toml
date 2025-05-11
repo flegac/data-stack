@@ -9,6 +9,7 @@ authors = [
 requires-python = ">=3.13"
 dependencies = [
     "aa-common",
+    "cfgrib>=0.9.15.0",
     "h5netcdf>=1.6.1",
     "xarray>=2025.3.1",
 ]

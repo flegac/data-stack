@@ -3,7 +3,7 @@ version: '3.8'
 services:
 
   postgres:
-    image: postgres:latest
+    image: timescale/timescaledb-postgis:latest-pg13
     container_name: postgres
     ports:
       - "5432:5432"
@@ -12,8 +12,10 @@ services:
       POSTGRES_PASSWORD: adminpassword
       POSTGRES_DB: meteo-db
     volumes:
-      - postgres-data:/data/measures/postgresql
+      - postgres-data:/var/lib/postgresql/data
 
+  
+  
   influxdb:
     image: influxdb:latest
     container_name: influxdb
