@@ -42,6 +42,7 @@ class InfluxDbConnection:
             url=self.config.url,
             token=self.config.token,
             org=self.config.org,
+            timeout=3_000,
         )
 
     @property

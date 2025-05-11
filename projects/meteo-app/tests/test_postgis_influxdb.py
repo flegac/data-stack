@@ -22,7 +22,7 @@ PARIS = Location(latitude=48.8566, longitude=2.3522)
 search_radius_km = 500
 locations = 100
 period_hours = 200
-batch_size = 200_000
+batch_size = 1_000
 
 
 async def weather_workflow(
@@ -30,7 +30,7 @@ async def weather_workflow(
 ):
 
     await sensor_repo.init(reset=True)
-    await temperature_repo.init()
+    await temperature_repo.init(reset=True)
 
     # Création des capteurs
     sensors = [
@@ -99,7 +99,7 @@ class TestPostgisInfluxdb(TestCase):
             InfluxDBConfig(
                 url="http://localhost:8086",
                 token="server-token",
-                org="myorg",
+                org="meteo-org",
                 bucket="meteo-data",
             )
         )

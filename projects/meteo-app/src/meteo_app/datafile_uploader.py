@@ -8,7 +8,7 @@ from meteo_domain.entities.meta_data_file.coordinate import Coordinate
 from meteo_domain.entities.meta_data_file.meta_data_file import MetaDataFile
 from meteo_domain.entities.meta_data_file.variable import Variable
 from meteo_domain.entities.workspace import Workspace
-from meteo_domain.services.datafile_creation_service import DataFileCreationService
+from meteo_domain.services.metadatafile_service import MetadataFileService
 
 
 def main():
@@ -18,7 +18,7 @@ def main():
 
     filepath = EXPORT_PATH / "dummy.grib"
     now = datetime.datetime.now(datetime.UTC)
-    DataFileCreationService().randomize(
+    MetadataFileService().randomize(
         MetaDataFile(
             coords=[
                 Coordinate.interval(

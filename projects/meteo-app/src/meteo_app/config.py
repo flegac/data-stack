@@ -12,7 +12,7 @@ S3_CONFIG = S3Config(
 
 INFLUX_DB_CONFIG = InfluxDBConfig(
     url="http://localhost:8086",
-    org="myorg",
+    org="meteo-org",
     token="server-token",
     bucket="meteo-data",
 )

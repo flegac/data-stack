@@ -1,6 +1,5 @@
 import asyncio
 import datetime
-import logging
 import random
 from unittest import TestCase
 
@@ -20,8 +19,10 @@ from meteo_domain.entities.temporal.period import Period
 
 class TestInfluDbMeasureRepository(TestCase):
     def setUp(self):
-        logging.getLogger("asyncio").setLevel(logging.ERROR)
+        # logging.getLogger("asyncio").setLevel(logging.ERROR)
         self.repo = InfluxDbMeasureRepository(INFLUX_DB_CONFIG)
+        asyncio.run(self.repo.init(reset=True))
+
         self.sensor = Sensor(
             uid="testing",
             measure_type="something",

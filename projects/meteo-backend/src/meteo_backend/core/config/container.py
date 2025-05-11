@@ -1,5 +1,4 @@
 from dependency_injector import containers, providers
-from meteo_domain.services.datafile_upload_service import DataFileUploadService
 
 from influxdb_connector.influxdb_config import InfluxDBConfig
 from influxdb_measure_repository.influxdb_measure_repository import (
@@ -9,7 +8,6 @@ from kafka_connector.kafka_config import KafkaConfig
 from kafka_connector.kafka_connection import KafkaConnection
 from kafka_message_queue.kafka_factory import KafkaMQBackend
 from meteo_backend.core.config.settings import Settings
-from meteo_domain.services.datafile_messaging_service import DataFileMessagingService
 from meteo_domain.services.datafile_service import DataFileService
 from meteo_domain.services.workspace_service import WorkspaceService
 from redis_message_queue.redis_config import RedisConfig
@@ -85,7 +83,7 @@ class Container(containers.DeclarativeContainer):
         port=settings.provided.REDIS_PORT,
     )
     redis_connection = providers.Singleton(RedisConnection, redis_config)
-    redis_mq_factory = providers.Singleton(
+    redis_mq_backend = providers.Singleton(
         RedisMQBackend,
         redis_connection,
     )
@@ -97,22 +95,15 @@ class Container(containers.DeclarativeContainer):
     )
     kafka_connection = providers.Singleton(KafkaConnection, kafka_config)
 
-    kafka_mq_factory = providers.Singleton(
+    kafka_mq_backend = providers.Singleton(
         KafkaMQBackend,
         kafka_connection,
-    )
-
-    # Service de Messaging
-    messaging_service = providers.Singleton(
-        DataFileMessagingService,
-        data_file_repository=data_file_repository,
-        mq_factory=redis_mq_factory,
     )
 
     # Service DataFile
     datafile_service = providers.Singleton(
         DataFileService,
-        messaging=messaging_service,
+        mq_backend=redis_mq_backend,
         data_file_repository=data_file_repository,
         file_repository=file_repository,
         measure_repository=measure_repository,

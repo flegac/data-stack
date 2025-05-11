@@ -2,14 +2,13 @@ from pathlib import Path
 from unittest.mock import AsyncMock
 
 from dependency_injector import containers, providers
-from meteo_domain.services.datafile_upload_service import DataFileUploadService
 
+from aa_common.mq.mq_backend import MQBackend
 from meteo_backend.core.application_context import ApplicationContext
 from meteo_backend.core.config.settings import Settings
 from meteo_domain.ports.data_file_repository import DataFileRepository
 from meteo_domain.ports.file_repository import FileRepository
 from meteo_domain.ports.measure_repository import MeasureRepository
-from meteo_domain.services.datafile_messaging_service import DataFileMessagingService
 from meteo_domain.services.datafile_service import DataFileService
 
 
@@ -25,15 +24,15 @@ class MockedContainer(containers.DeclarativeContainer):
     measure_repository = providers.Singleton(AsyncMock, spec=MeasureRepository)
 
     # Mock messaging service
-    messaging_service = providers.Singleton(
+    mq_backend = providers.Singleton(
         AsyncMock,
-        spec=DataFileMessagingService,
+        spec=MQBackend,
     )
 
     # Service d'Upload avec des dépendances mockées
     datafile_service = providers.Singleton(
         DataFileService,
-        messaging=messaging_service,
+        mq_backend=mq_backend,
         file_repository=file_repository,
         data_file_repository=data_file_repository,
     )
@@ -43,6 +42,5 @@ class MockedContainer(containers.DeclarativeContainer):
         ApplicationContext,
         settings=settings,
         datafile_service=datafile_service,
-        messaging_service=messaging_service,
         ws_service=providers.Singleton(AsyncMock),
     )

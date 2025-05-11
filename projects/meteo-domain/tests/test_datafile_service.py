@@ -6,7 +6,7 @@ from meteo_domain.entities.datafile import DataFile
 from meteo_domain.services.metadatafile_service import MetadataFileService
 
 
-class TestDataFile(TestCase):
+class TestDataFileService(TestCase):
     def setUp(self):
         EXPORT_PATH.mkdir(parents=True, exist_ok=True)
 

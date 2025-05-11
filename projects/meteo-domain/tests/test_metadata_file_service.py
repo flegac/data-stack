@@ -5,13 +5,13 @@ from aa_common.constants import EXPORT_PATH, LOCAL_TEST_PATH
 from meteo_domain.entities.meta_data_file.coordinate import Coordinate
 from meteo_domain.entities.meta_data_file.meta_data_file import MetaDataFile
 from meteo_domain.entities.meta_data_file.variable import Variable
-from meteo_domain.services.datafile_creation_service import DataFileCreationService
+from meteo_domain.services.metadatafile_service import MetadataFileService
 
 
-class TestDataFileCreationService(TestCase):
+class TestMetadataFileService(TestCase):
     def setUp(self):
         EXPORT_PATH.mkdir(parents=True, exist_ok=True)
-        self.service = DataFileCreationService()
+        self.service = MetadataFileService()
 
     def test_randomize(self):
         self.service.randomize(
