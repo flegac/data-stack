@@ -2,17 +2,16 @@ from collections.abc import AsyncGenerator
 from datetime import datetime
 from typing import Any, override
 
+from aa_common.logger import logger
+from aa_common.repo.repository import UID, Repository
 from sqlalchemy import delete
 from sqlmodel import select
 
-from aa_common.logger import logger
-from aa_common.repo.repository import UID, Repository
 from sql_connector.model_mapping import ModelDomainMapper
 from sql_connector.sql_connection import SqlConnection
 
 
 class SqlRepository[Domain, Model](Repository[Domain]):
-
     def __init__(
         self,
         connection: SqlConnection,

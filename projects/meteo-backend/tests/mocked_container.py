@@ -1,15 +1,14 @@
 from pathlib import Path
 from unittest.mock import AsyncMock
 
-from dependency_injector import containers, providers
-
 from aa_common.mq.mq_backend import MQBackend
+from dependency_injector import containers, providers
 from meteo_backend.core.application_context import ApplicationContext
 from meteo_backend.core.config.settings import Settings
-from meteo_domain.ports.data_file_repository import DataFileRepository
-from meteo_domain.ports.file_repository import FileRepository
-from meteo_domain.ports.measure_repository import MeasureRepository
-from meteo_domain.services.datafile_service import DataFileService
+from meteo_domain.data_file.datafile_service import DataFileService
+from meteo_domain.data_file.ports.data_file_repository import DataFileRepository
+from meteo_domain.data_file.ports.file_repository import FileRepository
+from meteo_domain.temporal_series.ports.tseries_repository import TSeriesRepository
 
 
 class MockedContainer(containers.DeclarativeContainer):
@@ -21,7 +20,7 @@ class MockedContainer(containers.DeclarativeContainer):
     # Mock repositories
     file_repository = providers.Singleton(AsyncMock, spec=FileRepository)
     data_file_repository = providers.Singleton(AsyncMock, spec=DataFileRepository)
-    measure_repository = providers.Singleton(AsyncMock, spec=MeasureRepository)
+    measure_repository = providers.Singleton(AsyncMock, spec=TSeriesRepository)
 
     # Mock messaging service
     mq_backend = providers.Singleton(

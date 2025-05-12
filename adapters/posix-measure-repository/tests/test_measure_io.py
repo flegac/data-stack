@@ -1,17 +1,15 @@
 from itertools import islice
 from unittest import TestCase
 
-from loguru import logger
-
 from aa_common.constants import DATASET_ROOT_PATH
-from meteo_domain.entities.datafile import DataFile
+from loguru import logger
+from meteo_domain.data_file.entities.datafile import DataFile
 from posix_measure_repository.data_file_measure_repository import (
     DataFileMeasureRepository,
 )
 
 
 class TestInfluDbMeasureIO(TestCase):
-
     def test_io(self):
         paths = [
             DATASET_ROOT_PATH / "CDS-2025-01.grib",

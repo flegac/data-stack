@@ -3,18 +3,17 @@ import datetime
 import random
 from unittest import TestCase
 
-from loguru import logger
-
 from influxdb_measure_repository.influxdb_measure_repository import (
     InfluxDbMeasureRepository,
 )
 from influxdb_measure_repository.query_mapping import query_to_flux
+from loguru import logger
 from meteo_app.config import INFLUX_DB_CONFIG
-from meteo_domain.entities.geo_spatial.location import Location
-from meteo_domain.entities.measure_query import MeasureQuery
-from meteo_domain.entities.measurement.measurement import Measurement
-from meteo_domain.entities.sensor import Sensor
-from meteo_domain.entities.temporal.period import Period
+from meteo_domain.sensor.entities.location import Location
+from meteo_domain.sensor.entities.sensor import Sensor
+from meteo_domain.temporal_series.entities.measure_query import MeasureQuery
+from meteo_domain.temporal_series.entities.measurement import Measurement
+from meteo_domain.temporal_series.entities.period import Period
 
 
 class TestInfluDbMeasureRepository(TestCase):
@@ -47,7 +46,6 @@ class TestInfluDbMeasureRepository(TestCase):
                 Measurement(
                     time=datetime.datetime.now(datetime.UTC),
                     value=random.random(),
-                    sensor=self.sensor,
                 )
             )
         )
@@ -59,7 +57,6 @@ class TestInfluDbMeasureRepository(TestCase):
                     time=datetime.datetime.now(datetime.UTC)
                     + datetime.timedelta(seconds=10 * i),
                     value=20.0,
-                    sensor=self.sensor,
                 )
 
         asyncio.run(self.repo.save_batch(measure_generator()))
@@ -71,7 +68,6 @@ class TestInfluDbMeasureRepository(TestCase):
                     time=datetime.datetime.now(datetime.UTC)
                     + datetime.timedelta(seconds=10 * i),
                     value=20.0,
-                    sensor=self.sensor,
                 )
 
         asyncio.run(self.repo.save_batch(measure_generator()))

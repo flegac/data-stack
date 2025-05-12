@@ -1,3 +1,5 @@
+from dataclasses import dataclass
+
 import psutil
 
 
@@ -14,9 +16,6 @@ def get_memory_usage() -> float:
     except Exception as e:
         print(f"Warning: Impossible de mesurer la mémoire: {e}")
         return 0.0
-
-
-from dataclasses import dataclass
 
 
 @dataclass

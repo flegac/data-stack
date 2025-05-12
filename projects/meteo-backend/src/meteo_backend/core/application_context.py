@@ -1,8 +1,9 @@
 from dataclasses import dataclass
 
+from meteo_domain.data_file.datafile_service import DataFileService
+from meteo_domain.workspace.workspace_service import WorkspaceService
+
 from meteo_backend.core.config.settings import Settings
-from meteo_domain.services.datafile_service import DataFileService
-from meteo_domain.services.workspace_service import WorkspaceService
 
 
 @dataclass

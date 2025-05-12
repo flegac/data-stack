@@ -1,6 +1,6 @@
-from abc import abstractmethod, ABC
+from abc import ABC, abstractmethod
 from dataclasses import asdict, dataclass
-from typing import Protocol, Any, Union, override
+from typing import Any, Protocol, override
 
 from pydantic import BaseModel
 from sqlmodel import SQLModel
@@ -24,7 +24,7 @@ class DictConvertible(Protocol):
 
 
 class ModelMapping[
-    Domain: Union[DictConvertible, type[dataclass]],
+    Domain: DictConvertible | type[dataclass],
     Model: type[SQLModel],
 ](ModelDomainMapper[Domain, Model]):
     def __init__(

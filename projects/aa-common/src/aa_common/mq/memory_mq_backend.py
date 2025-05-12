@@ -21,6 +21,10 @@ class MemoryMQProducer[Input](MQProducer[Input]):
     async def flush(self):
         pass
 
+    @override
+    async def stop(self):
+        pass
+
 
 class MemoryMQConsumer[Input](MQConsumer[Input]):
     def __init__(self, queue: list[Input]):

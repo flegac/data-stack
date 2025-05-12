@@ -1,6 +1,6 @@
-from fastapi import APIRouter, Depends, UploadFile, HTTPException
-
 from aa_common.logger import logger
+from fastapi import APIRouter, Depends, HTTPException, UploadFile
+
 from meteo_backend.core.application_context import ApplicationContext
 from meteo_backend.core.dependencies import get_context
 

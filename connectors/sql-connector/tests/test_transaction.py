@@ -3,12 +3,11 @@ import logging
 from dataclasses import dataclass
 from unittest import TestCase
 
-from sqlmodel import SQLModel, Field
-
 from aa_common.repo.repository_checker import check_repository
 from sql_connector.model_mapping import ModelMapping
 from sql_connector.sql_connection import SqlConnection
 from sql_connector.sql_repository import SqlRepository
+from sqlmodel import Field, SQLModel
 
 
 @dataclass

@@ -1,8 +1,7 @@
 from dataclasses import dataclass
 
 from dependency_injector.wiring import Provide
-
-from meteo_domain.services.datafile_service import (
+from meteo_domain.data_file.datafile_service import (
     DataFileService,
 )
 

@@ -1,13 +1,14 @@
+from collections.abc import Iterable
 from functools import cached_property
 from itertools import islice
-from typing import Any, Iterable
+from typing import Any
 
+from aa_common.memory import get_detailed_memory_info
 from influxdb_client import InfluxDBClient
 from influxdb_client.client.flux_table import TableList
 from influxdb_client.client.write_api import SYNCHRONOUS
 from loguru import logger
 
-from aa_common.memory import get_detailed_memory_info
 from influxdb_connector.influxdb_config import InfluxDBConfig
 
 

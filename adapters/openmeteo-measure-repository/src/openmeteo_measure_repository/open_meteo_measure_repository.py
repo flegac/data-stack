@@ -4,29 +4,31 @@ from typing import Any, override
 
 import openmeteo_requests
 import requests_cache
+from meteo_domain.temporal_series.entities.measure_query import MeasureQuery
+from meteo_domain.temporal_series.entities.measurement import (
+    Measurement,
+    TaggedMeasurement,
+)
+from meteo_domain.temporal_series.entities.temporal_series import TSeries
+from meteo_domain.temporal_series.ports.tseries_repository import TSeriesRepository
 from retry_requests import retry
-
-from meteo_domain.entities.measure_query import MeasureQuery
-from meteo_domain.entities.measurement.measurement import Measurement, Measurements
-from meteo_domain.ports.measure_repository import MeasureRepository
 
 OPEN_METEO_URL = "https://archive-api.open-meteo.com/v1/archive"
 
 
-class OpenMeteoMeasureRepository(MeasureRepository):
-
+class OpenMeteoMeasureRepository(TSeriesRepository):
     @override
     async def init(self, reset: bool = False):
         pass
 
     @override
     async def save_batch(
-        self, measures: Iterable[Measurement], chunk_size: int = 100_000
+        self, measures: Iterable[TaggedMeasurement], chunk_size: int = 100_000
     ):
         raise NotImplementedError
 
     @override
-    def search(self, query: MeasureQuery = None) -> Generator[Measurements, Any]:
+    def search(self, query: MeasureQuery = None) -> Generator[TSeries, Any]:
         if not (period := query.period):
             raise ValueError("period is required")
 
@@ -64,14 +66,13 @@ class OpenMeteoMeasureRepository(MeasureRepository):
 
             measures = [
                 Measurement(
-                    sensor=sensor,
                     time=time,
                     value=value,
                 )
-                for time, value in zip(times, values)
+                for time, value in zip(times, values, strict=False)
             ]
 
-            yield Measurements.from_measures(
+            yield TSeries.from_measures(
                 sensor=sensor,
                 measures=measures,
             )

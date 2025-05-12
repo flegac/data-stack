@@ -1,4 +1,4 @@
-from meteo_domain.entities.geo_spatial.location import Location
+from meteo_domain.sensor.entities.location import Location
 
 
 def generate_french_locations(n: int):

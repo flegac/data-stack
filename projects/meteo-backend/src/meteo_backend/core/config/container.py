@@ -1,5 +1,4 @@
 from dependency_injector import containers, providers
-
 from influxdb_connector.influxdb_config import InfluxDBConfig
 from influxdb_measure_repository.influxdb_measure_repository import (
     InfluxDbMeasureRepository,
@@ -7,9 +6,8 @@ from influxdb_measure_repository.influxdb_measure_repository import (
 from kafka_connector.kafka_config import KafkaConfig
 from kafka_connector.kafka_connection import KafkaConnection
 from kafka_message_queue.kafka_factory import KafkaMQBackend
-from meteo_backend.core.config.settings import Settings
-from meteo_domain.services.datafile_service import DataFileService
-from meteo_domain.services.workspace_service import WorkspaceService
+from meteo_domain.data_file.datafile_service import DataFileService
+from meteo_domain.workspace.workspace_service import WorkspaceService
 from redis_message_queue.redis_config import RedisConfig
 from redis_message_queue.redis_connection import RedisConnection
 from redis_message_queue.redis_factory import RedisMQBackend
@@ -19,6 +17,8 @@ from s3_file_repository.s3_file_repository import S3FileRepository
 from sql_connector.sql_connection import SqlConnection
 from sql_meteo_adapters.data_file_repository import SqlDataFileRepository
 from sql_meteo_adapters.workspace_repository import SqlWorkspaceRepository
+
+from meteo_backend.core.config.settings import Settings
 
 
 class Container(containers.DeclarativeContainer):

@@ -1,16 +1,4 @@
-from influxdb_client import Point
-
-from meteo_domain.entities.measure_query import MeasureQuery
-from meteo_domain.entities.measurement.measurement import Measurement
-
-
-def measure_to_point(measure: Measurement):
-    return (
-        Point(measure.sensor.measure_type.lower())
-        .tag("sensor_id", measure.sensor.uid)
-        .field("value", measure.value)
-        .time(measure.time)
-    )
+from meteo_domain.temporal_series.entities.measure_query import MeasureQuery
 
 
 def query_to_flux(query: MeasureQuery, bucket: str):
@@ -36,12 +24,15 @@ def query_to_flux(query: MeasureQuery, bucket: str):
     # sources
     if query.sources is not None:
         sensor_ids = [_.uid for _ in query.sources]
-        sensor_list = ",".join([f'"{_}"' for _ in sensor_ids])
-        flux_query += f"\n    |> filter(fn: (r) => contains(value: r.sensor_id, set: [{sensor_list}]))"
+        sensors = ",".join([f'"{_}"' for _ in sensor_ids])
+        flux_query += (
+            f"\n    |> filter(fn: (r) => "
+            f"contains(value: r.sensor_id, set: [{sensors}]))"
+        )
 
     flux_query += (
-        f"\n    |> aggregateWindow(every: 1h, fn: mean, createEmpty: false)"
-        f'\n    |> group(columns: ["sensor_id"])'
+        "\n    |> aggregateWindow(every: 1h, fn: mean, createEmpty: false)"
+        '\n    |> group(columns: ["sensor_id"])'
     )
 
     return flux_query

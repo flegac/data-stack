@@ -1,8 +1,7 @@
 from datetime import datetime
 
-from sqlmodel import SQLModel, Field
-
-from meteo_domain.entities.datafile_lifecycle import DataFileLifecycle
+from meteo_domain.data_file.entities.datafile_lifecycle import DataFileLifecycle
+from sqlmodel import Field, SQLModel
 
 
 class DataFileModel(SQLModel, table=True):

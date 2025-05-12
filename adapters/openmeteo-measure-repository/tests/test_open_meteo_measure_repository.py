@@ -1,10 +1,10 @@
 import datetime
-from unittest import IsolatedAsyncioTestCase, TestCase
+from unittest import TestCase
 
-from meteo_domain.entities.geo_spatial.location import Location
-from meteo_domain.entities.measure_query import MeasureQuery
-from meteo_domain.entities.sensor import Sensor
-from meteo_domain.entities.temporal.period import Period
+from meteo_domain.sensor.entities.location import Location
+from meteo_domain.sensor.entities.sensor import Sensor
+from meteo_domain.temporal_series.entities.measure_query import MeasureQuery
+from meteo_domain.temporal_series.entities.period import Period
 from openmeteo_measure_repository.open_meteo_measure_repository import (
     OpenMeteoMeasureRepository,
 )

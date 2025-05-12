@@ -3,8 +3,8 @@ import logging
 from unittest import TestCase
 
 from aa_common.repo.repository_checker import check_repository
-from meteo_domain.entities.datafile import DataFile
-from meteo_domain.entities.workspace import Workspace
+from meteo_domain.data_file.entities.datafile import DataFile
+from meteo_domain.workspace.entities.workspace import Workspace
 from sql_connector.sql_connection import SqlConnection
 from sql_connector.sql_repository import SqlRepository
 from sql_meteo_adapters.data_file_repository import SqlDataFileRepository

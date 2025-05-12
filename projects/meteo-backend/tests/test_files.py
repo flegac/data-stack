@@ -1,10 +1,9 @@
 from unittest import TestCase
 
 from fastapi.testclient import TestClient
-
 from meteo_backend.core.app_factory import create_app
-from meteo_domain.entities.datafile import DataFile
-from meteo_domain.entities.datafile_lifecycle import DataFileLifecycle
+from meteo_domain.data_file.entities.datafile import DataFile
+from meteo_domain.data_file.entities.datafile_lifecycle import DataFileLifecycle
 from mocked_container import MockedContainer
 
 

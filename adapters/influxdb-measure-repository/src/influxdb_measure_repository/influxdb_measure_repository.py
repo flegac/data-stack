@@ -3,14 +3,19 @@ from typing import override
 
 from influxdb_connector.influx_db_connection import InfluxDbConnection
 from influxdb_connector.influxdb_config import InfluxDBConfig
+from meteo_domain.temporal_series.entities.measure_query import MeasureQuery
+from meteo_domain.temporal_series.entities.measurement import (
+    Measurement,
+    TaggedMeasurement,
+)
+from meteo_domain.temporal_series.entities.temporal_series import TSeries
+from meteo_domain.temporal_series.ports.tseries_repository import TSeriesRepository
+
 from influxdb_measure_repository.measure_mapper import MeasureMapper
 from influxdb_measure_repository.query_mapping import query_to_flux
-from meteo_domain.entities.measure_query import MeasureQuery
-from meteo_domain.entities.measurement.measurement import Measurement, Measurements
-from meteo_domain.ports.measure_repository import MeasureRepository
 
 
-class InfluxDbMeasureRepository(MeasureRepository):
+class InfluxDbMeasureRepository(TSeriesRepository):
     def __init__(self, config: InfluxDBConfig):
         self.config = config
         self.connection = InfluxDbConnection(config)
@@ -18,21 +23,20 @@ class InfluxDbMeasureRepository(MeasureRepository):
 
     @override
     async def save_batch(
-        self,
-        measures: Iterable[Measurement],
-        chunk_size: int = 100_000,
+        self, measures: Iterable[TaggedMeasurement], chunk_size: int = 100_000
     ):
         self.connection.write_batch(
-            map(self.mapper.to_model, measures), chunk_size=chunk_size
+            map(self.mapper.to_model, measures),
+            chunk_size=chunk_size,
         )
 
     @override
     def search(
         self,
         query: MeasureQuery = None,
-    ) -> Generator[Measurements, None, None]:
+    ) -> Generator[TSeries]:
         sensor_ids = [_.uid for _ in query.sources]
-        sensor_mapping = dict(zip(sensor_ids, query.sources))
+        sensor_mapping = dict(zip(sensor_ids, query.sources, strict=False))
 
         flux_query = query_to_flux(query=query, bucket=self.config.bucket)
         tables = self.connection.query(flux_query)
@@ -42,12 +46,11 @@ class InfluxDbMeasureRepository(MeasureRepository):
             for record in table.records:
                 measurements.append(
                     Measurement(
-                        sensor=sensor_mapping[record.values.get("sensor_id")],
                         value=record.get_value(),
                         time=record.get_time(),
                     )
                 )
-            yield Measurements.from_measures(
+            yield TSeries.from_measures(
                 sensor=sensor_mapping[table.records[0].values.get("sensor_id")],
                 measures=measurements,
             )

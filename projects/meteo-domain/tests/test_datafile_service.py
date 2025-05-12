@@ -2,8 +2,8 @@ from unittest import TestCase
 
 from aa_common.constants import DATASET_ROOT_PATH, EXPORT_PATH
 from aa_common.logger import logger
-from meteo_domain.entities.datafile import DataFile
-from meteo_domain.services.metadatafile_service import MetadataFileService
+from meteo_domain.data_file.entities.datafile import DataFile
+from meteo_domain.metadata_file.metadatafile_service import MetadataFileService
 
 
 class TestDataFileService(TestCase):
@@ -11,7 +11,6 @@ class TestDataFileService(TestCase):
         EXPORT_PATH.mkdir(parents=True, exist_ok=True)
 
     def test_it(self):
-
         service = MetadataFileService()
 
         grib = DataFile.from_file(

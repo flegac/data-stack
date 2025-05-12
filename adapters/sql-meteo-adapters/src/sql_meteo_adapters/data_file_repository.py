@@ -1,8 +1,9 @@
-from meteo_domain.entities.datafile import DataFile
-from meteo_domain.ports.data_file_repository import DataFileRepository
+from meteo_domain.data_file.entities.datafile import DataFile
+from meteo_domain.data_file.ports.data_file_repository import DataFileRepository
 from sql_connector.model_mapping import ModelMapping
 from sql_connector.sql_connection import SqlConnection
 from sql_connector.sql_repository import SqlRepository
+
 from sql_meteo_adapters.data_file_model import DataFileModel
 
 

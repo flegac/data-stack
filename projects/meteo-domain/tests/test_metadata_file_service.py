@@ -2,10 +2,10 @@ from datetime import datetime
 from unittest import TestCase
 
 from aa_common.constants import EXPORT_PATH, LOCAL_TEST_PATH
-from meteo_domain.entities.meta_data_file.coordinate import Coordinate
-from meteo_domain.entities.meta_data_file.meta_data_file import MetaDataFile
-from meteo_domain.entities.meta_data_file.variable import Variable
-from meteo_domain.services.metadatafile_service import MetadataFileService
+from meteo_domain.metadata_file.entities.coordinate import Coordinate
+from meteo_domain.metadata_file.entities.meta_data_file import MetaDataFile
+from meteo_domain.metadata_file.entities.variable import Variable
+from meteo_domain.metadata_file.metadatafile_service import MetadataFileService
 
 
 class TestMetadataFileService(TestCase):

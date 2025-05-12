@@ -1,16 +1,15 @@
 from typing import override
 
 from geoalchemy2.shape import from_shape
+from meteo_domain.sensor.entities.location import Location
+from meteo_domain.sensor.entities.sensor import Sensor
 from shapely import Point
-
-from meteo_domain.entities.geo_spatial.location import Location
-from meteo_domain.entities.sensor import Sensor
 from sql_connector.model_mapping import ModelDomainMapper
+
 from sql_meteo_adapters.sensor_model import SensorModel
 
 
 class SensorMapper(ModelDomainMapper[Sensor, SensorModel]):
-
     def __init__(self):
         self.entity = Sensor
         self.model = SensorModel

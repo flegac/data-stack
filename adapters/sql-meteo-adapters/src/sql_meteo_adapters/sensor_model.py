@@ -1,5 +1,5 @@
 from geoalchemy2 import Geometry
-from sqlalchemy import Column, String, Date, func
+from sqlalchemy import Column, Date, String, func
 from sqlalchemy.orm import declarative_base
 
 Base = declarative_base()
