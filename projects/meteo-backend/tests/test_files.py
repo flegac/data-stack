@@ -1,6 +1,7 @@
 from unittest import TestCase
 
 from fastapi.testclient import TestClient
+
 from meteo_backend.core.app_factory import create_app
 from meteo_domain.data_file.entities.datafile import DataFile
 from meteo_domain.data_file.entities.datafile_lifecycle import DataFileLifecycle
@@ -22,7 +23,6 @@ class TestFilesAPI(TestCase):
         # Garder une référence aux mocks
         self.mock_file_repository = self.container.file_repository()
         self.mock_data_file_repository = self.container.data_file_repository()
-        self.mock_messaging_service = self.container.messaging_service()
 
     def test_upload_file(self):
         # Préparer un fichier de test
@@ -36,11 +36,6 @@ class TestFilesAPI(TestCase):
             status=DataFileLifecycle.upload_completed,
         )
 
-        # Configurer les mocks
-        self.mock_data_file_repository.find_by_id.return_value = None
-        self.mock_data_file_repository.find_all.return_value = []
-        self.mock_messaging_service.ingestion_producer.write_single.return_value = None
-
         # Simuler l'upload de fichier
         response = self.client.post(
             "/api/v1/files/upload",
@@ -49,6 +44,7 @@ class TestFilesAPI(TestCase):
         )
 
         # Vérifier la réponse
+        print(response.json())
         self.assertEqual(response.status_code, 200)
         data = response.json()
         self.assertEqual(data["uid"], test_filename)

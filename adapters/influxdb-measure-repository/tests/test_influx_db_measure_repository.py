@@ -1,18 +1,20 @@
 import asyncio
 import datetime
-import random
 from unittest import TestCase
+
+from loguru import logger
 
 from influxdb_measure_repository.influxdb_measure_repository import (
     InfluxDbMeasureRepository,
 )
 from influxdb_measure_repository.query_mapping import query_to_flux
-from loguru import logger
 from meteo_app.config import INFLUX_DB_CONFIG
 from meteo_domain.sensor.entities.location import Location
 from meteo_domain.sensor.entities.sensor import Sensor
 from meteo_domain.temporal_series.entities.measure_query import MeasureQuery
-from meteo_domain.temporal_series.entities.measurement import Measurement
+from meteo_domain.temporal_series.entities.measurement import (
+    TaggedMeasurement,
+)
 from meteo_domain.temporal_series.entities.period import Period
 
 
@@ -28,6 +30,15 @@ class TestInfluDbMeasureRepository(TestCase):
             location=Location(latitude=43.6043, longitude=1.4437),
         )
 
+    def measure_generator(self):
+        for i in range(10000):
+            yield TaggedMeasurement(
+                sensor=self.sensor,
+                time=datetime.datetime.now(datetime.UTC)
+                + datetime.timedelta(seconds=10 * i),
+                value=20.0,
+            )
+
     def test_flux_query(self):
         query = MeasureQuery(
             sources=[self.sensor],
@@ -40,37 +51,11 @@ class TestInfluDbMeasureRepository(TestCase):
         query_string = query_to_flux(query, "my-bucket")
         print(query_string)
 
-    def test_save(self):
-        asyncio.run(
-            self.repo.save(
-                Measurement(
-                    time=datetime.datetime.now(datetime.UTC),
-                    value=random.random(),
-                )
-            )
-        )
-
     def test_save_batch(self):
-        def measure_generator():
-            for i in range(10000):
-                yield Measurement(
-                    time=datetime.datetime.now(datetime.UTC)
-                    + datetime.timedelta(seconds=10 * i),
-                    value=20.0,
-                )
-
-        asyncio.run(self.repo.save_batch(measure_generator()))
+        asyncio.run(self.repo.save_batch(self.measure_generator()))
 
     def test_search(self):
-        def measure_generator():
-            for i in range(10000):
-                yield Measurement(
-                    time=datetime.datetime.now(datetime.UTC)
-                    + datetime.timedelta(seconds=10 * i),
-                    value=20.0,
-                )
-
-        asyncio.run(self.repo.save_batch(measure_generator()))
+        asyncio.run(self.repo.save_batch(self.measure_generator()))
 
         query = MeasureQuery(
             sources=[self.sensor],

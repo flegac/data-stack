@@ -3,6 +3,8 @@ from typing import override
 
 from influxdb_connector.influx_db_connection import InfluxDbConnection
 from influxdb_connector.influxdb_config import InfluxDBConfig
+from influxdb_measure_repository.measure_mapper import MeasureMapper
+from influxdb_measure_repository.query_mapping import query_to_flux
 from meteo_domain.temporal_series.entities.measure_query import MeasureQuery
 from meteo_domain.temporal_series.entities.measurement import (
     Measurement,
@@ -10,9 +12,6 @@ from meteo_domain.temporal_series.entities.measurement import (
 )
 from meteo_domain.temporal_series.entities.temporal_series import TSeries
 from meteo_domain.temporal_series.ports.tseries_repository import TSeriesRepository
-
-from influxdb_measure_repository.measure_mapper import MeasureMapper
-from influxdb_measure_repository.query_mapping import query_to_flux
 
 
 class InfluxDbMeasureRepository(TSeriesRepository):
@@ -74,7 +73,7 @@ class InfluxDbMeasureRepository(TSeriesRepository):
 
         try:
             org = self.connection.client.organizations_api().find_organizations()[0]
-            buckets_api.create_bucket(bucket_name=self.config.bucket, org_id=org.id)
+            buckets_api.create_bucket(bucket_name=self.config.bucket, org=org)
         except Exception as e:
             print(f"Warning: Could not create bucket: {e}")
 

@@ -3,11 +3,10 @@ from dataclasses import dataclass, field
 from pathlib import Path
 
 from meteo_domain.data_file.entities.datafile_lifecycle import DataFileLifecycle
-from meteo_domain.workspace.entities.workspace import WorkObject
 
 
 @dataclass(kw_only=True)
-class DataFile(WorkObject):
+class DataFile:
     uid: str
     source_hash: str
     local_path: Path | None = None
