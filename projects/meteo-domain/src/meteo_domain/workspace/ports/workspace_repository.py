@@ -1,7 +1,6 @@
 from abc import ABC
 
-from aa_common.repo.repository import Repository
-
+from meteo_domain.core.repository import Repository
 from meteo_domain.workspace.entities.workspace import Workspace
 
 

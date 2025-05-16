@@ -1,10 +1,10 @@
 import traceback
 from typing import Any, override
 
-from aa_common.mq.mq_producer import MQProducer
-from aa_common.mq.mq_topic import MQTopic
 from kafka_connector.kafka_connection import KafkaConnection
 from loguru import logger
+from meteo_domain.core.message_queue.mq_producer import MQProducer
+from meteo_domain.core.message_queue.mq_topic import MQTopic
 
 
 class KafkaProducer[Input](MQProducer[Input]):

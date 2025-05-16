@@ -2,7 +2,7 @@ import asyncio
 import logging
 from unittest import TestCase
 
-from aa_common.constants import LOCAL_TEST_PATH
+from meteo_domain.config import LOCAL_TEST_PATH
 from posix_file_repository.posix_file_repository import PosixFileRepository
 
 

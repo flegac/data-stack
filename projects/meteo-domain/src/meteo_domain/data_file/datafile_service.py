@@ -1,8 +1,6 @@
 from functools import cached_property
 from pathlib import Path
 
-from aa_common.logger import logger
-from aa_common.mq.mq_backend import MQBackend
 from posix_measure_repository.data_file_measure_repository import (
     DataFileMeasureRepository,
 )
@@ -12,6 +10,8 @@ from meteo_domain.config import (
     DATAFILE_INGESTION_TOPIC,
     MEASURE_TOPIC,
 )
+from meteo_domain.core.logger import logger
+from meteo_domain.core.message_queue.mq_backend import MQBackend
 from meteo_domain.data_file.entities.datafile import DataFile
 from meteo_domain.data_file.entities.datafile_lifecycle import DataFileLifecycle
 from meteo_domain.data_file.ports.data_file_repository import DataFileRepository
@@ -35,7 +35,7 @@ class DataFileService:
 
     async def update_status(self, item: DataFile, status: DataFileLifecycle):
         item.status = status
-        await self.data_file_repository.create_or_update(item)
+        await self.data_file_repository.save(item)
 
     async def start_ingest_listener(self):
         await self.ingestion_consumer.listen(self.ingest_file)
@@ -83,7 +83,7 @@ class DataFileService:
                 f"{[_.uid async for _ in existing]}"
             )
 
-        await self.data_file_repository.create_or_update(item)
+        await self.data_file_repository.save(item)
 
         try:
             await self.update_status(item, DataFileLifecycle.upload_in_progress)
@@ -116,5 +116,5 @@ class DataFileService:
     async def error_handler(self, item: DataFile, error: Exception = None):
         logger.warning(f"_handle_error: {error}: {item}")
         item.status = DataFileLifecycle.ingestion_failed
-        await self.data_file_repository.create_or_update(item)
+        await self.data_file_repository.save(item)
         await self.error_producer.write_single(item)

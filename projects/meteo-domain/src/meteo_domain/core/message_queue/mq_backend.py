@@ -1,8 +1,8 @@
 from abc import ABC, abstractmethod
 
-from aa_common.mq.mq_consumer import MQConsumer
-from aa_common.mq.mq_producer import MQProducer
-from aa_common.mq.mq_topic import MQTopic
+from meteo_domain.core.message_queue.mq_consumer import MQConsumer
+from meteo_domain.core.message_queue.mq_producer import MQProducer
+from meteo_domain.core.message_queue.mq_topic import MQTopic
 
 
 class MQBackend(ABC):

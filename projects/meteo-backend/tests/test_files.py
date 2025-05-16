@@ -1,7 +1,7 @@
 from unittest import TestCase
 
+import meteo_domain.config
 from fastapi.testclient import TestClient
-
 from meteo_backend.core.app_factory import create_app
 from meteo_domain.data_file.entities.datafile import DataFile
 from meteo_domain.data_file.entities.datafile_lifecycle import DataFileLifecycle
@@ -57,7 +57,7 @@ class TestFilesAPI(TestCase):
 
     def tearDown(self):
         # Nettoyer les fichiers temporaires si nécessaire
-        if self.container.settings().LOCAL_STORAGE_PATH.exists():
+        if meteo_domain.config.LOCAL_STORAGE_PATH.exists():
             import shutil
 
-            shutil.rmtree(self.container.settings().LOCAL_STORAGE_PATH)
+            shutil.rmtree(meteo_domain.config.LOCAL_STORAGE_PATH)

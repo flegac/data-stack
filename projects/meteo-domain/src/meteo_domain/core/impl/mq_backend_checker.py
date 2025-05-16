@@ -1,8 +1,8 @@
 import asyncio
 
-from aa_common.logger import logger
-from aa_common.mq.mq_backend import MQBackend
-from aa_common.mq.mq_topic import MQTopic
+from meteo_domain.core.logger import logger
+from meteo_domain.core.message_queue.mq_backend import MQBackend
+from meteo_domain.core.message_queue.mq_topic import MQTopic
 
 
 async def mq_backend_checker(

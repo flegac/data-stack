@@ -2,7 +2,7 @@ import asyncio
 import logging
 from unittest import TestCase
 
-from aa_common.constants import LOCAL_TEST_PATH
+from meteo_domain.config import LOCAL_TEST_PATH
 from s3_connector.s3_config import S3Config
 from s3_connector.s3_connection import S3Connection
 from s3_file_repository.s3_file_repository import S3FileRepository

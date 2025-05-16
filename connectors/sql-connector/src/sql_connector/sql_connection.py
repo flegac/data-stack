@@ -63,7 +63,7 @@ class SqlConnection:
         SQLModel.metadata.create_all(self.engine)
 
     async def init_table(self, model, reset: bool = False):
-        await self.connect()
+        await self.database.connect()
         async with self.engine.begin() as conn:
             if reset:
                 await conn.run_sync(model.metadata.drop_all)

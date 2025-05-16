@@ -1,8 +1,8 @@
 import asyncio
 from unittest import TestCase
 
-from aa_common.mq.memory_mq_backend import MemoryMQBackend
-from aa_common.mq.mq_backend_checker import mq_backend_checker
+from meteo_domain.core.impl.memory_mq_backend import MemoryMQBackend
+from meteo_domain.core.impl.mq_backend_checker import mq_backend_checker
 
 
 class TestMemoryMQBackend(TestCase):

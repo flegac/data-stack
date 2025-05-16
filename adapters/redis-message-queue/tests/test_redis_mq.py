@@ -1,7 +1,7 @@
 import asyncio
 from unittest import TestCase
 
-from aa_common.mq.mq_backend_checker import mq_backend_checker
+from meteo_domain.core.impl.mq_backend_checker import mq_backend_checker
 from redis_message_queue.redis_config import RedisConfig
 from redis_message_queue.redis_connection import RedisConnection
 from redis_message_queue.redis_factory import RedisMQBackend

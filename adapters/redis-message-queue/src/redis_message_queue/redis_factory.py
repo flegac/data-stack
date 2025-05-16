@@ -1,8 +1,8 @@
 # redis_factory.py
 from typing import override
 
-from aa_common.mq.mq_backend import MQBackend
-from aa_common.mq.mq_topic import MQTopic
+from meteo_domain.core.message_queue.mq_backend import MQBackend
+from meteo_domain.core.message_queue.mq_topic import MQTopic
 
 from redis_message_queue.redis_connection import RedisConnection
 from redis_message_queue.redis_consumer import RedisConsumer

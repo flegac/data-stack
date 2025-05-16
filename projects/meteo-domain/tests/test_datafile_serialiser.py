@@ -1,7 +1,7 @@
 from unittest import TestCase
 
-from aa_common.constants import DATASET_ROOT_PATH
-from aa_common.logger import logger
+from meteo_domain.config import DATASET_ROOT_PATH
+from meteo_domain.core.logger import logger
 from meteo_domain.data_file.datafile_serializer import DataFileSerializer
 from meteo_domain.data_file.entities.datafile import DataFile
 

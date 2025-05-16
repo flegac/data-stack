@@ -20,7 +20,6 @@ members = [
 meteo-app = { workspace = true }
 
 # domain
-aa-common = { workspace = true }
 meteo-domain = { workspace = true }
 
 #ports

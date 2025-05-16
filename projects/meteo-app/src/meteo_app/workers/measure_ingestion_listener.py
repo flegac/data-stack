@@ -1,9 +1,9 @@
 from dataclasses import dataclass
 
-from aa_common.mq.mq_backend import MQBackend
 from dependency_injector.wiring import Provide
 from loguru import logger
 from meteo_domain.config import specific_measure_topic
+from meteo_domain.core.message_queue.mq_backend import MQBackend
 from meteo_domain.temporal_series.entities.measurement import Measurement
 from meteo_domain.temporal_series.ports.tseries_repository import TSeriesRepository
 

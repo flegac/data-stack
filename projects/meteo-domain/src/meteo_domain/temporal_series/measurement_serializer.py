@@ -3,8 +3,8 @@ import json
 from dataclasses import asdict
 
 import pandas as pd
-from aa_common.mq.serializer import Serializer
 
+from meteo_domain.core.message_queue.serializer import Serializer
 from meteo_domain.sensor.sensor_serializer import SensorSerializer
 from meteo_domain.temporal_series.entities.measurement import Measurement
 

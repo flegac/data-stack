@@ -3,11 +3,12 @@ import logging
 from dataclasses import dataclass
 from unittest import TestCase
 
-from aa_common.repo.repository_checker import check_repository
-from sql_connector.model_mapping import ModelMapping
-from sql_connector.sql_connection import SqlConnection
-from sql_connector.sql_repository import SqlRepository
 from sqlmodel import Field, SQLModel
+
+from meteo_domain.core.impl.repository_checker import check_repository
+from sql_connector.model_mapping import ModelMapping
+from sql_connector.sql_repository import SqlRepository
+from sql_connector.sql_unit_of_work import SqlUnitOfWork
 
 
 @dataclass
@@ -24,23 +25,25 @@ class ModelEntity(SQLModel, table=True):
 class TestSqlRepository(TestCase):
     def setUp(self):
         logging.getLogger("asyncio").setLevel(logging.ERROR)
-        self.repo = SqlRepository(
-            connection=SqlConnection(
-                "postgresql+asyncpg://admin:adminpassword@localhost:5432/meteo-db"
-            ),
-            mapper=ModelMapping(DomainEntity, ModelEntity),
-        )
 
     def test_transaction(self):
         asyncio.run(self.run_transaction())
 
     async def run_transaction(self):
-        await self.repo.init()
-        connection = self.repo.connection
+        uow = SqlUnitOfWork(
+            "postgresql+asyncpg://admin:adminpassword@localhost:5432/meteo-db"
+        )
 
-        async with connection.transaction():
-            await check_repository(self.repo, DomainEntity(id="toto", name="toto"))
+        async with uow.transaction():
+            repo = SqlRepository(
+                uow.session, mapper=ModelMapping(DomainEntity, ModelEntity)
+            )
+            await check_repository(repo, DomainEntity(id="toto", name="toto"))
             print("whatever1")
-        async with connection.transaction():
+
+        async with uow.transaction():
+            repo = SqlRepository(
+                uow.session, mapper=ModelMapping(DomainEntity, ModelEntity)
+            )
             print("whatever2")
-            connection.cancel_transaction()
+            uow.cancel()

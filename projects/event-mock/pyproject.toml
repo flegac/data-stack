@@ -1,5 +1,5 @@
 [project]
-name = "aa-common"
+name = "event-mock"
 version = "0.1.0"
 description = "Add your description here"
 readme = "README.md"
@@ -7,12 +7,7 @@ authors = [
     { name = "flegac", email = "florent.legac@gmail.com" }
 ]
 requires-python = ">=3.13"
-dependencies = [
-    "dependency-injector>=4.46.0",
-    "loguru>=0.7.3",
-    "psutil>=7.0.0",
-    "tqdm>=4.67.1",
-]
+dependencies = []
 
 [build-system]
 requires = ["hatchling"]

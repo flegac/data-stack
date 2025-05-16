@@ -1,7 +1,13 @@
-from aa_common.mq.mq_topic import MQTopic
+from pathlib import Path
 
+from meteo_domain.core.message_queue.mq_topic import MQTopic
 from meteo_domain.data_file.datafile_serializer import DataFileSerializer
 from meteo_domain.temporal_series.measurement_serializer import MeasurementSerializer
+
+DATASET_ROOT_PATH = Path.home() / "Documents" / "Data" / "Datasets"
+LOCAL_STORAGE_PATH = Path("/tmp/meteo-files")
+EXPORT_PATH = LOCAL_STORAGE_PATH / "exports"
+LOCAL_TEST_PATH = LOCAL_STORAGE_PATH / "tests"
 
 
 def specific_measure_topic(name: str):
@@ -9,10 +15,7 @@ def specific_measure_topic(name: str):
 
 
 MEASURE_TOPIC = specific_measure_topic("measure")
-
-TEMPERATURE_TOPIC = MQTopic(
-    topic="temperature.topic", serializer=MeasurementSerializer()
-)
+TEMPERATURE_TOPIC = specific_measure_topic("temperature")
 
 DATAFILE_INGESTION_TOPIC = MQTopic(
     topic="DataFile.ingestion.topic", serializer=DataFileSerializer()

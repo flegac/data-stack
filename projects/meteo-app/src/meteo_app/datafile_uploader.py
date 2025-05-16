@@ -1,7 +1,7 @@
 import asyncio
 import datetime
 
-from aa_common.constants import EXPORT_PATH
+from meteo_domain.config import EXPORT_PATH
 from meteo_domain.metadata_file.entities.coordinate import Coordinate
 from meteo_domain.metadata_file.entities.meta_data_file import MetaDataFile
 from meteo_domain.metadata_file.entities.variable import Variable

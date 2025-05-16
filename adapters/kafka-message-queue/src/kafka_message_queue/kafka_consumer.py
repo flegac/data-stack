@@ -2,10 +2,10 @@ import traceback
 from collections.abc import Awaitable, Callable
 from typing import Any, override
 
-from aa_common.mq.mq_consumer import MQConsumer
-from aa_common.mq.mq_topic import MQTopic
 from kafka_connector.kafka_connection import KafkaConnection
 from loguru import logger
+from meteo_domain.core.message_queue.mq_consumer import MQConsumer
+from meteo_domain.core.message_queue.mq_topic import MQTopic
 
 
 class KafkaConsumer[Input](MQConsumer[Input]):

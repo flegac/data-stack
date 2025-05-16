@@ -1,14 +1,14 @@
 from dataclasses import dataclass
 
 from meteo_domain.sensor.entities.location import Location
-from meteo_domain.workspace.entities.workspace import WorkObject
 
 type SensorId = str
 
 
-@dataclass(kw_only=True)
-class Sensor(WorkObject):
+@dataclass(frozen=True)
+class Sensor:
     uid: SensorId
+    workspace_id: str | None = None
     measure_type: str | None = None
     location: Location | None = None
 

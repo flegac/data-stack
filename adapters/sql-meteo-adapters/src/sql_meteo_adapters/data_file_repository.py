@@ -11,5 +11,5 @@ class SqlDataFileRepository(
     SqlRepository[DataFile, DataFileModel],
     DataFileRepository,
 ):
-    def __init__(self, connection: SqlConnection):
-        super().__init__(connection, ModelMapping(DataFile, DataFileModel))
+    def __init__(self, uow: SqlConnection):
+        super().__init__(uow, ModelMapping(DataFile, DataFileModel))

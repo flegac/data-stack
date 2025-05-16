@@ -1,3 +1,0 @@
-# aa-common
-
-Common library.

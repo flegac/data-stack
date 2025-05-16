@@ -3,8 +3,8 @@ from pathlib import Path
 
 import numpy as np
 import xarray as xr
-from aa_common.logger import logger
 
+from meteo_domain.core.logger import logger
 from meteo_domain.data_file.entities.datafile import DataFile
 from meteo_domain.metadata_file.entities.coordinate import Coordinate
 from meteo_domain.metadata_file.entities.meta_data_file import MetaDataFile

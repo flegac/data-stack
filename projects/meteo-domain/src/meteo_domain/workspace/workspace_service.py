@@ -16,7 +16,7 @@ class WorkspaceService:
         self.data_file_repository = data_file_repository
 
     async def init_workspace(self, ws: Workspace):
-        await self.ws_repository.create_or_update(ws)
+        await self.ws_repository.save(ws)
         await self.file_repository.create_bucket(ws.datafile_bucket)
 
     async def delete_workspace(self, ws: Workspace):

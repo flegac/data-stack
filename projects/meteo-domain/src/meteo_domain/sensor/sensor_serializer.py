@@ -1,8 +1,7 @@
 import datetime
 from dataclasses import asdict
 
-from aa_common.mq.serializer import Serializer
-
+from meteo_domain.core.message_queue.serializer import Serializer
 from meteo_domain.sensor.entities.sensor import Sensor
 
 

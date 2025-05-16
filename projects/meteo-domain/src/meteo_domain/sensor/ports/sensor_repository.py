@@ -1,7 +1,6 @@
 from abc import ABC
 
-from aa_common.repo.repository import GeoRepository
-
+from meteo_domain.core.repository import GeoRepository
 from meteo_domain.sensor.entities.sensor import Sensor
 
 

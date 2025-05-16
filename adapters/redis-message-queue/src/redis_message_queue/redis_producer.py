@@ -2,9 +2,9 @@ import json
 import traceback
 from typing import Any, override
 
-from aa_common.logger import logger
-from aa_common.mq.mq_producer import MQProducer
-from aa_common.mq.mq_topic import MQTopic
+from meteo_domain.core.logger import logger
+from meteo_domain.core.message_queue.mq_producer import MQProducer
+from meteo_domain.core.message_queue.mq_topic import MQTopic
 
 from redis_message_queue.redis_connection import RedisConnection
 

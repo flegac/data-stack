@@ -1,7 +1,7 @@
 import asyncio
 from unittest import TestCase
 
-from aa_common.repo.repository_checker import check_repository
+from meteo_domain.core.impl.repository_checker import check_repository
 from meteo_domain.data_file.entities.datafile import DataFile
 from meteo_domain.workspace.entities.workspace import Workspace
 from sql_connector.sql_connection import SqlConnection
@@ -20,7 +20,7 @@ class TestRepositories(TestCase):
 
     def test_workspace(self):
         repo = SqlWorkspaceRepository(self.connection)
-        item = Workspace(uid="ws_id", name="ws_name")
+        item = Workspace(uid="ws_id")
         asyncio.run(self.run_repo_check(repo, item))
 
     def test_datafile(self):

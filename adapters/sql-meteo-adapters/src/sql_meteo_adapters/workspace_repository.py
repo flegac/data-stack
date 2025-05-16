@@ -11,5 +11,5 @@ class SqlWorkspaceRepository(
     SqlRepository[Workspace, WorkspaceModel],
     WorkspaceRepository,
 ):
-    def __init__(self, connection: SqlConnection):
-        super().__init__(connection, ModelMapping(Workspace, WorkspaceModel))
+    def __init__(self, uow: SqlConnection):
+        super().__init__(uow, ModelMapping(Workspace, WorkspaceModel))

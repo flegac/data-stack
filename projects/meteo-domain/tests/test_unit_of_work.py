@@ -3,7 +3,8 @@ import inspect
 from dataclasses import dataclass
 from unittest import TestCase
 
-from aa_common.repo.memory_repository import MemUnitOfWork
+from event_mock.event_mock import event_mock
+from meteo_domain.core.unit_of_work import UnitOfWork
 
 
 @dataclass
@@ -16,7 +17,7 @@ class DomainB:
     uid: str
 
 
-class TestMemoryMQBackend(TestCase):
+class TestMemoryUnitOfWork(TestCase):
     def test_all(self):
         for func in list_async_methods(self):
             with self.subTest(func.__name__):
@@ -26,55 +27,60 @@ class TestMemoryMQBackend(TestCase):
         a = DomainA(uid="A")
         b = DomainB(uid="B")
         c = DomainB(uid="C")
-        d = DomainB(uid="D")
-        e = DomainA(uid="E")
 
-        uow = MemUnitOfWork()
+        uow, bus = event_mock(UnitOfWork)
         async with uow.transaction():
             await uow.save(a)
             await uow.save(b)
             await uow.delete(b)
-        print(uow.events)
+        print(bus)
         self.assertListEqual(
-            uow.sorted_events(),
+            bus.sorted_events(),
             [
-                "create_session",
-                "on_create: A",
-                "on_create: B",
-                "on_delete: B",
-                "commit",
-                "destroy_session",
+                "transaction()",
+                "create_session()",
+                "save(DomainA(uid='A'))",
+                "save(DomainB(uid='B'))",
+                "delete(DomainB(uid='B'))",
+                "commit()",
+                "destroy_session()",
             ],
         )
-        uow.clear_events()
+        bus.events.clear()
         async with uow.transaction():
             await uow.save(c)
             await uow.delete(a)
             uow.cancel("testing")
-        print(uow.events)
+        print(bus)
         self.assertListEqual(
-            uow.sorted_events(),
+            bus.sorted_events(),
             [
-                "create_session",
-                "on_create: C",
-                "on_delete: A",
-                "rollback",
-                "rollback: created=C",
-                "rollback: updated=A",
-                "destroy_session",
+                "transaction()",
+                "create_session()",
+                "save(DomainB(uid='C'))",
+                "delete(DomainA(uid='A'))",
+                "cancel(testing)",
+                "rollback()",
+                "destroy_session()",
             ],
         )
 
     async def cancel_transaction(self):
-        uow = MemUnitOfWork()
+        uow, bus = event_mock(UnitOfWork)
 
         async with uow.transaction():
             uow.cancel("testing")
 
-        print(uow.events)
+        print(bus)
         self.assertListEqual(
-            uow.events.sorted_events(),
-            ["create_session", "rollback", "destroy_session"],
+            bus.sorted_events(),
+            [
+                "transaction()",
+                "create_session()",
+                "cancel(testing)",
+                "rollback()",
+                "destroy_session()",
+            ],
         )
 
 

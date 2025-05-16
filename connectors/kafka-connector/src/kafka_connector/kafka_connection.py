@@ -1,5 +1,5 @@
-from aa_common.mq.mq_topic import MQTopic
 from aiokafka import AIOKafkaConsumer, AIOKafkaProducer
+from meteo_domain.core.message_queue.mq_topic import MQTopic
 
 from kafka_connector.kafka_config import KafkaConfig
 

@@ -8,6 +8,7 @@ from meteo_domain.data_file.entities.datafile_lifecycle import DataFileLifecycle
 @dataclass(kw_only=True)
 class DataFile:
     uid: str
+    workspace_id: str | None = None
     source_hash: str
     local_path: Path | None = None
     status: DataFileLifecycle = field(default=DataFileLifecycle.created)
@@ -29,7 +30,6 @@ class DataFile:
             f"status: {self.status.name}\n"
             f"local_path: {self.local_path}\n"
             f"source_hash: {self.source_hash}\n"
-            f"last_update_date: {self.last_update_date}"
         )
 
 

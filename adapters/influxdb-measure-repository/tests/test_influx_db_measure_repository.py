@@ -2,12 +2,11 @@ import asyncio
 import datetime
 from unittest import TestCase
 
-from loguru import logger
-
 from influxdb_measure_repository.influxdb_measure_repository import (
     InfluxDbMeasureRepository,
 )
 from influxdb_measure_repository.query_mapping import query_to_flux
+from loguru import logger
 from meteo_app.config import INFLUX_DB_CONFIG
 from meteo_domain.sensor.entities.location import Location
 from meteo_domain.sensor.entities.sensor import Sensor

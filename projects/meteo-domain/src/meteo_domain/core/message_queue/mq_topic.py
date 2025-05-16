@@ -1,4 +1,4 @@
-from aa_common.mq.serializer import Serializer
+from meteo_domain.core.message_queue.serializer import Serializer
 
 
 # pylint: disable=too-few-public-methods

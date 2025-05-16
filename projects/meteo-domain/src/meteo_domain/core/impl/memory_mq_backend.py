@@ -3,10 +3,10 @@ from collections import defaultdict
 from collections.abc import Awaitable, Callable
 from typing import Any, override
 
-from aa_common.mq.mq_backend import MQBackend
-from aa_common.mq.mq_consumer import MQConsumer
-from aa_common.mq.mq_producer import MQProducer
-from aa_common.mq.mq_topic import MQTopic
+from meteo_domain.core.message_queue.mq_backend import MQBackend
+from meteo_domain.core.message_queue.mq_consumer import MQConsumer
+from meteo_domain.core.message_queue.mq_producer import MQProducer
+from meteo_domain.core.message_queue.mq_topic import MQTopic
 
 
 class MemoryMQProducer[Input](MQProducer[Input]):

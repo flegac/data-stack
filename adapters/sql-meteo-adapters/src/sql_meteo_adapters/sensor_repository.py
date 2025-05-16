@@ -1,10 +1,10 @@
+from sqlalchemy import func, select
+
 from meteo_domain.sensor.entities.location import Location
 from meteo_domain.sensor.entities.sensor import Sensor
 from meteo_domain.sensor.ports.sensor_repository import SensorRepository
 from sql_connector.sql_connection import SqlConnection
 from sql_connector.sql_repository import SqlRepository
-from sqlalchemy import func, select
-
 from sql_meteo_adapters.sensor_mapper import SensorMapper
 from sql_meteo_adapters.sensor_model import SensorModel
 
@@ -13,11 +13,11 @@ class SqlSensorRepository(
     SqlRepository[Sensor, SensorModel],
     SensorRepository,
 ):
-    def __init__(self, connection: SqlConnection):
-        super().__init__(connection, SensorMapper())
+    def __init__(self, uow: SqlConnection):
+        super().__init__(uow, SensorMapper())
 
     async def find_in_radius(self, center: Location, radius_km: float) -> list[Sensor]:
-        async with self.connection.transaction() as session:
+        async with self.uow.transaction() as session:
             point = func.ST_Transform(
                 func.ST_SetSRID(
                     func.ST_MakePoint(center.longitude, center.latitude), 4326
