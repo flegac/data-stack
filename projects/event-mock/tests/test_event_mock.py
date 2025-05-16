@@ -2,49 +2,94 @@ import asyncio
 from abc import abstractmethod, ABC
 from unittest import TestCase
 
-from event_mock.event_mock import event_mock
+from event_mock.event_bus import EventBus
 
 
-class MyClass(ABC):
-
+class AbstractSync(ABC):
     @abstractmethod
-    def abstract(self): ...
+    def func(self): ...
+
+
+class AbstractAsync(ABC):
     @abstractmethod
-    async def abstract_async(self): ...
+    async def func(self): ...
 
-    def not_abstract(self):
-        return self.sub_method("not_abstract")
 
-    async def not_abstract_async(self):
-        return self.sub_method("not_abstract_async")
+class ConcreteSync:
+    def func(self):
+        self.sub_func("func")
 
-    def sub_method(self, param: str):
-        return "sub_method"
+    def sub_func(self, param: str):
+        return "sub_func"
+
+
+class ConcreteAsync:
+
+    async def func(self):
+        await self.sub_func("func")
+
+    async def sub_func(self, param: str):
+        return "sub_func"
 
 
 class TestIt(TestCase):
 
-    def test_it(self):
-        asyncio.run(self.check_it())
+    def test_concrete_sync(self):
+        # Given
+        bus = EventBus()
+        mock = bus.mock_object(ConcreteSync())
 
-    async def check_it(self):
-        mock, bus = event_mock(MyClass)
+        # When
+        mock.func()
 
-        mock.abstract()
-        await mock.abstract_async()
-
-        mock.not_abstract()
-        await mock.not_abstract_async()
-
+        # Then
         print(bus)
         self.assertListEqual(
             bus.sorted_events(),
-            [
-                "abstract()",
-                "abstract_async()",
-                "not_abstract()",
-                "sub_method(not_abstract)",
-                "not_abstract_async()",
-                "sub_method(not_abstract_async)",
-            ],
+            ["func()", "sub_func(func)"],
+        )
+
+    def test_concrete_async(self):
+        # Given
+        bus = EventBus()
+        mock = bus.mock_object(ConcreteAsync())
+
+        # When
+        asyncio.run(mock.func())
+
+        # Then
+        print(bus)
+        self.assertListEqual(
+            bus.sorted_events(),
+            ["func()", "sub_func(func)"],
+        )
+
+    def test_abstract_sync(self):
+        # Given
+        bus = EventBus()
+        mock = bus.mock_type(AbstractSync)
+
+        # When
+        mock.func()
+
+        # Then
+        print(bus)
+        self.assertListEqual(
+            bus.sorted_events(),
+            ["func()"],
+        )
+
+    def test_abstract_async(self):
+        # Given
+        bus = EventBus()
+        mock = bus.mock_type(AbstractAsync)
+
+        # When
+        asyncio.run(mock.func())
+
+        # Then
+        print(bus)
+        self.assertListEqual(
+            bus.sorted_events(),
+            ["func()"],
         )

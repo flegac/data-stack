@@ -3,8 +3,8 @@ import inspect
 from dataclasses import dataclass
 from unittest import TestCase
 
-from event_mock.event_mock import event_mock
-from meteo_domain.core.unit_of_work import UnitOfWork
+from event_mock.event_bus import event_mock
+from meteo_domain.core.unit_of_work import UnitOfWork, WriteQuery
 
 
 @dataclass
@@ -15,6 +15,14 @@ class DomainA:
 @dataclass
 class DomainB:
     uid: str
+
+
+class SaveQuery[Entity](WriteQuery):
+    def __init__(self, item: Entity):
+        self.item = item
+
+    def write(self, uow: UnitOfWork):
+        pass
 
 
 class TestMemoryUnitOfWork(TestCase):
@@ -29,6 +37,7 @@ class TestMemoryUnitOfWork(TestCase):
         c = DomainB(uid="C")
 
         uow, bus = event_mock(UnitOfWork)
+        uow, bus = event_mock()
         async with uow.transaction():
             await uow.save(a)
             await uow.save(b)

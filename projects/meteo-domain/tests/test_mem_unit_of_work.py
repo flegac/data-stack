@@ -3,7 +3,7 @@ import inspect
 from dataclasses import dataclass
 from unittest import TestCase
 
-from event_mock.event_mock import event_mock
+from event_mock.event_bus import event_mock
 from meteo_domain.core.impl.memory_unit_of_work import MemUnitOfWork
 
 

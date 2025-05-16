@@ -3,16 +3,6 @@ from contextlib import asynccontextmanager
 from typing import Any, AsyncGenerator
 
 
-class ReadQuery[Entity](ABC):
-    @abstractmethod
-    def read(self, uow) -> AsyncGenerator[Entity, Any]: ...
-
-
-class WriteQuery(ABC):
-    @abstractmethod
-    def write(self, uow): ...
-
-
 class CancelUnitOfWorkError(Exception):
     def __init__(self, reason: str = None):
         self.reason = reason
@@ -48,8 +38,12 @@ class UnitOfWork(ABC):
     def cancel(self, reason: str = None):
         raise CancelUnitOfWorkError(reason=reason)
 
-    @abstractmethod
-    async def save[Entity](self, batch: Entity | list[Entity]): ...
 
+class ReadQuery[Entity](ABC):
     @abstractmethod
-    async def delete[Entity](self, item: Entity): ...
+    def read(self, uow: UnitOfWork) -> AsyncGenerator[Entity, Any]: ...
+
+
+class WriteQuery(ABC):
+    @abstractmethod
+    def write(self, uow: UnitOfWork): ...
