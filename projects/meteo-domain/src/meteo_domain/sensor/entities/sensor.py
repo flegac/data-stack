@@ -7,7 +7,7 @@ type SensorId = str
 
 @dataclass(frozen=True)
 class Sensor:
-    uid: SensorId
+    uid: SensorId | None = None
     workspace_id: str | None = None
     measure_type: str | None = None
     location: Location | None = None

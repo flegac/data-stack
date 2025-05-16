@@ -1,10 +1,6 @@
 from functools import cached_property
 from pathlib import Path
 
-from posix_measure_repository.data_file_measure_repository import (
-    DataFileMeasureRepository,
-)
-
 from meteo_domain.config import (
     DATAFILE_ERROR_TOPIC,
     DATAFILE_INGESTION_TOPIC,
@@ -12,22 +8,33 @@ from meteo_domain.config import (
 )
 from meteo_domain.core.logger import logger
 from meteo_domain.core.message_queue.mq_backend import MQBackend
+from meteo_domain.core.unit_of_work import UnitOfWork
 from meteo_domain.data_file.entities.datafile import DataFile
 from meteo_domain.data_file.entities.datafile_lifecycle import DataFileLifecycle
-from meteo_domain.data_file.ports.data_file_repository import DataFileRepository
+from meteo_domain.data_file.ports.data_file_repository import (
+    DataFileSaveBatch,
+    DataFileFindById,
+    DataFileRepository,
+)
 from meteo_domain.data_file.ports.file_repository import FileRepository
 from meteo_domain.temporal_series.ports.tseries_repository import TSeriesRepository
 from meteo_domain.workspace.entities.workspace import Workspace
+from posix_measure_repository.data_file_measure_repository import (
+    DataFileMeasureRepository,
+)
 
 
 class DataFileService:
+
     def __init__(
         self,
+        uow: UnitOfWork,
         data_file_repository: DataFileRepository,
         file_repository: FileRepository,
         measure_repository: TSeriesRepository,
         mq_backend: MQBackend,
     ):
+        self.uow = uow
         self.data_file_repository = data_file_repository
         self.file_repository = file_repository
         self.mq_backend = mq_backend
@@ -35,7 +42,8 @@ class DataFileService:
 
     async def update_status(self, item: DataFile, status: DataFileLifecycle):
         item.status = status
-        await self.data_file_repository.save(item)
+        async with self.uow.transaction():
+            await DataFileSaveBatch(item).write(self.uow)
 
     async def start_ingest_listener(self):
         await self.ingestion_consumer.listen(self.ingest_file)
@@ -73,7 +81,7 @@ class DataFileService:
         item.workspace_id = ws.uid
         logger.info(item)
 
-        if existing := await self.data_file_repository.find_by_id(item.uid):
+        if existing := await DataFileFindById(item.uid).read_one(self.uow):
             logger.warning(f'"{item.uid}" already exists:\n{existing}')
         if existing := self.data_file_repository.find_all(
             source_hash=item.source_hash,
@@ -114,7 +122,10 @@ class DataFileService:
         return self.mq_backend.producer(MEASURE_TOPIC)
 
     async def error_handler(self, item: DataFile, error: Exception = None):
+
         logger.warning(f"_handle_error: {error}: {item}")
         item.status = DataFileLifecycle.ingestion_failed
-        await self.data_file_repository.save(item)
+        with self.uow.transaction():
+            await DataFileSaveBatch(item).write(self.uow)
+
         await self.error_producer.write_single(item)

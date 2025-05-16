@@ -3,10 +3,11 @@ import logging
 from dataclasses import dataclass
 from unittest import TestCase
 
-from sqlmodel import Field, SQLModel
+from sqlalchemy import Column, String
+from sqlalchemy.orm import declarative_base
 
 from meteo_domain.core.impl.repository_checker import check_repository
-from sql_connector.model_mapping import ModelMapping
+from sql_connector.model_mapper import ModelMapper
 from sql_connector.sql_repository import SqlRepository
 from sql_connector.sql_unit_of_work import SqlUnitOfWork
 
@@ -17,9 +18,13 @@ class DomainEntity:
     name: str
 
 
-class ModelEntity(SQLModel, table=True):
-    id: str = Field(primary_key=True)
-    name: str
+Base = declarative_base()
+
+
+class ModelEntity(Base):
+    __tablename__ = "modelentity"
+    id = Column(String, primary_key=True)
+    name: str = Column(String)
 
 
 class TestSqlRepository(TestCase):
@@ -33,17 +38,13 @@ class TestSqlRepository(TestCase):
         uow = SqlUnitOfWork(
             "postgresql+asyncpg://admin:adminpassword@localhost:5432/meteo-db"
         )
+        mapper = ModelMapper(DomainEntity, ModelEntity)
+        repo = SqlRepository(uow, mapper=mapper)
 
         async with uow.transaction():
-            repo = SqlRepository(
-                uow.session, mapper=ModelMapping(DomainEntity, ModelEntity)
-            )
             await check_repository(repo, DomainEntity(id="toto", name="toto"))
             print("whatever1")
 
         async with uow.transaction():
-            repo = SqlRepository(
-                uow.session, mapper=ModelMapping(DomainEntity, ModelEntity)
-            )
             print("whatever2")
             uow.cancel()

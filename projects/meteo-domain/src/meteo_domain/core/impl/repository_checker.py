@@ -16,9 +16,7 @@ async def check_repository[Entity](
 
     uid = await repo.save(item)
     await log_all()
-
     await repo.delete_by_id(uid)
     await log_all()
-
     await repo.save(item)
     await log_all()

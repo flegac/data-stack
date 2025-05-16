@@ -9,6 +9,7 @@ from influxdb_measure_repository.influxdb_measure_repository import (
 )
 from meteo_domain.sensor.entities.location import Location
 from meteo_domain.sensor.entities.sensor import Sensor
+from meteo_domain.sensor.ports.sensor_repository import SensorRepository
 from meteo_domain.temporal_series.entities.measure_query import MeasureQuery
 from meteo_domain.temporal_series.entities.measurement import (
     TaggedMeasurement,
@@ -25,7 +26,11 @@ period_hours = 200
 batch_size = 1_000
 
 
-async def weather_workflow(uow: SqlUnitOfWork, temperature_repo: TSeriesRepository):
+async def weather_workflow(
+    uow: SqlUnitOfWork,
+    sensor_repo: SensorRepository,
+    temperature_repo: TSeriesRepository,
+):
     await temperature_repo.init(reset=True)
 
     # Création des capteurs

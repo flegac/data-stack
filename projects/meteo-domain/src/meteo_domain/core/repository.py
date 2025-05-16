@@ -2,29 +2,27 @@ from abc import ABC, abstractmethod
 from collections.abc import AsyncGenerator
 from typing import Any
 
-from meteo_domain.sensor.entities.location import Location
-
 type UID = str
 
 
 class Repository[Entity](ABC):
     @abstractmethod
-    async def save(self, batch: Entity | list[Entity]): ...
+    async def save(
+        self,
+        batch: Entity | list[Entity],
+    ): ...
     @abstractmethod
-    async def delete_by_id(self, primary_key: UID): ...
+    async def delete_by_id(
+        self,
+        primary_key: UID,
+    ): ...
     @abstractmethod
-    async def find_by_id(self, primary_key: UID) -> Entity | None: ...
+    async def find_by_id(
+        self,
+        primary_key: UID,
+    ) -> Entity | None: ...
     @abstractmethod
-    def find_all(self, **query: Any) -> AsyncGenerator[Entity, Any]: ...
-
-
-class GeoRepository[Entity](Repository[Entity], ABC):
-    @abstractmethod
-    async def find_in_radius(
-        self, center: Location, radius_km: float
-    ) -> list[Entity]: ...
-
-
-class TimeRepository[Entity](Repository[Entity], ABC):
-    @abstractmethod
-    async def find_in_period(self, start: str, end: str) -> list[Entity]: ...
+    def find_all(
+        self,
+        **query: Any,
+    ) -> AsyncGenerator[Entity, Any]: ...

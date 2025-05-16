@@ -1,6 +1,5 @@
 from abc import ABC, abstractmethod
 from contextlib import asynccontextmanager
-from typing import Any, AsyncGenerator
 
 
 class CancelUnitOfWorkError(Exception):
@@ -37,13 +36,3 @@ class UnitOfWork(ABC):
 
     def cancel(self, reason: str = None):
         raise CancelUnitOfWorkError(reason=reason)
-
-
-class ReadQuery[Entity](ABC):
-    @abstractmethod
-    def read(self, uow: UnitOfWork) -> AsyncGenerator[Entity, Any]: ...
-
-
-class WriteQuery(ABC):
-    @abstractmethod
-    def write(self, uow: UnitOfWork): ...
