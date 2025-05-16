@@ -1,14 +1,12 @@
 from typing import override
 
 import databases
-from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession
-from sqlalchemy.orm import sessionmaker
-
 from meteo_domain.core.unit_of_work import UnitOfWork
+from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
+from sqlalchemy.orm import sessionmaker
 
 
 class SqlUnitOfWork(UnitOfWork):
-
     def __init__(self, database_url: str):
         self.database_url = database_url
         self.database = databases.Database(database_url)

@@ -9,7 +9,6 @@ from sql_connector.patches.patch import MapperPatch
 
 
 class ModelMapper[Domain, Model: type[SQLModel]]:
-
     def __init__(
         self,
         domain: type[Domain],

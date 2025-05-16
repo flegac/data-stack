@@ -3,13 +3,12 @@ import logging
 from dataclasses import dataclass
 from unittest import TestCase
 
-from sqlalchemy import Column, String
-from sqlalchemy.orm import declarative_base
-
 from meteo_domain.core.impl.repository_checker import check_repository
 from sql_connector.model_mapper import ModelMapper
 from sql_connector.sql_repository import SqlRepository
 from sql_connector.sql_unit_of_work import SqlUnitOfWork
+from sqlalchemy import Column, String
+from sqlalchemy.orm import declarative_base
 
 
 @dataclass

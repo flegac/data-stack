@@ -1,10 +1,10 @@
 from typing import Any
 
 from geoalchemy2.shape import from_shape, to_shape
+from meteo_domain.sensor.entities.location import Location
 from shapely import Point
 
-from meteo_domain.sensor.entities.location import Location
-from sql_connector.patches.patch import Patch, MapperPatch
+from sql_connector.patches.patch import MapperPatch, Patch
 
 
 class LocationDomainPatch(Patch):

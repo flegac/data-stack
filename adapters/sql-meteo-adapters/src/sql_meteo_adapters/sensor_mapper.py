@@ -5,7 +5,8 @@ from sql_connector.model_mapper import ModelMapper
 from sql_connector.patches.location_patch import (
     LocationPatch,
 )
-from sql_meteo_adapters.models import SensorModel, WorkspaceModel, DataFileModel
+
+from sql_meteo_adapters.models import DataFileModel, SensorModel, WorkspaceModel
 
 SensorMapper = ModelMapper(Sensor, SensorModel, patches=[LocationPatch()])
 WorkspaceMapper = ModelMapper(Workspace, WorkspaceModel, patches=[LocationPatch()])

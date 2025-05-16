@@ -16,10 +16,10 @@ from redis_message_queue.redis_factory import RedisMQBackend
 from s3_connector.s3_config import S3Config
 from s3_connector.s3_connection import S3Connection
 from s3_file_repository.s3_file_repository import S3FileRepository
-from sql_connector.sql_connection import SqlConnection
+from sql_connector.sql_unit_of_work import SqlUnitOfWork
 from sql_meteo_adapters.repositories import (
-    SqlWorkspaceRepository,
     SqlDataFileRepository,
+    SqlWorkspaceRepository,
 )
 
 
@@ -52,17 +52,13 @@ class Container(containers.DeclarativeContainer):
         settings,
     )
 
-    sql_connection = providers.Singleton(SqlConnection, database_url)
+    sql_uow = providers.Singleton(SqlUnitOfWork, database_url)
 
     # DataFile Repository
-    data_file_repository = providers.Singleton(
-        SqlDataFileRepository, connection=sql_connection
-    )
+    data_file_repository = providers.Singleton(SqlDataFileRepository, uow=sql_uow)
 
     # Workspace Repository
-    ws_repository = providers.Singleton(
-        SqlWorkspaceRepository, connection=sql_connection
-    )
+    ws_repository = providers.Singleton(SqlWorkspaceRepository, uow=sql_uow)
     # Configuration InfluxDB (à ajouter dans Settings aussi)
     influxdb_config = providers.Singleton(
         InfluxDBConfig,
@@ -105,6 +101,7 @@ class Container(containers.DeclarativeContainer):
     # Service DataFile
     datafile_service = providers.Singleton(
         DataFileService,
+        uow=sql_uow,
         mq_backend=redis_mq_backend,
         data_file_repository=data_file_repository,
         file_repository=file_repository,

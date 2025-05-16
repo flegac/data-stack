@@ -1,5 +1,5 @@
 import asyncio
-from abc import abstractmethod, ABC
+from abc import ABC, abstractmethod
 from unittest import TestCase
 
 from event_mock.event_bus import EventBus
@@ -24,7 +24,6 @@ class ConcreteSync:
 
 
 class ConcreteAsync:
-
     async def func(self):
         await self.sub_func("func")
 
@@ -33,7 +32,6 @@ class ConcreteAsync:
 
 
 class TestIt(TestCase):
-
     def test_concrete_sync(self):
         # Given
         bus = EventBus()

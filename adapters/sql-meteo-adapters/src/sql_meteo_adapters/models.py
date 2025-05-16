@@ -1,8 +1,7 @@
 from geoalchemy2 import Geometry
-from sqlalchemy import Column, String, Date, func, Enum
-from sqlalchemy.orm import declarative_base
-
 from meteo_domain.data_file.entities.datafile_lifecycle import DataFileLifecycle
+from sqlalchemy import Column, Date, Enum, String, func
+from sqlalchemy.orm import declarative_base
 
 Base = declarative_base()
 

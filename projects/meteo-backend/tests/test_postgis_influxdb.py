@@ -18,6 +18,7 @@ from meteo_domain.temporal_series.entities.period import Period
 from meteo_domain.temporal_series.ports.tseries_repository import TSeriesRepository
 from meteo_domain.utils import generate_french_locations
 from sql_connector.sql_unit_of_work import SqlUnitOfWork
+from sql_meteo_adapters.repositories import SqlSensorRepository
 
 PARIS = Location(latitude=48.8566, longitude=2.3522)
 search_radius_km = 500
@@ -44,7 +45,7 @@ async def weather_workflow(
     ]
 
     async with uow.transaction():
-        await uow.save(sensors)
+        await sensor_repo.save(sensors)
 
     # Ajout des mesures
     base_date = datetime.now(UTC).replace(
@@ -92,13 +93,14 @@ async def weather_workflow(
 
 
 class TestPostgisInfluxdb(TestCase):
-
     def test_it(self):
         import asyncio
 
         uow = SqlUnitOfWork(
             "postgresql+asyncpg://admin:adminpassword@localhost:5432/meteo-db"
         )
+        sensor_repo = SqlSensorRepository(uow)
+
         measures = InfluxDbMeasureRepository(
             InfluxDBConfig(
                 url="http://localhost:8086",
@@ -110,6 +112,7 @@ class TestPostgisInfluxdb(TestCase):
         asyncio.run(
             weather_workflow(
                 uow,
+                sensor_repo,
                 measures,
             )
         )

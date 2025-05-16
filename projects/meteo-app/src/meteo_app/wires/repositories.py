@@ -8,10 +8,10 @@ from kafka_message_queue.kafka_factory import KafkaMQBackend
 from meteo_app.wires.config import Config
 from s3_connector.s3_connection import S3Connection
 from s3_file_repository.s3_file_repository import S3FileRepository
-from sql_connector.sql_connection import SqlConnection
+from sql_connector.sql_unit_of_work import SqlUnitOfWork
 from sql_meteo_adapters.repositories import (
-    SqlWorkspaceRepository,
     SqlDataFileRepository,
+    SqlWorkspaceRepository,
 )
 
 
@@ -37,8 +37,6 @@ class Repositories(containers.DeclarativeContainer):
         InfluxDbMeasureRepository, config=config.influx_db
     )
 
-    sql_connection = providers.Singleton(SqlConnection, config.database_url)
+    sql_uow = providers.Singleton(SqlUnitOfWork, config.database_url)
 
-    data_file_repository = providers.Singleton(
-        SqlDataFileRepository, connection=sql_connection
-    )
+    data_file_repository = providers.Singleton(SqlDataFileRepository, uow=sql_uow)

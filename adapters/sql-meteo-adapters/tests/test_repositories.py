@@ -10,9 +10,9 @@ from sql_connector.sql_repository import SqlRepository
 from sql_connector.sql_unit_of_work import SqlUnitOfWork
 from sql_meteo_adapters.models import SensorModel
 from sql_meteo_adapters.repositories import (
-    SqlWorkspaceRepository,
     SqlDataFileRepository,
     SqlSensorRepository,
+    SqlWorkspaceRepository,
 )
 
 

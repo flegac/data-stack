@@ -1,5 +1,3 @@
-from sqlalchemy import func, select
-
 from meteo_domain.data_file.entities.datafile import DataFile
 from meteo_domain.data_file.ports.data_file_repository import DataFileRepository
 from meteo_domain.sensor.entities.location import Location
@@ -9,11 +7,13 @@ from meteo_domain.workspace.entities.workspace import Workspace
 from meteo_domain.workspace.ports.workspace_repository import WorkspaceRepository
 from sql_connector.sql_repository import SqlRepository
 from sql_connector.sql_unit_of_work import SqlUnitOfWork
-from sql_meteo_adapters.models import DataFileModel, WorkspaceModel, SensorModel
+from sqlalchemy import func, select
+
+from sql_meteo_adapters.models import DataFileModel, SensorModel, WorkspaceModel
 from sql_meteo_adapters.sensor_mapper import (
+    DataFileMapper,
     SensorMapper,
     WorkspaceMapper,
-    DataFileMapper,
 )
 
 

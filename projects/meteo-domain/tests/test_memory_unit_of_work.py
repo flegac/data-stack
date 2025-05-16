@@ -44,5 +44,5 @@ class TestMemoryUnitOfWork(TestCase):
 
 
 def list_async_methods(obj):
-    for name, method in inspect.getmembers(obj, inspect.iscoroutinefunction):
+    for _, method in inspect.getmembers(obj, inspect.iscoroutinefunction):
         yield method

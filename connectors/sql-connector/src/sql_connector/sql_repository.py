@@ -1,11 +1,11 @@
 from collections.abc import AsyncGenerator
 from typing import Any, override
 
+from meteo_domain.core.logger import logger
+from meteo_domain.core.repository import UID, Repository
 from sqlalchemy import delete
 from sqlmodel import select
 
-from meteo_domain.core.logger import logger
-from meteo_domain.core.repository import UID, Repository
 from sql_connector.model_mapper import ModelMapper
 from sql_connector.sql_unit_of_work import SqlUnitOfWork
 
@@ -22,7 +22,6 @@ class SqlRepository[Domain, Model](Repository[Domain]):
     @override
     async def save(self, batch: Domain | list[Domain]):
         async with self.uow.transaction():
-
             items: list[Domain] = batch
             # if not isinstance(batch, list):
             #     items = [batch]
@@ -65,7 +64,6 @@ class SqlRepository[Domain, Model](Repository[Domain]):
     @override
     async def find_all(self, **query: Any) -> AsyncGenerator[Domain, Any]:
         async with self.uow.transaction():
-
             statement = select(self.model)
             for key, value in query.items():
                 statement.where(getattr(self.model, key) == value)

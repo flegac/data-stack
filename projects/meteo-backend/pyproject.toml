@@ -15,10 +15,10 @@ dependencies = [
     "pydantic-settings>=2.9.1",
 ]
 
-[tool.pytest.ini_options]
-testpaths = ["tests"]
-python_files = ["test_*.py"]
-addopts = "-v --cov=meteo_backend"
+#[tool.pytest.ini_options]
+#testpaths = ["tests"]
+#python_files = ["test_*.py"]
+#addopts = "-v --cov=meteo_backend"
 
 [build-system]
 requires = ["hatchling"]

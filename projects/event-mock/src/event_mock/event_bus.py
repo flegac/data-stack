@@ -40,7 +40,7 @@ class EventBus:
 
     def _trace_func(self, func, *args, **kwargs):
         kwargs_str = "" if not kwargs else f"{kwargs}"
-        args_str = "" if not args else f"{",".join(map(str,args))}"
+        args_str = "" if not args else f"{','.join(map(str, args))}"
         self.push(f"{func.__name__}({args_str}{kwargs_str})")
 
     def _wrap_object_func(self, object, func):
