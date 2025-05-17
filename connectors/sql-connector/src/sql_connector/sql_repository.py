@@ -4,19 +4,22 @@ from typing import Any, override
 from sqlalchemy import delete, select, Column
 
 from meteo_domain.core.logger import logger
-from meteo_domain.core.repository import UID, Repository
+from meteo_domain.datafile_ingestion.ports.uow.repository import (
+    UID,
+    Repository,
+)
 from sql_connector.model_mapper import ModelMapper
-from sql_connector.sql_unit_of_work import SqlUnitOfWork
+from sql_connector.sql_connection import SqlConnection
 
 
 class SqlRepository[Domain, Model](Repository[Domain]):
 
     def __init__(
         self,
-        uow: SqlUnitOfWork,
+        connection: SqlConnection,
         mapper: ModelMapper[Domain, Model],
     ):
-        self.uow = uow
+        self.connection = connection
         self.mapper = mapper
 
     @override
@@ -76,16 +79,16 @@ class SqlRepository[Domain, Model](Repository[Domain]):
 
     @override
     async def create_table(self):
-        await self.uow.connection.create_table(self.model)
+        await self.connection.create_table(self.model)
 
     @override
     async def drop_table(self):
-        await self.uow.connection.drop_table(self.model)
-
-    @property
-    def session(self):
-        return self.uow.session
+        await self.connection.drop_table(self.model)
 
     @property
     def model(self) -> Model:
         return self.mapper.model
+
+    @property
+    def session(self):
+        return self.connection.session

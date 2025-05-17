@@ -1,24 +1,24 @@
 from dependency_injector import containers, providers
 
+from file_repository_s3.s3_file_repository import S3FileRepository
 from influxdb_connector.influxdb_config import InfluxDBConfig
-from influxdb_measure_repository.influxdb_measure_repository import (
-    InfluxDbTSeriesRepository,
-)
 from kafka_connector.kafka_config import KafkaConfig
 from kafka_connector.kafka_connection import KafkaConnection
-from kafka_message_queue.kafka_factory import KafkaMQBackend
+from measure_repository_influxdb.influxdb_measure_repository import (
+    InfluxDbTSeriesRepository,
+)
+from message_queue_kafka.kafka_factory import KafkaMQBackend
+from message_queue_redis.redis_config import RedisConfig
+from message_queue_redis.redis_connection import RedisConnection
+from message_queue_redis.redis_factory import RedisMQBackend
 from meteo_backend.core.config.settings import Settings
-from meteo_domain.data_file.datafile_service import DataFileService
-from meteo_domain.workspace.workspace_service import WorkspaceService
-from redis_message_queue.redis_config import RedisConfig
-from redis_message_queue.redis_connection import RedisConnection
-from redis_message_queue.redis_factory import RedisMQBackend
+from meteo_domain.datafile_ingestion.datafile_service import DataFileService
+from meteo_domain.datafile_ingestion.workspace_service import WorkspaceService
 from s3_connector.s3_config import S3Config
 from s3_connector.s3_connection import S3Connection
-from s3_file_repository.s3_file_repository import S3FileRepository
-from sql_connector.sql_unit_of_work import SqlUnitOfWork
-from sql_meteo_adapters.data_file import SqlDataFileRepository
-from sql_meteo_adapters.workspace import SqlWorkspaceRepository
+from unit_of_work_sql.repositories.data_file import SqlDataFileRepository
+from unit_of_work_sql.repositories.workspace import SqlWorkspaceRepository
+from unit_of_work_sql.sql_unit_of_work import SqlUnitOfWork
 
 
 class Container(containers.DeclarativeContainer):

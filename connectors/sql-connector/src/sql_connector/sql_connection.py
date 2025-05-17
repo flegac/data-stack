@@ -1,6 +1,6 @@
 import re
 
-from sqlalchemy import text
+from sqlalchemy import text, Executable
 from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession, async_sessionmaker
 from sqlalchemy.orm import DeclarativeBase
 
@@ -22,6 +22,27 @@ class SqlConnection:
             expire_on_commit=False,
             class_=AsyncSession,
         )
+        self.session: AsyncSession | None = None
+
+    async def create_session(self):
+        if self.session:
+            raise ValueError("Session already exists")
+        self.session = self.session_factory()
+
+    async def close_session(self):
+        if not self.session:
+            raise ValueError("Session does not exist. Call create_session() first.")
+        await self.session.close()
+        self.session = None
+
+    async def commit(self):
+        await self.session.commit()
+
+    async def rollback(self):
+        await self.session.rollback()
+
+    async def execute(self, session: AsyncSession, statement: Executable):
+        await session.execute(statement)
 
     async def kill_all_connections(self):
         logger.info("killing all connections")

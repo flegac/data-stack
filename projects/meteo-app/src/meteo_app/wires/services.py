@@ -1,6 +1,6 @@
 from dependency_injector import containers, providers
-from meteo_domain.data_file.datafile_service import DataFileService
-from meteo_domain.workspace.workspace_service import WorkspaceService
+from meteo_domain.datafile_ingestion.datafile_service import DataFileService
+from meteo_domain.datafile_ingestion.workspace_service import WorkspaceService
 
 from meteo_app.wires.repositories import Repositories
 

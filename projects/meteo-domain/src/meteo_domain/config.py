@@ -1,8 +1,8 @@
 from pathlib import Path
 
 from meteo_domain.core.message_queue.mq_topic import MQTopic
-from meteo_domain.data_file.datafile_serializer import DataFileSerializer
-from meteo_domain.temporal_series.measurement_serializer import MeasurementSerializer
+from meteo_domain.serializers.datafile_serializer import DataFileSerializer
+from meteo_domain.serializers.measurement_serializer import MeasurementSerializer
 
 DATASET_ROOT_PATH = Path.home() / "Documents" / "Data" / "Datasets"
 LOCAL_STORAGE_PATH = Path("/tmp/meteo-files")

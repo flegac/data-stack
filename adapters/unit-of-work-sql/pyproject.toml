@@ -1,0 +1,20 @@
+[project]
+name = "unit-of-work-sql"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+authors = [
+    { name = "flegac", email = "florent.legac@gmail.com" }
+]
+requires-python = ">=3.13"
+dependencies = [
+    "meteo-domain",
+    "sql-connector"
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.pytest.ini_options]
+asyncio_default_fixture_loop_scope = "function"

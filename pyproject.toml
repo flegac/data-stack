@@ -24,16 +24,16 @@ meteo-backend = { workspace = true }
 meteo-domain = { workspace = true }
 
 # adapters
-geopy-location-api = { workspace = true }
-influxdb-measure-repository = { workspace = true }
-kafka-message-queue = { workspace = true }
-openmeteo-measure-repository = { workspace = true }
-posix-file-repository = { workspace = true }
-posix-measure-repository = { workspace = true }
-redis-message-queue = { workspace = true }
-s3-file-repository = { workspace = true }
-sql-meteo-adapters = { workspace = true }
-xarray-datafile-api = { workspace = true }
+datafile-api-xarray = { workspace = true }
+file-repository-posix = { workspace = true }
+file-repository-s3 = { workspace = true }
+location-api-geopy = { workspace = true }
+measure-repository-influxdb = { workspace = true }
+measure-repository-openmeteo = { workspace = true }
+measure-repository-posix = { workspace = true }
+message-queue-kafka = { workspace = true }
+message-queue-redis = { workspace = true }
+unit-of-work-sql = { workspace = true }
 
 # connectors
 influxdb-connector = { workspace = true }

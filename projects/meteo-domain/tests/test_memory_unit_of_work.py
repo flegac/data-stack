@@ -4,7 +4,7 @@ from dataclasses import dataclass
 from unittest import TestCase
 
 from event_mock.event_bus import EventBus
-from meteo_domain.core.unit_of_work import UnitOfWork
+from meteo_domain.datafile_ingestion.ports.uow.unit_of_work import UnitOfWork
 
 
 @dataclass
@@ -35,10 +35,10 @@ class TestMemoryUnitOfWork(TestCase):
             bus.sorted_events(),
             [
                 "transaction()",
-                "create_session()",
+                "on_start()",
                 "cancel(testing)",
                 "rollback()",
-                "destroy_session()",
+                "on_stop()",
             ],
         )
 

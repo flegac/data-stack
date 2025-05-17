@@ -1,8 +1,8 @@
 import datetime
 from unittest import TestCase
 
-from meteo_domain.temporal_series.entities.measurement import Measurement
-from meteo_domain.temporal_series.measurement_serializer import MeasurementSerializer
+from meteo_domain.measurement.entities.measurement import Measurement
+from meteo_domain.serializers.measurement_serializer import MeasurementSerializer
 
 
 class TestMeasureSerializer(TestCase):

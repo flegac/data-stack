@@ -4,7 +4,7 @@ from functools import cached_property
 from sqlalchemy import inspect, Column
 from sqlalchemy.orm import class_mapper
 
-from sql_connector.patches.patch import MapperPatch
+from sql_connector.patch import MapperPatch
 from sql_connector.sql_connection import BaseModel
 
 

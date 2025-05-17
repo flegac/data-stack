@@ -3,7 +3,7 @@ from fastapi import APIRouter, Depends, UploadFile
 from meteo_backend.core.application_context import ApplicationContext
 from meteo_backend.core.dependencies import get_context
 from meteo_domain.core.logger import logger
-from meteo_domain.workspace.entities.workspace import Workspace
+from meteo_domain.datafile_ingestion.entities.workspace import Workspace
 
 router = APIRouter()
 

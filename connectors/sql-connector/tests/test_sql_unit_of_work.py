@@ -8,7 +8,7 @@ from meteo_domain.core.impl.repository_checker import check_uow_repository
 from sql_connector.model_mapper import ModelMapper
 from sql_connector.sql_connection import BaseModel
 from sql_connector.sql_repository import SqlRepository
-from sql_connector.sql_unit_of_work import SqlUnitOfWork
+from unit_of_work_sql.sql_unit_of_work import SqlUnitOfWork
 
 
 @dataclass
@@ -29,7 +29,7 @@ class TestSqlRepository(TestCase):
             "postgresql+asyncpg://admin:adminpassword@localhost:5432/meteo-db"
         )
         self.repo = SqlRepository(
-            self.uow, mapper=ModelMapper(DomainEntity, ModelEntity)
+            self.uow.connection, mapper=ModelMapper(DomainEntity, ModelEntity)
         )
 
     def test_repository(self):

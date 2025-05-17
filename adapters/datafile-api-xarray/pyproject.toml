@@ -1,0 +1,18 @@
+[project]
+name = "datafile-api-xarray"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+authors = [
+    { name = "flegac", email = "florent.legac@gmail.com" }
+]
+requires-python = ">=3.13"
+dependencies = [
+    "cfgrib>=0.9.15.0",
+    "h5netcdf>=1.6.1",
+    "xarray>=2025.3.1",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"

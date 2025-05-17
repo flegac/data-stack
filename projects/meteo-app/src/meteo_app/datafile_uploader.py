@@ -4,10 +4,10 @@ import datetime
 from meteo_app.wires.config import INI_FILE
 from meteo_app.wires.services import Services
 from meteo_domain.config import EXPORT_PATH
-from meteo_domain.data_file.entities.meta_data_file import MetaDataFile
-from meteo_domain.data_file.entities.metadata.coordinate import Coordinate
-from meteo_domain.data_file.entities.metadata.variable import Variable
-from meteo_domain.workspace.entities.workspace import Workspace
+from meteo_domain.datafile_ingestion.entities.meta_data_file import MetaDataFile
+from meteo_domain.datafile_ingestion.entities.coordinate import Coordinate
+from meteo_domain.datafile_ingestion.entities.variable import Variable
+from meteo_domain.datafile_ingestion.entities.workspace import Workspace
 
 
 def main():
