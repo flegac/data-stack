@@ -1,5 +1,5 @@
 [project]
-name = "posix-measure-repository"
+name = "xarray-datafile-api"
 version = "0.1.0"
 description = "Add your description here"
 readme = "README.md"
@@ -8,12 +8,11 @@ authors = [
 ]
 requires-python = ">=3.13"
 dependencies = [
-    "meteo-domain",
+    "cfgrib>=0.9.15.0",
+    "h5netcdf>=1.6.1",
+    "xarray>=2025.3.1",
 ]
 
 [build-system]
 requires = ["hatchling"]
 build-backend = "hatchling.build"
-
-[tool.pytest.ini_options]
-asyncio_default_fixture_loop_scope = "function"

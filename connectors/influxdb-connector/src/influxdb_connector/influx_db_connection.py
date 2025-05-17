@@ -7,7 +7,6 @@ from influxdb_client import InfluxDBClient
 from influxdb_client.client.flux_table import TableList
 from influxdb_client.client.write_api import SYNCHRONOUS
 from loguru import logger
-from meteo_domain.core.memory import get_detailed_memory_info
 
 from influxdb_connector.influxdb_config import InfluxDBConfig
 
@@ -24,7 +23,7 @@ class InfluxDbConnection:
         parts = chunks(records, chunk_size)
         for chunk in parts:
             self.write(chunk)
-            logger.info(f"Wrote {len(chunk)} records, {get_detailed_memory_info()}")
+            # logger.info(f"Wrote {len(chunk)} records, {get_detailed_memory_info()}")
 
     def write(self, record: Any):
         self.write_api.write(

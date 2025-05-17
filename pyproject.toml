@@ -5,7 +5,6 @@ description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [
-    "celery>=5.5.2",
 ]
 
 [tool.uv.workspace]
@@ -16,34 +15,32 @@ members = [
 ]
 
 [tool.uv.sources]
-
+# projects
+event-mock = { workspace = true }
 meteo-app = { workspace = true }
+meteo-backend = { workspace = true }
 
 # domain
 meteo-domain = { workspace = true }
 
-#ports
-data-file-repository = { workspace = true }
-workspace-repository = { workspace = true }
-file-repository = { workspace = true }
-measure-repository = { workspace = true }
-
 # adapters
-kafka-message-queue = { workspace = true }
-redis-message-queue = { workspace = true }
-sql-meteo-adapters = { workspace = true }
-s3-file-repository = { workspace = true }
-posix-file-repository = { workspace = true }
-
-posix-measure-repository = { workspace = true }
+geopy-location-api = { workspace = true }
 influxdb-measure-repository = { workspace = true }
+kafka-message-queue = { workspace = true }
 openmeteo-measure-repository = { workspace = true }
+posix-file-repository = { workspace = true }
+posix-measure-repository = { workspace = true }
+redis-message-queue = { workspace = true }
+s3-file-repository = { workspace = true }
+sql-meteo-adapters = { workspace = true }
+xarray-datafile-api = { workspace = true }
 
 # connectors
-sql-connector = { workspace = true }
 influxdb-connector = { workspace = true }
-s3-connector = { workspace = true }
 kafka-connector = { workspace = true }
+redis-connector = { workspace = true }
+s3-connector = { workspace = true }
+sql-connector = { workspace = true }
 
 [tool.ruff]
 # Règles à activer

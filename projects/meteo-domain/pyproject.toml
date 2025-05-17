@@ -12,11 +12,11 @@ dependencies = [
     "loguru>=0.7.3",
     "psutil>=7.0.0",
     "tqdm>=4.67.1",
-    "cfgrib>=0.9.15.0",
-    "h5netcdf>=1.6.1",
-    "xarray>=2025.3.1",
 ]
 
 [build-system]
 requires = ["hatchling"]
 build-backend = "hatchling.build"
+
+[tool.pytest.ini_options]
+asyncio_default_fixture_loop_scope = "function"

@@ -4,14 +4,15 @@ from typing import Any, override
 
 import openmeteo_requests
 import requests_cache
+from retry_requests import retry
+
+from meteo_domain.ports.tseries_repository import TSeriesRepository
 from meteo_domain.temporal_series.entities.measure_query import MeasureQuery
 from meteo_domain.temporal_series.entities.measurement import (
     Measurement,
     TaggedMeasurement,
 )
 from meteo_domain.temporal_series.entities.temporal_series import TSeries
-from meteo_domain.temporal_series.ports.tseries_repository import TSeriesRepository
-from retry_requests import retry
 
 OPEN_METEO_URL = "https://archive-api.open-meteo.com/v1/archive"
 

@@ -15,7 +15,7 @@ class MyService:
         self.config = config
 
     def do_something(self):
-        print("do_something")
+        print(f"do_something: {self.custom}")
 
 
 # pylint: disable=too-few-public-methods

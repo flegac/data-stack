@@ -11,9 +11,9 @@ from meteo_domain.core.message_queue.mq_backend import MQBackend
 from meteo_domain.core.unit_of_work import UnitOfWork
 from meteo_domain.data_file.entities.datafile import DataFile
 from meteo_domain.data_file.entities.datafile_lifecycle import DataFileLifecycle
-from meteo_domain.data_file.ports.data_file_repository import DataFileRepository
-from meteo_domain.data_file.ports.file_repository import FileRepository
-from meteo_domain.temporal_series.ports.tseries_repository import TSeriesRepository
+from meteo_domain.ports.data_file_repository import DataFileRepository
+from meteo_domain.ports.file_repository import FileRepository
+from meteo_domain.ports.tseries_repository import TSeriesRepository
 from meteo_domain.workspace.entities.workspace import Workspace
 from posix_measure_repository.data_file_measure_repository import (
     DataFileMeasureRepository,
@@ -76,20 +76,19 @@ class DataFileService:
         item.workspace_id = ws.uid
         logger.info(item)
 
-        with self.uow.transaction():
+        async with self.uow.transaction():
             existing = await self.data_file_repository.find_by_id(item.uid)
+            if existing:
+                logger.warning(f'"{item.uid}" already exists:\n{existing}')
+            if existing := self.data_file_repository.find_all(
+                source_hash=item.source_hash,
+            ):
+                logger.warning(
+                    f'source_hash "{item.source_hash}" already exists:\n'
+                    f"{[_.uid async for _ in existing]}"
+                )
 
-        if existing:
-            logger.warning(f'"{item.uid}" already exists:\n{existing}')
-        if existing := self.data_file_repository.find_all(
-            source_hash=item.source_hash,
-        ):
-            logger.warning(
-                f'source_hash "{item.source_hash}" already exists:\n'
-                f"{[_.uid async for _ in existing]}"
-            )
-
-        await self.data_file_repository.save(item)
+            await self.data_file_repository.save(item)
 
         try:
             await self.update_status(item, DataFileLifecycle.upload_in_progress)

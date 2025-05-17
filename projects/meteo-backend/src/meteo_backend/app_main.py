@@ -11,7 +11,7 @@ app = create_app(container)
 
 
 if __name__ == "__main__":
-    asyncio.run(container.data_file_repository().init())
+    asyncio.run(container.data_file_repository().create_table())
 
     module_path = f"{__name__}:app"
     uvicorn.run(

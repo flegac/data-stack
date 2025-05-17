@@ -1,22 +1,33 @@
-import logging
-
 from meteo_domain.core.repository import Repository
+from meteo_domain.core.unit_of_work import UnitOfWork
 
 
-async def check_repository[Entity](
+async def check_uow_repository[Entity](
+    uow: UnitOfWork,
     repo: Repository[Entity],
     item: Entity,
 ):
-    logging.getLogger("asyncio").setLevel(logging.ERROR)
+    # async with uow.transaction():
+    #     await repo.drop_table()
 
-    async def log_all():
-        async for _ in repo.find_all():
-            print(_)
-        print("-------------------")
+    async with uow.transaction():
+        await repo.create_table()
 
-    uid = await repo.save(item)
-    await log_all()
-    await repo.delete_by_id(uid)
-    await log_all()
-    await repo.save(item)
-    await log_all()
+    async with uow.transaction():
+        await repo.save(item)
+    await log_all(repo)
+
+    async with uow.transaction():
+        await repo.delete_by_id(item.uid)
+    await log_all(repo)
+
+    async with uow.transaction():
+        await repo.save(item)
+    await log_all(repo)
+
+
+async def log_all(repo: Repository):
+    print(f"--- content of {str(repo):30s} ----------------")
+    async for _ in repo.find_all():
+        print(_)
+    print("--------------------------------------------------------------")

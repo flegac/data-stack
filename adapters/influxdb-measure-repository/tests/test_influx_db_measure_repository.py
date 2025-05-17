@@ -2,11 +2,12 @@ import asyncio
 import datetime
 from unittest import TestCase
 
+from loguru import logger
+
 from influxdb_measure_repository.influxdb_measure_repository import (
-    InfluxDbMeasureRepository,
+    InfluxDbTSeriesRepository,
 )
 from influxdb_measure_repository.query_mapping import query_to_flux
-from loguru import logger
 from meteo_app.config import INFLUX_DB_CONFIG
 from meteo_domain.sensor.entities.location import Location
 from meteo_domain.sensor.entities.sensor import Sensor
@@ -20,7 +21,7 @@ from meteo_domain.temporal_series.entities.period import Period
 class TestInfluDbMeasureRepository(TestCase):
     def setUp(self):
         # logging.getLogger("asyncio").setLevel(logging.ERROR)
-        self.repo = InfluxDbMeasureRepository(INFLUX_DB_CONFIG)
+        self.repo = InfluxDbTSeriesRepository(INFLUX_DB_CONFIG)
         asyncio.run(self.repo.init(reset=True))
 
         self.sensor = Sensor(

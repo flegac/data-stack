@@ -3,7 +3,8 @@ from pathlib import Path
 from typing import IO, Any, override
 
 from loguru import logger
-from meteo_domain.data_file.ports.file_repository import FileRepository
+
+from meteo_domain.ports.file_repository import FileRepository
 from s3_connector.s3_connection import S3Connection
 
 

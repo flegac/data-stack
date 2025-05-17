@@ -1,15 +1,13 @@
 import asyncio
 import datetime
 
-from meteo_domain.config import EXPORT_PATH
-from meteo_domain.metadata_file.entities.coordinate import Coordinate
-from meteo_domain.metadata_file.entities.meta_data_file import MetaDataFile
-from meteo_domain.metadata_file.entities.variable import Variable
-from meteo_domain.metadata_file.metadatafile_service import MetadataFileService
-from meteo_domain.workspace.entities.workspace import Workspace
-
 from meteo_app.wires.config import INI_FILE
 from meteo_app.wires.services import Services
+from meteo_domain.config import EXPORT_PATH
+from meteo_domain.data_file.entities.meta_data_file import MetaDataFile
+from meteo_domain.data_file.entities.metadata.coordinate import Coordinate
+from meteo_domain.data_file.entities.metadata.variable import Variable
+from meteo_domain.workspace.entities.workspace import Workspace
 
 
 def main():
@@ -19,7 +17,7 @@ def main():
 
     filepath = EXPORT_PATH / "dummy.grib"
     now = datetime.datetime.now(datetime.UTC)
-    MetadataFileService().randomize(
+    services.datafile_service.randomize(
         MetaDataFile(
             coords=[
                 Coordinate.interval(
@@ -40,7 +38,7 @@ def main():
 
     asyncio.run(
         service.upload_single(
-            ws=Workspace.from_name(name="default"),
+            ws=Workspace(uid="default"),
             path=filepath,
         )
     )

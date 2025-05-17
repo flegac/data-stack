@@ -1,49 +1,47 @@
 import asyncio
-import logging
 from dataclasses import dataclass
 from unittest import TestCase
 
-from meteo_domain.core.impl.repository_checker import check_repository
+from sqlalchemy import Column, String
+
+from meteo_domain.core.impl.repository_checker import check_uow_repository
 from sql_connector.model_mapper import ModelMapper
+from sql_connector.sql_connection import BaseModel
 from sql_connector.sql_repository import SqlRepository
 from sql_connector.sql_unit_of_work import SqlUnitOfWork
-from sqlalchemy import Column, String
-from sqlalchemy.orm import declarative_base
 
 
 @dataclass
 class DomainEntity:
-    id: str
+    uid: str
     name: str
 
 
-Base = declarative_base()
-
-
-class ModelEntity(Base):
+class ModelEntity(BaseModel):
     __tablename__ = "modelentity"
-    id = Column(String, primary_key=True)
+    uid = Column(String, primary_key=True)
     name: str = Column(String)
 
 
 class TestSqlRepository(TestCase):
     def setUp(self):
-        logging.getLogger("asyncio").setLevel(logging.ERROR)
-
-    def test_transaction(self):
-        asyncio.run(self.run_transaction())
-
-    async def run_transaction(self):
-        uow = SqlUnitOfWork(
+        self.uow = SqlUnitOfWork(
             "postgresql+asyncpg://admin:adminpassword@localhost:5432/meteo-db"
         )
-        mapper = ModelMapper(DomainEntity, ModelEntity)
-        repo = SqlRepository(uow, mapper=mapper)
+        self.repo = SqlRepository(
+            self.uow, mapper=ModelMapper(DomainEntity, ModelEntity)
+        )
 
-        async with uow.transaction():
-            await check_repository(repo, DomainEntity(id="toto", name="toto"))
-            print("whatever1")
+    def test_repository(self):
+        asyncio.run(self.run_repository())
 
-        async with uow.transaction():
+    async def run_repository(self):
+
+        await check_uow_repository(
+            self.uow, self.repo, DomainEntity(uid="toto", name="toto")
+        )
+        print("whatever1")
+
+        async with self.uow.transaction():
             print("whatever2")
-            uow.cancel()
+            self.uow.cancel()

@@ -2,7 +2,7 @@ from dependency_injector import containers, providers
 
 from influxdb_connector.influxdb_config import InfluxDBConfig
 from influxdb_measure_repository.influxdb_measure_repository import (
-    InfluxDbMeasureRepository,
+    InfluxDbTSeriesRepository,
 )
 from kafka_connector.kafka_config import KafkaConfig
 from kafka_connector.kafka_connection import KafkaConnection
@@ -17,10 +17,8 @@ from s3_connector.s3_config import S3Config
 from s3_connector.s3_connection import S3Connection
 from s3_file_repository.s3_file_repository import S3FileRepository
 from sql_connector.sql_unit_of_work import SqlUnitOfWork
-from sql_meteo_adapters.repositories import (
-    SqlDataFileRepository,
-    SqlWorkspaceRepository,
-)
+from sql_meteo_adapters.data_file import SqlDataFileRepository
+from sql_meteo_adapters.workspace import SqlWorkspaceRepository
 
 
 class Container(containers.DeclarativeContainer):
@@ -70,7 +68,7 @@ class Container(containers.DeclarativeContainer):
 
     # Measure Repository
     measure_repository = providers.Singleton(
-        InfluxDbMeasureRepository,
+        InfluxDbTSeriesRepository,
         config=influxdb_config,
     )
 

@@ -1,19 +1,17 @@
 import asyncio
 from unittest import TestCase
 
-from meteo_domain.core.impl.repository_checker import check_repository
+from meteo_domain.core.impl.repository_checker import check_uow_repository
 from meteo_domain.data_file.entities.datafile import DataFile
 from meteo_domain.sensor.entities.location import Location
 from meteo_domain.sensor.entities.sensor import Sensor
 from meteo_domain.workspace.entities.workspace import Workspace
-from sql_connector.sql_repository import SqlRepository
 from sql_connector.sql_unit_of_work import SqlUnitOfWork
-from sql_meteo_adapters.models import SensorModel
-from sql_meteo_adapters.repositories import (
-    SqlDataFileRepository,
+from sql_meteo_adapters.data_file import SqlDataFileRepository
+from sql_meteo_adapters.sensor import (
     SqlSensorRepository,
-    SqlWorkspaceRepository,
 )
+from sql_meteo_adapters.workspace import SqlWorkspaceRepository
 
 
 class TestRepositories(TestCase):
@@ -24,32 +22,35 @@ class TestRepositories(TestCase):
         )
 
     def test_sensor(self):
-        repo = SqlSensorRepository(self.uow)
-        item = Sensor(
-            uid="sensor_uid",
-            measure_type="test-type",
-            location=Location(
-                latitude=33.0,
-                longitude=22.0,
-            ),
+        asyncio.run(
+            check_uow_repository(
+                self.uow,
+                SqlSensorRepository(self.uow),
+                Sensor(
+                    uid="sensor_uid",
+                    measure_type="test-type",
+                    location=Location(
+                        latitude=33.0,
+                        longitude=22.0,
+                    ),
+                ),
+            )
         )
-        asyncio.run(self.run_repo_check(repo, item))
 
     def test_workspace(self):
-        repo = SqlWorkspaceRepository(self.uow)
-        item = Workspace(uid="ws_id")
-        asyncio.run(self.run_repo_check(repo, item))
+        asyncio.run(
+            check_uow_repository(
+                self.uow,
+                SqlWorkspaceRepository(self.uow),
+                Workspace(uid="ws_id"),
+            )
+        )
 
     def test_datafile(self):
-        repo = SqlDataFileRepository(self.uow)
-        item = DataFile(uid="toto", source_hash="toto-hash")
-        asyncio.run(self.run_repo_check(repo, item))
-
-    async def run_repo_check[Entity](self, repo: SqlRepository, item: Entity):
-        await self.uow._init_table(SensorModel)
-
-        async with self.uow.transaction():
-            await check_repository(
-                repo,
-                item,
+        asyncio.run(
+            check_uow_repository(
+                self.uow,
+                SqlDataFileRepository(self.uow),
+                DataFile(uid="toto", source_hash="toto-hash"),
             )
+        )

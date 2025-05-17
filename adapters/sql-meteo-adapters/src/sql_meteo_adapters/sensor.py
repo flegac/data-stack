@@ -1,36 +1,28 @@
-from meteo_domain.data_file.entities.datafile import DataFile
-from meteo_domain.data_file.ports.data_file_repository import DataFileRepository
+from geoalchemy2 import Geometry
+from sqlalchemy import func, select, Column, String, Date
+
+from meteo_domain.ports.sensor_repository import SensorRepository
 from meteo_domain.sensor.entities.location import Location
 from meteo_domain.sensor.entities.sensor import Sensor
-from meteo_domain.sensor.ports.sensor_repository import SensorRepository
-from meteo_domain.workspace.entities.workspace import Workspace
-from meteo_domain.workspace.ports.workspace_repository import WorkspaceRepository
+from sql_connector.model_mapper import ModelMapper
+from sql_connector.patches.location_patch import LocationPatch
+from sql_connector.sql_connection import BaseModel
 from sql_connector.sql_repository import SqlRepository
 from sql_connector.sql_unit_of_work import SqlUnitOfWork
-from sqlalchemy import func, select
-
-from sql_meteo_adapters.models import DataFileModel, SensorModel, WorkspaceModel
-from sql_meteo_adapters.sensor_mapper import (
-    DataFileMapper,
-    SensorMapper,
-    WorkspaceMapper,
-)
 
 
-class SqlWorkspaceRepository(
-    SqlRepository[Workspace, WorkspaceModel],
-    WorkspaceRepository,
-):
-    def __init__(self, uow: SqlUnitOfWork):
-        super().__init__(uow, WorkspaceMapper)
+class SensorModel(BaseModel):
+    __tablename__ = "sensors"
+    uid = Column(String, primary_key=True)
+    creation_date = Column(Date, server_default=func.now())
+    last_update_date = Column(Date, server_default=func.now())
+    workspace_id = Column(String)
+
+    measure_type = Column(String, index=True, nullable=False)
+    location = Column(Geometry("POINT", srid=4326), index=True, nullable=False)
 
 
-class SqlDataFileRepository(
-    SqlRepository[DataFile, DataFileModel],
-    DataFileRepository,
-):
-    def __init__(self, uow: SqlUnitOfWork):
-        super().__init__(uow, DataFileMapper)
+SensorMapper = ModelMapper(Sensor, SensorModel, patches=[LocationPatch()])
 
 
 class SqlSensorRepository(
@@ -41,7 +33,7 @@ class SqlSensorRepository(
         super().__init__(uow, SensorMapper)
 
     async def find_in_radius(self, center: Location, radius_km: float) -> list[Sensor]:
-        async with self.uow.transaction() as session:
+        async with self.uow.transaction():
             point = func.ST_Transform(
                 func.ST_SetSRID(
                     func.ST_MakePoint(center.longitude, center.latitude), 4326
@@ -59,7 +51,7 @@ class SqlSensorRepository(
                     use_spheroid=True,
                 )
             )
-            result = await session.execute(stmt)
+            result = await self.uow.session.execute(stmt)
             return [
                 Sensor(
                     uid=row.uid,

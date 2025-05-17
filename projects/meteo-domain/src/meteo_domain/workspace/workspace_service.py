@@ -1,7 +1,7 @@
-from meteo_domain.data_file.ports.data_file_repository import DataFileRepository
-from meteo_domain.data_file.ports.file_repository import FileRepository
+from meteo_domain.ports.data_file_repository import DataFileRepository
+from meteo_domain.ports.file_repository import FileRepository
+from meteo_domain.ports.workspace_repository import WorkspaceRepository
 from meteo_domain.workspace.entities.workspace import Workspace
-from meteo_domain.workspace.ports.workspace_repository import WorkspaceRepository
 
 
 class WorkspaceService:

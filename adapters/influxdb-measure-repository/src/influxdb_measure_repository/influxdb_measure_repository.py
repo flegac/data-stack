@@ -3,19 +3,19 @@ from typing import override
 
 from influxdb_connector.influx_db_connection import InfluxDbConnection
 from influxdb_connector.influxdb_config import InfluxDBConfig
+from influxdb_measure_repository.measure_mapper import MeasureMapper
+from influxdb_measure_repository.query_mapping import query_to_flux
+from meteo_domain.core.logger import logger
+from meteo_domain.ports.tseries_repository import TSeriesRepository
 from meteo_domain.temporal_series.entities.measure_query import MeasureQuery
 from meteo_domain.temporal_series.entities.measurement import (
     Measurement,
     TaggedMeasurement,
 )
 from meteo_domain.temporal_series.entities.temporal_series import TSeries
-from meteo_domain.temporal_series.ports.tseries_repository import TSeriesRepository
-
-from influxdb_measure_repository.measure_mapper import MeasureMapper
-from influxdb_measure_repository.query_mapping import query_to_flux
 
 
-class InfluxDbMeasureRepository(TSeriesRepository):
+class InfluxDbTSeriesRepository(TSeriesRepository):
     def __init__(self, config: InfluxDBConfig):
         self.config = config
         self.connection = InfluxDbConnection(config)
@@ -57,6 +57,7 @@ class InfluxDbMeasureRepository(TSeriesRepository):
 
     @override
     async def init(self, reset: bool = False):
+        logger.info(f"Initializing InfluxDB repository with config={self.config}")
         buckets_api = self.connection.client.buckets_api()
         try:
             bucket = next(

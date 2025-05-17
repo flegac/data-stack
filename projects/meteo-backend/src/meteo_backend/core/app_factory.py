@@ -1,11 +1,11 @@
+from dependency_injector import containers
 from fastapi import FastAPI
-from starlette.middleware.cors import CORSMiddleware
+from fastapi.middleware.cors import CORSMiddleware
 
 from meteo_backend.api.routes import files, health
-from meteo_backend.core.config.container import Container
 
 
-def create_app(container: Container) -> FastAPI:
+def create_app(container: containers.DeclarativeContainer) -> FastAPI:
     app = FastAPI(title="Meteo Backend API")
     # Configure CORS
     app.add_middleware(

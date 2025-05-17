@@ -1,8 +1,8 @@
 from dataclasses import dataclass, field
 from functools import cached_property
 
-from meteo_domain.metadata_file.entities.coordinate import Coordinate
-from meteo_domain.metadata_file.entities.variable import Variable
+from meteo_domain.data_file.entities.metadata.coordinate import Coordinate
+from meteo_domain.data_file.entities.metadata.variable import Variable
 
 
 @dataclass

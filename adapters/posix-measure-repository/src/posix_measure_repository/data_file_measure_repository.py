@@ -5,8 +5,9 @@ from typing import Any, override
 import numpy as np
 import xarray as xr
 from loguru import logger
+
 from meteo_domain.data_file.entities.datafile import DataFile
-from meteo_domain.metadata_file.metadatafile_service import MetadataFileService
+from meteo_domain.ports.tseries_repository import TSeriesRepository
 from meteo_domain.sensor.entities.location import Location
 from meteo_domain.sensor.entities.sensor import Sensor
 from meteo_domain.temporal_series.entities.measure_query import MeasureQuery
@@ -15,15 +16,15 @@ from meteo_domain.temporal_series.entities.measurement import (
     TaggedMeasurement,
 )
 from meteo_domain.temporal_series.entities.temporal_series import TSeries
-from meteo_domain.temporal_series.ports.tseries_repository import TSeriesRepository
+from xarray_datafile_api.xarray_datafile_api import XarrayDatafileAPI
 
 
 class DataFileMeasureRepository(TSeriesRepository):
     def __init__(self, data_file: DataFile):
+        self.api = XarrayDatafileAPI()
         self.data_file = data_file
-        self.metadata_service = MetadataFileService()
-        self.metadata = self.metadata_service.load_from_datafile(self.data_file)
-        self.raw = self.metadata_service.load_raw_data(data_file)
+        self.metadata = self.api.load_from_datafile(self.data_file)
+        self.raw = self.api.load_raw_data(data_file)
         logger.info(f"{self.raw}")
 
     @override

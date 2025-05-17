@@ -1,14 +1,14 @@
 from dataclasses import fields
 from functools import cached_property
 
-from sqlalchemy import inspect
+from sqlalchemy import inspect, Column
 from sqlalchemy.orm import class_mapper
-from sqlmodel import SQLModel
 
 from sql_connector.patches.patch import MapperPatch
+from sql_connector.sql_connection import BaseModel
 
 
-class ModelMapper[Domain, Model: type[SQLModel]]:
+class ModelMapper[Domain, Model: type[BaseModel]]:
     def __init__(
         self,
         domain: type[Domain],
@@ -36,7 +36,11 @@ class ModelMapper[Domain, Model: type[SQLModel]]:
 
     @cached_property
     def primary_key(self) -> str:
-        return get_primary_key_column_name(self.model)
+        return self.primary_key_column.name
+
+    @cached_property
+    def primary_key_column(self) -> Column:
+        return get_primary_key_column(self.model)
 
     @cached_property
     def domain_attrs(self):
@@ -48,8 +52,8 @@ class ModelMapper[Domain, Model: type[SQLModel]]:
         return {column.key for column in mapper.columns}
 
 
-def get_primary_key_column_name(model):
+def get_primary_key_column(model) -> Column:
     inspector = inspect(model)
     if not (primary_key := inspector.primary_key):
         raise ValueError("Le modèle n'a pas de primary key définie.")
-    return primary_key[0].name
+    return primary_key[0]

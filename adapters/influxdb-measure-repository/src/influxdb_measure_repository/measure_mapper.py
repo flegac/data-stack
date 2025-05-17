@@ -1,4 +1,5 @@
 from influxdb_client import Point
+
 from meteo_domain.sensor.entities.sensor import Sensor
 from meteo_domain.temporal_series.entities.measurement import (
     TaggedMeasurement,

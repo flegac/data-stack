@@ -1,9 +1,9 @@
 from typing import Any
 
 from geoalchemy2.shape import from_shape, to_shape
-from meteo_domain.sensor.entities.location import Location
 from shapely import Point
 
+from meteo_domain.sensor.entities.location import Location
 from sql_connector.patches.patch import MapperPatch, Patch
 
 
@@ -13,8 +13,8 @@ class LocationDomainPatch(Patch):
 
     def patch(self, value: Any) -> Any:
         point = Point(
-            value.latitude,
             value.longitude,
+            value.latitude,
         )
         return from_shape(point, srid=4326)
 
@@ -26,8 +26,8 @@ class LocationModelPatch(Patch):
     def patch(self, value: Any) -> Any:
         point = to_shape(value)
         return Location(
-            latitude=point.y,
             longitude=point.x,
+            latitude=point.y,
         )
 
 

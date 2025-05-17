@@ -20,7 +20,7 @@ class ConcreteSync:
         self.sub_func("func")
 
     def sub_func(self, param: str):
-        return "sub_func"
+        return f"sub_func: {self}"
 
 
 class ConcreteAsync:
@@ -28,7 +28,7 @@ class ConcreteAsync:
         await self.sub_func("func")
 
     async def sub_func(self, param: str):
-        return "sub_func"
+        return f"sub_func: {self}"
 
 
 class TestIt(TestCase):
