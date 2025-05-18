@@ -1,4 +1,3 @@
-import math
 import random
 from typing import override
 
@@ -22,7 +21,7 @@ class GeopyLocationAPI(LocationAPI):
     def random_in_radius(self, center: Location, radius_km: float) -> Location:
         """Génère des points aléatoires à la surface de la Terre dans un rayon donné."""
         # Générer un angle et une distance aléatoires
-        angle = random.uniform(0, 2 * math.pi)
+        angle = random.uniform(0, 360)
         distance = random.uniform(0, radius_km)
 
         # Calculer les nouvelles coordonnées

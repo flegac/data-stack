@@ -1,4 +1,5 @@
 from meteo_domain.datafile_ingestion.ports.location_api import LocationAPI
+from meteo_domain.measurement.centroid import Centroid
 from meteo_domain.measurement.entities.sensor.location import Location
 
 
@@ -8,6 +9,10 @@ class LocationService:
 
     def random_in_radius(self, center: Location, radius_km: float) -> Location:
         return self.location_api.random_in_radius(center, radius_km)
+
+    def random_with_centroid(self, centroid: Centroid):
+        for pos in centroid.generate_random_points():
+            yield Location(longitude=pos[0], latitude=pos[1]),
 
     def generate_french_locations(self, n: int) -> list[Location]:
         """Génère n positions aléatoires en France métropolitaine"""
