@@ -4,8 +4,8 @@ from unittest import TestCase
 from meteo_domain.core.impl.repository_checker import check_uow_repository
 from meteo_domain.datafile_ingestion.entities.datafile import DataFile
 from meteo_domain.datafile_ingestion.entities.workspace import Workspace
-from meteo_domain.measurement.entities.sensor.location import Location
-from meteo_domain.measurement.entities.sensor.sensor import Sensor
+from meteo_domain.geo_sensor.entities.geo_sensor import GeoSensor
+from meteo_domain.geo_sensor.entities.location.location import Location
 from unit_of_work_sql.sql_unit_of_work import SqlUnitOfWork
 
 
@@ -21,7 +21,7 @@ class TestRepositories(TestCase):
             check_uow_repository(
                 self.uow,
                 self.uow.sensors(),
-                Sensor(
+                GeoSensor(
                     uid="sensor_uid",
                     measure_type="test-type",
                     location=Location(

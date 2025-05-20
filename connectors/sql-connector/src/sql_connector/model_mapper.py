@@ -1,7 +1,7 @@
 from dataclasses import fields
 from functools import cached_property
 
-from sqlalchemy import inspect, Column
+from sqlalchemy import Column, inspect
 from sqlalchemy.orm import class_mapper
 
 from sql_connector.patch import MapperPatch

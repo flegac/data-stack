@@ -1,5 +1,3 @@
-from sqlalchemy import Column, String, Date, func, Enum
-
 from meteo_domain.datafile_ingestion.entities.datafile import DataFile
 from meteo_domain.datafile_ingestion.entities.datafile_lifecycle import (
     DataFileLifecycle,
@@ -7,6 +5,8 @@ from meteo_domain.datafile_ingestion.entities.datafile_lifecycle import (
 from sql_connector.model_mapper import ModelMapper
 from sql_connector.sql_connection import BaseModel, SqlConnection
 from sql_connector.sql_repository import SqlRepository
+from sqlalchemy import Column, Date, Enum, String, func
+
 from unit_of_work_sql.patches.location_patch import LocationPatch
 
 

@@ -2,22 +2,20 @@ import asyncio
 import datetime
 from unittest import TestCase
 
+import numpy as np
 from loguru import logger
-
 from measure_repository_influxdb.influxdb_measure_repository import (
     InfluxDbTSeriesRepository,
 )
 from measure_repository_influxdb.query_mapping import query_to_flux
 from meteo_app.config import INFLUX_DB_CONFIG
-from meteo_domain.measurement.entities.measure_query import (
+from meteo_domain.geo_sensor.entities.geo_sensor import GeoSensor
+from meteo_domain.geo_sensor.entities.location.location import Location
+from meteo_domain.geo_sensor.entities.measure_query import (
     MeasureQuery,
 )
-from meteo_domain.measurement.entities.measurement import (
-    TaggedMeasurement,
-)
-from meteo_domain.measurement.entities.period import Period
-from meteo_domain.measurement.entities.sensor.location import Location
-from meteo_domain.measurement.entities.sensor.sensor import Sensor
+from meteo_domain.geo_sensor.entities.telemetry.telemetries import Telemetries
+from meteo_domain.geo_sensor.entities.times.period import Period
 
 
 class TestInfluDbMeasureRepository(TestCase):
@@ -26,20 +24,25 @@ class TestInfluDbMeasureRepository(TestCase):
         self.repo = InfluxDbTSeriesRepository(INFLUX_DB_CONFIG)
         asyncio.run(self.repo.init(reset=True))
 
-        self.sensor = Sensor(
+        self.sensor = GeoSensor(
             uid="testing",
             measure_type="something",
             location=Location(latitude=43.6043, longitude=1.4437),
         )
 
     def measure_generator(self):
-        for i in range(10000):
-            yield TaggedMeasurement(
-                sensor=self.sensor,
-                time=datetime.datetime.now(datetime.UTC)
-                + datetime.timedelta(seconds=10 * i),
-                value=20.0,
-            )
+        n = 10_000
+        period = Period.from_duration(
+            start=datetime.datetime.now(datetime.UTC),
+            duration=datetime.timedelta(days=100),
+        )
+        return Telemetries(
+            sensors=[self.sensor for _ in range(n)],
+            times=period.split(n),
+            values=np.array(
+                [20.0 for _ in range(n)],
+            ),
+        )
 
     def test_flux_query(self):
         query = MeasureQuery(
@@ -54,10 +57,10 @@ class TestInfluDbMeasureRepository(TestCase):
         print(query_string)
 
     def test_save_batch(self):
-        asyncio.run(self.repo.save_batch(self.measure_generator()))
+        asyncio.run(self.repo.save_batch(self.measure_generator().iter()))
 
     def test_search(self):
-        asyncio.run(self.repo.save_batch(self.measure_generator()))
+        asyncio.run(self.repo.save_batch(self.measure_generator().iter()))
 
         query = MeasureQuery(
             sources=[self.sensor],
@@ -66,8 +69,8 @@ class TestInfluDbMeasureRepository(TestCase):
                 # end=datetime.datetime.now(datetime.timezone.utc)
             ),
         )
-        results = list(self.repo.search(query))
+        regions = self.repo.search(query)
 
-        logger.info(f"Found {len(results)} results")
-        for measures in results:
-            logger.info(measures)
+        logger.info(f"Found {len(regions.series)} regions")
+        for measures in regions.iter_timeline():
+            logger.info(str(measures))

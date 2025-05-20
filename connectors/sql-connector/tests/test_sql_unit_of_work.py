@@ -2,12 +2,11 @@ import asyncio
 from dataclasses import dataclass
 from unittest import TestCase
 
-from sqlalchemy import Column, String
-
 from meteo_domain.core.impl.repository_checker import check_uow_repository
 from sql_connector.model_mapper import ModelMapper
 from sql_connector.sql_connection import BaseModel
 from sql_connector.sql_repository import SqlRepository
+from sqlalchemy import Column, String
 from unit_of_work_sql.sql_unit_of_work import SqlUnitOfWork
 
 
@@ -36,7 +35,6 @@ class TestSqlRepository(TestCase):
         asyncio.run(self.run_repository())
 
     async def run_repository(self):
-
         await check_uow_repository(
             self.uow, self.repo, DomainEntity(uid="toto", name="toto")
         )

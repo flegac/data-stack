@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 
-from meteo_domain.measurement.entities.sensor.location import Location
+from meteo_domain.geo_sensor.entities.location.location import Location
 
 
 @dataclass(frozen=True)

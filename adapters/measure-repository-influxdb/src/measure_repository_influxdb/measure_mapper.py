@@ -1,20 +1,17 @@
 from influxdb_client import Point
-
-from meteo_domain.measurement.entities.sensor.sensor import Sensor
-from meteo_domain.measurement.entities.measurement import (
-    TaggedMeasurement,
-)
+from meteo_domain.geo_sensor.entities.geo_sensor import GeoSensor
+from meteo_domain.geo_sensor.entities.telemetry.tagged_telemetry import TaggedTelemetry
 
 
 class MeasureMapper:
-    def to_domain(self, point: Point, sensor: Sensor) -> TaggedMeasurement:
-        return TaggedMeasurement(
+    def to_domain(self, point: Point, sensor: GeoSensor) -> TaggedTelemetry:
+        return TaggedTelemetry(
             value=point.get_field("value"),
             time=point.time,
             sensor=sensor,
         )
 
-    def to_model(self, measure: TaggedMeasurement) -> Point:
+    def to_model(self, measure: TaggedTelemetry) -> Point:
         return (
             Point(measure.sensor.measure_type.lower())
             .tag("sensor_id", measure.sensor.uid)

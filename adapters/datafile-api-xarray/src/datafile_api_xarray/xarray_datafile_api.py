@@ -4,11 +4,10 @@ from typing import override
 
 import numpy as np
 import xarray as xr
-
 from meteo_domain.core.logger import logger
+from meteo_domain.datafile_ingestion.entities.coordinate import Coordinate
 from meteo_domain.datafile_ingestion.entities.datafile import DataFile
 from meteo_domain.datafile_ingestion.entities.meta_data_file import MetaDataFile
-from meteo_domain.datafile_ingestion.entities.coordinate import Coordinate
 from meteo_domain.datafile_ingestion.entities.variable import Variable
 from meteo_domain.datafile_ingestion.ports.datafile_api import DatafileAPI
 

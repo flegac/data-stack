@@ -4,16 +4,12 @@ import numpy as np
 from scipy.spatial.distance import euclidean
 
 
-@dataclass
-class Centroid:
-    size: int
+@dataclass(frozen=True)
+class RadialValueDistribution:
     center: tuple[float, float]
-    scale: float = 1.0
     value: float = 1.0
+    scale: float = 1.0
     variance_ratio: float = 0.0
-
-    def generate_random_points(self):
-        return np.random.normal(loc=self.center, scale=self.scale, size=(self.size, 2))
 
     def compute_value(self, point: tuple[float, float]):
         distortion = 1 + np.random.rand() * self.variance_ratio

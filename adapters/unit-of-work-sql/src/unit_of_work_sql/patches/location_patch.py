@@ -1,9 +1,8 @@
 from typing import Any
 
 from geoalchemy2.shape import from_shape, to_shape
+from meteo_domain.geo_sensor.entities.location.location import Location
 from shapely import Point
-
-from meteo_domain.measurement.entities.sensor.location import Location
 from sql_connector.patch import MapperPatch, Patch
 
 

@@ -3,7 +3,6 @@ from pathlib import Path
 from typing import IO, Any, override
 
 from loguru import logger
-
 from meteo_domain.datafile_ingestion.ports.uow.file_repository import FileRepository
 
 

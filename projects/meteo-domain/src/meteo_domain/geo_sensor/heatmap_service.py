@@ -1,20 +1,20 @@
 import cv2
 import numpy as np
-from easy_kit.timing import time_func
+from easy_kit.timing import time_func, timing
 from scipy.interpolate import griddata
 
-from meteo_domain.measurement.entities.measurement import TaggedMeasurement
-from meteo_domain.measurement.poisson_disk_sampling import (
+from meteo_domain.geo_sensor.entities.telemetry.tagged_telemetry import TaggedTelemetry
+from meteo_domain.geo_sensor.poisson_disk_sampling import (
     poisson_disk_sampling,
 )
 
-OUTPUT_SIZE = 2048
+OUTPUT_SIZE = 512
 
 
 class HeatmapService:
     def poisson_disc_sampling(
         self,
-        measurements: list[TaggedMeasurement],
+        measurements: list[TaggedTelemetry],
         min_distance: float = 0.01,
     ):
         points = np.array(
@@ -27,9 +27,10 @@ class HeatmapService:
         sampled_indices = poisson_disk_sampling(normalized_points, min_distance)
         return [points[_] for _ in sampled_indices]
 
+    @time_func
     def compute_heatmap(
         self,
-        measurements: list[TaggedMeasurement],
+        measurements: list[TaggedTelemetry],
         min_distance: float = 0.01,
     ):
         points = np.array(
@@ -48,20 +49,21 @@ class HeatmapService:
         return heatmap
 
 
+@time_func
 def normalize(points: np.ndarray):
     min_vals = np.min(points, axis=0)
     max_vals = np.max(points, axis=0)
     return (points - min_vals) / (max_vals - min_vals)
 
 
-@time_func
 def compute_heatmap(points, values, size: int):
     grid_x, grid_y = np.mgrid[0 : 1 : size * 1j, 0 : 1 : size * 1j]
 
     # Interpoler les données
-    interpolated_values = griddata(
-        points, values, (grid_x, grid_y), method="cubic", fill_value=-1
-    )
+    with timing(f"compute griddata: {len(points)} --> {size}x{size}"):
+        interpolated_values = griddata(
+            points, values, (grid_x, grid_y), method="cubic", fill_value=-1
+        )
 
     # Normaliser les valeurs interpolées pour qu'elles soient entre 0 et 255
     interpolated_values_normalized = (

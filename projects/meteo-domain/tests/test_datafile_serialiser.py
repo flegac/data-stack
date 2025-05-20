@@ -2,8 +2,8 @@ from unittest import TestCase
 
 from meteo_domain.config import DATASET_ROOT_PATH
 from meteo_domain.core.logger import logger
-from meteo_domain.serializers.datafile_serializer import DataFileSerializer
 from meteo_domain.datafile_ingestion.entities.datafile import DataFile
+from meteo_domain.serializers.datafile_serializer import DataFileSerializer
 
 
 class TestDataFileSerializer(TestCase):

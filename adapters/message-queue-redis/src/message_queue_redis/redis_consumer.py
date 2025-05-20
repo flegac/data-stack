@@ -1,10 +1,11 @@
 from collections.abc import Awaitable, Callable
 from typing import Any, override
 
-from message_queue_redis.redis_connection import RedisConnection
 from meteo_domain.core.logger import logger
 from meteo_domain.core.message_queue.mq_consumer import MQConsumer
 from meteo_domain.core.message_queue.mq_topic import MQTopic
+
+from message_queue_redis.redis_connection import RedisConnection
 
 
 class RedisConsumer[Input](MQConsumer[Input]):

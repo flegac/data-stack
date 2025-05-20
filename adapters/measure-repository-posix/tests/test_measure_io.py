@@ -2,7 +2,6 @@ from itertools import islice
 from unittest import TestCase
 
 from loguru import logger
-
 from measure_repository_posix.data_file_measure_repository import (
     DataFileMeasureRepository,
 )

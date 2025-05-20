@@ -3,13 +3,11 @@ from typing import override
 
 from geopy import Point
 from geopy.distance import geodesic
-
 from meteo_domain.datafile_ingestion.ports.location_api import LocationAPI
-from meteo_domain.measurement.entities.sensor.location import Location
+from meteo_domain.geo_sensor.entities.location.location import Location
 
 
 class GeopyLocationAPI(LocationAPI):
-
     @override
     def haversine_distance(self, loc1: Location, loc2: Location) -> float:
         """Calcule la distance entre deux locations en utilisant geopy."""
@@ -34,8 +32,8 @@ class GeopyLocationAPI(LocationAPI):
             latitude=destination.latitude, longitude=destination.longitude
         )
         dist = self.haversine_distance(center, location)
-        assert (
-            dist <= radius_km
-        ), "Location outside radius: {dist:.1f}km > {radius_km:.1f}km"
+        assert dist <= radius_km, (
+            "Location outside radius: {dist:.1f}km > {radius_km:.1f}km"
+        )
 
         return location

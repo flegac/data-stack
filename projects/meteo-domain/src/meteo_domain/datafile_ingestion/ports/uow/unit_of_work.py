@@ -7,7 +7,7 @@ from meteo_domain.datafile_ingestion.ports.uow.geo_repository import (
     GeoRepository,
 )
 from meteo_domain.datafile_ingestion.ports.uow.repository import Repository
-from meteo_domain.measurement.entities.sensor.sensor import Sensor
+from meteo_domain.geo_sensor.entities.geo_sensor import GeoSensor
 
 
 class CancelUnitOfWorkError(Exception):
@@ -16,7 +16,6 @@ class CancelUnitOfWorkError(Exception):
 
 
 class UnitOfWork(ABC):
-
     @abstractmethod
     def datafiles(self) -> Repository[DataFile]: ...
 
@@ -24,7 +23,7 @@ class UnitOfWork(ABC):
     def workspaces(self) -> Repository[Workspace]: ...
 
     @abstractmethod
-    def sensors(self) -> GeoRepository[Sensor]: ...
+    def sensors(self) -> GeoRepository[GeoSensor]: ...
 
     @asynccontextmanager
     async def transaction(self):

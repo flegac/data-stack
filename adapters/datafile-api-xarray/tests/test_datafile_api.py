@@ -2,7 +2,7 @@ from datetime import datetime
 from unittest import TestCase
 
 from datafile_api_xarray.xarray_datafile_api import XarrayDatafileAPI
-from meteo_domain.config import EXPORT_PATH, LOCAL_TEST_PATH, DATASET_ROOT_PATH
+from meteo_domain.config import DATASET_ROOT_PATH, EXPORT_PATH, LOCAL_TEST_PATH
 from meteo_domain.core.logger import logger
 from meteo_domain.datafile_ingestion.entities.coordinate import Coordinate
 from meteo_domain.datafile_ingestion.entities.datafile import DataFile
@@ -39,13 +39,13 @@ class TestXarrayDataFileAPI(TestCase):
                 },
                 coords=[
                     Coordinate(
-                        "time", [datetime(2023, 10, 1, hour, 0) for hour in range(24)]
+                        "times", [datetime(2023, 10, 1, hour, 0) for hour in range(24)]
                     ),
                     Coordinate("latitude", list(range(3))),
                     Coordinate("longitude", list(range(6))),
                 ],
                 variables=[
-                    Variable("temperature", ["time", "latitude", "longitude"]),
+                    Variable("temperature", ["times", "latitude", "longitude"]),
                     Variable("pression", ["latitude", "longitude"]),
                 ],
             ),

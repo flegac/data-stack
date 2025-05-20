@@ -4,12 +4,12 @@ from unittest import TestCase
 from measure_repository_openmeteo.open_meteo_measure_repository import (
     OpenMeteoMeasureRepository,
 )
-from meteo_domain.measurement.entities.measure_query import (
+from meteo_domain.geo_sensor.entities.geo_sensor import GeoSensor
+from meteo_domain.geo_sensor.entities.location.location import Location
+from meteo_domain.geo_sensor.entities.measure_query import (
     MeasureQuery,
 )
-from meteo_domain.measurement.entities.period import Period
-from meteo_domain.measurement.entities.sensor.location import Location
-from meteo_domain.measurement.entities.sensor.sensor import Sensor
+from meteo_domain.geo_sensor.entities.times.period import Period
 
 
 class TestInfluDbMeasureRepository(TestCase):
@@ -19,7 +19,7 @@ class TestInfluDbMeasureRepository(TestCase):
     def test_search(self):
         query = MeasureQuery(
             sources=[
-                Sensor(
+                GeoSensor(
                     uid="open-meteo",
                     measure_type="temperature",
                     location=Location(latitude=43.6043, longitude=1.4437),

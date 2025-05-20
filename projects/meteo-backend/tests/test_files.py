@@ -1,8 +1,7 @@
 from unittest import TestCase
 
-from fastapi.testclient import TestClient
-
 import meteo_domain.config
+from fastapi.testclient import TestClient
 from meteo_backend.core.app_factory import create_app
 from meteo_domain.datafile_ingestion.entities.datafile import DataFile
 from meteo_domain.datafile_ingestion.entities.datafile_lifecycle import (

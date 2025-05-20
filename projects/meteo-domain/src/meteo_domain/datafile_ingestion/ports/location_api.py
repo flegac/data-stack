@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 
-from meteo_domain.measurement.entities.sensor.location import Location
+from meteo_domain.geo_sensor.entities.location.location import Location
 
 
 class LocationAPI(ABC):

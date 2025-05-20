@@ -1,10 +1,9 @@
 import re
 
-from sqlalchemy import text, Executable
-from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession, async_sessionmaker
-from sqlalchemy.orm import DeclarativeBase
-
 from meteo_domain.core.logger import logger
+from sqlalchemy import Executable, text
+from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
+from sqlalchemy.orm import DeclarativeBase
 
 
 class BaseModel(DeclarativeBase):
@@ -59,7 +58,6 @@ class SqlConnection:
                  """
                 )
             )
-        logger.info("connections killed")
 
     async def create_table(self, model: BaseModel):
         async with self.engine.begin() as conn:

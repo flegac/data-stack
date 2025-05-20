@@ -1,20 +1,20 @@
 import datetime
-from collections.abc import Generator, Iterable
-from typing import Any, override
+from collections.abc import Iterable
+from typing import override
 
 import openmeteo_requests
 import requests_cache
-from retry_requests import retry
-
-from meteo_domain.measurement.ports.tseries_repository import TSeriesRepository
-from meteo_domain.measurement.entities.measure_query import (
+from meteo_domain.geo_sensor.entities.measure_query import (
     MeasureQuery,
 )
-from meteo_domain.measurement.entities.measurement import (
-    Measurement,
-    TaggedMeasurement,
+from meteo_domain.geo_sensor.entities.telemetry.geo_sensor_series import GeoSensorSeries
+from meteo_domain.geo_sensor.entities.telemetry.region_series import RegionSeries
+from meteo_domain.geo_sensor.entities.telemetry.tagged_telemetry import TaggedTelemetry
+from meteo_domain.geo_sensor.entities.telemetry.telemetry import (
+    Telemetry,
 )
-from meteo_domain.measurement.entities.temporal_series import TSeries
+from meteo_domain.geo_sensor.ports.tseries_repository import TSeriesRepository
+from retry_requests import retry
 
 OPEN_METEO_URL = "https://archive-api.open-meteo.com/v1/archive"
 
@@ -26,12 +26,12 @@ class OpenMeteoMeasureRepository(TSeriesRepository):
 
     @override
     async def save_batch(
-        self, measures: Iterable[TaggedMeasurement], chunk_size: int = 100_000
+        self, measures: Iterable[TaggedTelemetry], chunk_size: int = 100_000
     ):
         raise NotImplementedError
 
     @override
-    def search(self, query: MeasureQuery = None) -> Generator[TSeries, Any]:
+    def search(self, query: MeasureQuery = None) -> RegionSeries:
         if not (period := query.period):
             raise ValueError("period is required")
 
@@ -40,6 +40,8 @@ class OpenMeteoMeasureRepository(TSeriesRepository):
         )
         retry_session = retry(cache_session, retries=5, backoff_factor=0.2)
         openmeteo = openmeteo_requests.Client(session=retry_session)
+
+        series_list = []
 
         for sensor in query.sources:
             location = sensor.location
@@ -68,14 +70,17 @@ class OpenMeteoMeasureRepository(TSeriesRepository):
             ]
 
             measures = [
-                Measurement(
+                Telemetry(
                     time=time,
                     value=value,
                 )
                 for time, value in zip(times, values, strict=False)
             ]
 
-            yield TSeries.from_measures(
-                sensor=sensor,
-                measures=measures,
+            series_list.append(
+                GeoSensorSeries.from_measures(
+                    sensor=sensor,
+                    measures=measures,
+                )
             )
+        return RegionSeries(series=series_list)

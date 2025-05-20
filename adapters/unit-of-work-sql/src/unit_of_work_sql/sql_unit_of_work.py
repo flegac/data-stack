@@ -7,15 +7,15 @@ from meteo_domain.datafile_ingestion.ports.uow.geo_repository import (
 )
 from meteo_domain.datafile_ingestion.ports.uow.repository import Repository
 from meteo_domain.datafile_ingestion.ports.uow.unit_of_work import UnitOfWork
-from meteo_domain.measurement.entities.sensor.sensor import Sensor
+from meteo_domain.geo_sensor.entities.geo_sensor import GeoSensor
 from sql_connector.sql_connection import SqlConnection
+
 from unit_of_work_sql.repositories.data_file import SqlDataFileRepository
 from unit_of_work_sql.repositories.sensor import SqlSensorRepository
 from unit_of_work_sql.repositories.workspace import SqlWorkspaceRepository
 
 
 class SqlUnitOfWork(UnitOfWork):
-
     def __init__(self, database_url: str):
         self.connection = SqlConnection(database_url)
         self._sensors = SqlSensorRepository(self.connection)
@@ -47,5 +47,5 @@ class SqlUnitOfWork(UnitOfWork):
         return self._workspaces
 
     @override
-    def sensors(self) -> GeoRepository[Sensor]:
+    def sensors(self) -> GeoRepository[GeoSensor]:
         return self._sensors

@@ -6,6 +6,7 @@ readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [
     "easy-kit>=0.1.24",
+    "imageio>=2.37.0",
 ]
 
 [tool.uv.workspace]

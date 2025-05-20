@@ -1,19 +1,18 @@
 from collections.abc import AsyncGenerator
 from typing import Any, override
 
-from sqlalchemy import delete, select, Column
-
 from meteo_domain.core.logger import logger
 from meteo_domain.datafile_ingestion.ports.uow.repository import (
     UID,
     Repository,
 )
+from sqlalchemy import Column, delete, select
+
 from sql_connector.model_mapper import ModelMapper
 from sql_connector.sql_connection import SqlConnection
 
 
 class SqlRepository[Domain, Model](Repository[Domain]):
-
     def __init__(
         self,
         connection: SqlConnection,

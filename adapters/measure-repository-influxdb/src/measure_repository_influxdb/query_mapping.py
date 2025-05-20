@@ -1,4 +1,4 @@
-from meteo_domain.measurement.entities.measure_query import (
+from meteo_domain.geo_sensor.entities.measure_query import (
     MeasureQuery,
 )
 

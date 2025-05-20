@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 
 from meteo_domain.datafile_ingestion.ports.uow.repository import Repository
-from meteo_domain.measurement.entities.sensor.location import Location
+from meteo_domain.geo_sensor.entities.location.location import Location
 
 
 class GeoRepository[Entity](Repository[Entity], ABC):

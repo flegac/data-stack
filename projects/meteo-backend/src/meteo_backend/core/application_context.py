@@ -1,9 +1,10 @@
 from dataclasses import dataclass
 
-from meteo_backend.core.config.settings import Settings
 from meteo_domain.datafile_ingestion.datafile_service import DataFileService
 from meteo_domain.datafile_ingestion.ports.uow.unit_of_work import UnitOfWork
 from meteo_domain.datafile_ingestion.workspace_service import WorkspaceService
+
+from meteo_backend.core.config.settings import Settings
 
 
 @dataclass

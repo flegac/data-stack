@@ -1,14 +1,14 @@
 from geoalchemy2 import Geometry
-from sqlalchemy import func, select, Column, String, Date
-
 from meteo_domain.datafile_ingestion.ports.uow.geo_repository import (
     GeoRepository,
 )
-from meteo_domain.measurement.entities.sensor.location import Location
-from meteo_domain.measurement.entities.sensor.sensor import Sensor
+from meteo_domain.geo_sensor.entities.geo_sensor import GeoSensor
+from meteo_domain.geo_sensor.entities.location.location import Location
 from sql_connector.model_mapper import ModelMapper
 from sql_connector.sql_connection import BaseModel, SqlConnection
 from sql_connector.sql_repository import SqlRepository
+from sqlalchemy import Column, Date, String, func, select
+
 from unit_of_work_sql.patches.location_patch import LocationPatch
 
 
@@ -23,17 +23,19 @@ class SensorModel(BaseModel):
     location = Column(Geometry("POINT", srid=4326), index=True, nullable=False)
 
 
-SensorMapper = ModelMapper(Sensor, SensorModel, patches=[LocationPatch()])
+SensorMapper = ModelMapper(GeoSensor, SensorModel, patches=[LocationPatch()])
 
 
 class SqlSensorRepository(
-    SqlRepository[Sensor, SensorModel],
-    GeoRepository[Sensor],
+    SqlRepository[GeoSensor, SensorModel],
+    GeoRepository[GeoSensor],
 ):
     def __init__(self, connection: SqlConnection):
         super().__init__(connection, SensorMapper)
 
-    async def find_in_radius(self, center: Location, radius_km: float) -> list[Sensor]:
+    async def find_in_radius(
+        self, center: Location, radius_km: float
+    ) -> list[GeoSensor]:
         point = func.ST_Transform(
             func.ST_SetSRID(func.ST_MakePoint(center.longitude, center.latitude), 4326),
             3857,
@@ -51,7 +53,7 @@ class SqlSensorRepository(
         )
         result = await self.session.execute(stmt)
         return [
-            Sensor(
+            GeoSensor(
                 uid=row.uid,
                 measure_type="temperature",
                 location=Location(

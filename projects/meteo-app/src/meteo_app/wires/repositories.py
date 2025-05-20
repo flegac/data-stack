@@ -1,16 +1,16 @@
 from dependency_injector import containers, providers
-
 from file_repository_s3.s3_file_repository import S3FileRepository
 from kafka_connector.kafka_connection import KafkaConnection
 from measure_repository_influxdb.influxdb_measure_repository import (
     InfluxDbTSeriesRepository,
 )
 from message_queue_kafka.kafka_factory import KafkaMQBackend
-from meteo_app.wires.config import Config
 from s3_connector.s3_connection import S3Connection
 from unit_of_work_sql.repositories.data_file import SqlDataFileRepository
 from unit_of_work_sql.repositories.workspace import SqlWorkspaceRepository
 from unit_of_work_sql.sql_unit_of_work import SqlUnitOfWork
+
+from meteo_app.wires.config import Config
 
 
 # pylint: disable=too-few-public-methods

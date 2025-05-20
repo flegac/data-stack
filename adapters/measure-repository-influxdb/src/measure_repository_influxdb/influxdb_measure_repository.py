@@ -1,20 +1,22 @@
-from collections.abc import Generator, Iterable
+from collections.abc import Iterable
 from typing import override
 
 from influxdb_connector.influx_db_connection import InfluxDbConnection
 from influxdb_connector.influxdb_config import InfluxDBConfig
-from measure_repository_influxdb.measure_mapper import MeasureMapper
-from measure_repository_influxdb.query_mapping import query_to_flux
 from meteo_domain.core.logger import logger
-from meteo_domain.measurement.entities.measure_query import (
+from meteo_domain.geo_sensor.entities.measure_query import (
     MeasureQuery,
 )
-from meteo_domain.measurement.entities.measurement import (
-    Measurement,
-    TaggedMeasurement,
+from meteo_domain.geo_sensor.entities.telemetry.geo_sensor_series import GeoSensorSeries
+from meteo_domain.geo_sensor.entities.telemetry.region_series import RegionSeries
+from meteo_domain.geo_sensor.entities.telemetry.tagged_telemetry import TaggedTelemetry
+from meteo_domain.geo_sensor.entities.telemetry.telemetry import (
+    Telemetry,
 )
-from meteo_domain.measurement.entities.temporal_series import TSeries
-from meteo_domain.measurement.ports.tseries_repository import TSeriesRepository
+from meteo_domain.geo_sensor.ports.tseries_repository import TSeriesRepository
+
+from measure_repository_influxdb.measure_mapper import MeasureMapper
+from measure_repository_influxdb.query_mapping import query_to_flux
 
 
 class InfluxDbTSeriesRepository(TSeriesRepository):
@@ -25,7 +27,7 @@ class InfluxDbTSeriesRepository(TSeriesRepository):
 
     @override
     async def save_batch(
-        self, measures: Iterable[TaggedMeasurement], chunk_size: int = 100_000
+        self, measures: Iterable[TaggedTelemetry], chunk_size: int = 100_000
     ):
         self.connection.write_batch(
             map(self.mapper.to_model, measures),
@@ -36,26 +38,31 @@ class InfluxDbTSeriesRepository(TSeriesRepository):
     def search(
         self,
         query: MeasureQuery = None,
-    ) -> Generator[TSeries]:
+    ) -> RegionSeries:
         sensor_ids = [_.uid for _ in query.sources]
         sensor_mapping = dict(zip(sensor_ids, query.sources, strict=False))
 
         flux_query = query_to_flux(query=query, bucket=self.config.bucket)
         tables = self.connection.query(flux_query)
 
+        geo_series_list = []
+
         for table in tables:
             measurements = []
             for record in table.records:
                 measurements.append(
-                    Measurement(
+                    Telemetry(
                         value=record.get_value(),
                         time=record.get_time(),
                     )
                 )
-            yield TSeries.from_measures(
-                sensor=sensor_mapping[table.records[0].values.get("sensor_id")],
-                measures=measurements,
-            )
+                geo_series_list.append(
+                    GeoSensorSeries.from_measures(
+                        sensor=sensor_mapping[table.records[0].values.get("sensor_id")],
+                        measures=measurements,
+                    )
+                )
+        return RegionSeries(series=geo_series_list)
 
     @override
     async def init(self, reset: bool = False):

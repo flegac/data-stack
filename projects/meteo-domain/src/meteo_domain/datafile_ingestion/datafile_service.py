@@ -4,6 +4,7 @@ from pathlib import Path
 from measure_repository_posix.data_file_measure_repository import (
     DataFileMeasureRepository,
 )
+
 from meteo_domain.config import (
     DATAFILE_ERROR_TOPIC,
     DATAFILE_INGESTION_TOPIC,
@@ -18,7 +19,7 @@ from meteo_domain.datafile_ingestion.entities.datafile_lifecycle import (
 from meteo_domain.datafile_ingestion.entities.workspace import Workspace
 from meteo_domain.datafile_ingestion.ports.uow.file_repository import FileRepository
 from meteo_domain.datafile_ingestion.ports.uow.unit_of_work import UnitOfWork
-from meteo_domain.measurement.ports.tseries_repository import TSeriesRepository
+from meteo_domain.geo_sensor.ports.tseries_repository import TSeriesRepository
 
 
 class DataFileService:
